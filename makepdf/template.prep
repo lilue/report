@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE document SYSTEM "rml_1_0.dtd">
+<document filename="invoice.pdf">
+    <template pageSize="(420, 595)" leftMargin="0" rotation="90" rightMargin="0" showBoundary="0">
+        <pageTemplate id="first">
+            <pageGraphics>
+                <setFont name="Helvetica-Oblique" size="4"/>
+                <fill color="0x00337f"/>
+                <fill color="0x1E4C9C"/>
+                <drawString x="57" y="30">VAT Reg No.:&nbsp;&nbsp;&nbsp;GR1234567890</drawString>
+            </pageGraphics>
+            <!--get these right using showboundary-->
+            <frame id ="main_content" x1="57" y1="260" width="481" height="490"/>
+            <frame id ="footer_content" x1="57" y1="40" width="481" height="190"/>
+        </pageTemplate>
+    </template>
+
+    <stylesheet>
+        <paraStyle name="normal" fontName="Helvetica" fontSize="12" leading="14" alignment="JUSTIFY" textColor="black"/>
+    </stylesheet>
+</document>
