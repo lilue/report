@@ -82,3 +82,50 @@ def getInfo(params):
     else:
         result = '请发送电话号+证件号查询检验结果。例：13123456789*441234567894561235'
     return result
+
+
+def createMenu(request):
+    client = WeChatClient("appid", "secret")
+    client.menu.add_conditional({
+        "button": [
+            {
+                "name": "医院概括",
+                "sub_button": [
+                    {
+                        "type": "view",
+                        "name": "医院介绍",
+                        "url": ""
+                    },
+                    {
+                        "type": "view",
+                        "name": "康复医学",
+                        "url": ""
+                    },
+                    {
+                        "type": "click",
+                        "name": "医院分布",
+                        "url": ""
+                    },
+                    {
+                        "type": "click",
+                        "name": "来院线路",
+                        "url": ""
+                    },
+                    {
+                        "type": "click",
+                        "name": "联系我们",
+                        "url": ""
+                    },
+                ]
+            }
+        ]
+    })
+    pass
+
+
+def get_menu_info():
+    client = WeChatClient('appid', 'secret')
+    menu_info = client.menu.get_menu_info()
+    print(menu_info)
+    response = HttpResponse(json.dumps(menu_info), content_type='application/json')
+    return response
