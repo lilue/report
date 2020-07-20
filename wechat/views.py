@@ -11,7 +11,7 @@ from reports.models import Report, Subscription
 from wechatpy import WeChatClient
 
 #  token 取自微信公众号自己设置的
-token = 'test'
+token = 'JVWsgSgWG5Lu2z4jEE7OGRY18ixvJm4'
 
 
 # Create your views here.
@@ -31,10 +31,25 @@ def handle_wx(request):
         return response
     else:
         msg = parse_message(request.body)
-        if msg.type == 'text':
-            item_str = msg
-            res = getInfo(item_str)
-            content = res
+        if msg.type == 'event':
+            if msg.event == 'subscribe':
+                content = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打医务科电话3822802，' \
+                          '每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，检验报告请咨询检验科3822806；' \
+                          '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
+                          '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
+        elif msg.type == 'text':
+            keyword = ['时间', '时候', '上班', '几时']
+            for i in keyword:
+                result = i in msg.content
+                if result:
+                    break
+            if result:
+                content = '急诊科及120急救、住院病房均24小时工作制，门诊、医保报销、预防保健科工作日正常上班，' \
+                          '8:00—11:30、14:30—17:30，周六8:00—11:30，如特殊情况，可联系医院或相关医护人员。'
+            else:
+                item_str = msg
+                res = getInfo(item_str)
+                content = res
         else:
             content = '请发送电话号+证件号查询检验结果。例：13123456789*441234567894561235'
         reply = TextReply(content=content, message=msg)
@@ -59,26 +74,27 @@ def getInfo(params):
     response = symbol in msg
     if response:
         text = msg.split(symbol, 1)
-        query_set = Report.objects.filter(phone=text[0], idCard=text[1]).order_by('-id')[:1]
-        if query_set.exists():
-            # 有数据
-            template = "姓名：%s\n性别：%s\n年龄：%s\n采样时间：%s\n样本状态：%s\n送检医院：%s\n" \
-                       "联系方式：%s\n证件号：%s\n" \
-                       "检验结果：%s\n检验日期：%s\n报告日期：%s\n检验者：%s\n审核者：%s\n" \
-                       "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！"
-            for report in query_set:
-                print(report)
-                result = template % (report.name, report.gender, report.age, report.sampling_time, report.sample_status,
-                                     report.hospital, report.phone, report.idCard, report.proposal,
-                                     report.inspection_date, report.report_date, report.examiner, report.reviewer)
+        phone_res = re.match("^(13\d|14[5|7]|15\d|166|17[3|6|7]|18\d)\d{8}$", text[0])
+        id_card_res = re.match(
+            "/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(("
+            "[0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$", text[1])
+        if not phone_res or not id_card_res:
+            result = "输入格式不正确，请检查后重新发送。"
         else:
-            phone_res = re.match("^(13\d|14[5|7]|15\d|166|17[3|6|7]|18\d)\d{8}$", text[0])
-            id_card_res = re.match("/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(("
-                      "[0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$", text[1])
-            if not phone_res or not id_card_res:
-                result = "输入格式不正确，请检查后重新发送。"
-            if phone_res and id_card_res:
-                result = "暂无手机号%s，证件号%s的检验结果，请稍后查询。" % (text[0], text[1])
+            query_set = Report.objects.filter(phone=text[0], idCard=text[1]).order_by('-id')[:1]
+            if query_set.exists():
+                # 有数据
+                template = "姓名：%s\n性别：%s\n年龄：%s\n采样时间：%s\n样本状态：%s\n送检医院：%s\n" \
+                           "联系方式：%s\n证件号：%s\n" \
+                           "检验结果：%s\n检验日期：%s\n报告日期：%s\n检验者：%s\n审核者：%s\n" \
+                           "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！"
+                for report in query_set:
+                    result = template % (report.name, report.gender, report.age, report.sampling_time,
+                                         report.sample_status, report.hospital, report.phone, report.idCard, report.proposal,
+                                         report.inspection_date, report.report_date, report.examiner, report.reviewer)
+            else:
+                if phone_res and id_card_res:
+                    result = "暂无手机号%s，证件号%s的检验结果，请稍后查询。" % (text[0], text[1])
     else:
         result = '请发送电话号+证件号查询检验结果。例：13123456789*441234567894561235'
     return result
@@ -124,7 +140,7 @@ def createMenu(request):
 
 
 def get_menu_info():
-    client = WeChatClient('appid', 'secret')
+    client = WeChatClient('wx34323ffaf43c7824', 'wx34323ffaf43c7824')
     menu_info = client.menu.get_menu_info()
     print(menu_info)
     response = HttpResponse(json.dumps(menu_info), content_type='application/json')
