@@ -31,9 +31,9 @@ def createMenu(request):
                             "key": "hospital"
                         },
                         {
-                            "type": "media_id",
+                            "type": "view",
                             "name": "来院路线",
-                            "media_id": "8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_"
+                            "url": "https://www.baidu.com"
                         },
                         {
                             "type": "text",
