@@ -18,5 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('wx/', include('wechat.urls'))
+    path('wx/', include('wechat.urls')),
+    path('menu/', include('makepdf.urls'))
 ]
