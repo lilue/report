@@ -140,7 +140,7 @@ def createMenu(request):
 
 
 def get_menu_info():
-    client = WeChatClient('wx34323ffaf43c7824', 'wx34323ffaf43c7824')
+    client = WeChatClient('wx34323ffaf43c7824', '4c50c86bc211f62145076d93c8d089f8')
     menu_info = client.menu.get_menu_info()
     print(menu_info)
     response = HttpResponse(json.dumps(menu_info), content_type='application/json')
