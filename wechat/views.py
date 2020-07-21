@@ -1,12 +1,11 @@
 import json
 import re
-from wechatpy.replies import TextReply
 from django.shortcuts import render
 from wechatpy.utils import check_signature
 from wechatpy.exceptions import InvalidSignatureException
 from django.http import HttpResponse
 from wechatpy import parse_message
-from wechatpy.replies import TextReply
+from wechatpy.replies import TextReply, ImageReply
 from reports.models import Report, Subscription
 from wechatpy import WeChatClient
 
@@ -32,6 +31,7 @@ def handle_wx(request):
         return response
     else:
         msg = parse_message(request.body)
+        status = 'text'
         if msg.type == 'event':
             if msg.event == 'subscribe':
                 content = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打医务科电话3822802，' \
@@ -49,6 +49,8 @@ def handle_wx(request):
                     tempMsg = '院务办公：0759-3821203\n急救电话：0759-3823120\n防疫电话：0759-3821379\n' \
                               '妇产科电话：0759-3822013\n邮箱：2653809347@qq.com\n地址：湛江市坡头区坡头镇红旗路18-20号'
                 elif msg.key == 'image':
+                    status = 'image'
+                    media_id = '8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_'
                     tempMsg = '图片回复'
                 else:
                     tempMsg = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打医务科电话3822802，' \
@@ -75,7 +77,10 @@ def handle_wx(request):
                       '检验报告请咨询检验科3822806；\n如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；\n如预约疫苗接种，' \
                       '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！\n' \
                       '如需查询核酸检验结果，请发送【电话号*证件号】查询检验结果。例：13123456789*441234567894561235'
-        reply = TextReply(content=content, message=msg)
+        if status == 'text':
+            reply = TextReply(content=content, message=msg)
+        elif status == 'image':
+            reply = ImageReply(media_id=media_id, message=msg)
         response = HttpResponse(reply.render(), content_type='application/xml')
         return response
 
