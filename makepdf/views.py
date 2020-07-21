@@ -136,3 +136,4 @@ def createMenu(request):
                 }
             ]
         })
+        return HttpResponse("OK")
