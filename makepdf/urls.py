@@ -1,4 +1,4 @@
-from wechat import views
+from makepdf import views
 from django.urls import path
 
 
