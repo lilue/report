@@ -31,9 +31,9 @@ def createMenu(request):
                             "media_id": "HmciRG5xP_jEQD0HuE5bFN2L8AxiMgyNnIxkwYV9c_w"
                         },
                         {
-                            "type": "click",
+                            "type": "media_id",
                             "name": "来院路线",
-                            "key": "image"
+                            "media_id": "8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_"
                         },
                         {
                             "type": "click",
@@ -51,9 +51,9 @@ def createMenu(request):
                             "url": "http://mp.weixin.qq.com/mp/homepage?__biz=MzU4ODA1NTAyNg==&hid=1&sn=47bb912d49328559ae48fdc8369ecf4d&scene=18#wechat_redirect"
                         },
                         {
-                            "type": "click",
+                            "type": "view_limited",
                             "name": "家庭医生服务团队",
-                            "key": "family"
+                            "media_id": "HmciRG5xP_jEQD0HuE5bFPl2PYR2iAGPxN2Sd4HdW2E"
                         },
                         {
                             "type": "view",
@@ -81,9 +81,9 @@ def createMenu(request):
                             "url": "http://mp.weixin.qq.com/mp/homepage?__biz=MzU4ODA1NTAyNg==&hid=4&sn=d12420be00918fd640bf112d4144b9c4&scene=18#wechat_redirect"
                         },
                         {
-                            "type": "click",
+                            "type": "view_limited",
                             "name": "疫苗种类接种时间",
-                            "key": "vaccine"
+                            "media_id": "HmciRG5xP_jEQD0HuE5bFHt0ItcB8Vxhwkk1-VHpuSA"
                         },
                         {
                             "type": "view",
