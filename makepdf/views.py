@@ -26,9 +26,9 @@ def createMenu(request):
                             "url": "https://v.youku.com/v_show/id_XNDQ5MjE0OTg1Mg=="
                         },
                         {
-                            "type": "click",
+                            "type": "view_limited",
                             "name": "医院分布",
-                            "key": "hospital"
+                            "media_id": "HmciRG5xP_jEQD0HuE5bFN2L8AxiMgyNnIxkwYV9c_w"
                         },
                         {
                             "type": "click",
