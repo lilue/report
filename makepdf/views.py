@@ -31,9 +31,9 @@ def createMenu(request):
                             "media_id": "HmciRG5xP_jEQD0HuE5bFN2L8AxiMgyNnIxkwYV9c_w"
                         },
                         {
-                            "type": "media_id",
+                            "type": "click",
                             "name": "来院路线",
-                            "media_id": "8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_"
+                            "key": "image"
                         },
                         {
                             "type": "click",
