@@ -1,11 +1,11 @@
 import json
 import re
 from django.shortcuts import render
-from wechatpy.utils import check_signature
+from wechatpy.utils import check_signature, ObjectDict
 from wechatpy.exceptions import InvalidSignatureException
 from django.http import HttpResponse
 from wechatpy import parse_message
-from wechatpy.replies import TextReply, ImageReply
+from wechatpy.replies import TextReply, ImageReply, ArticlesReply
 from reports.models import Report, Subscription
 from wechatpy import WeChatClient
 
@@ -39,11 +39,19 @@ def handle_wx(request):
                           '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
                           '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
             elif msg.event == 'click':
+                article = ObjectDict()
                 if msg.key == 'vaccine':
+                    status = 'article'
                     tempMsg = '疫苗'
                 elif msg.key == 'family':
+                    status = 'article'
                     tempMsg = '家庭医生'
                 elif msg.key == 'hospital':
+                    status = 'article'
+                    article.title = '坡头镇家庭医生服务团队名单及服务所属自然村'
+                    article.description = ''
+                    article.image = 'http://mmbiz.qpic.cn/mmbiz_jpg/CYRHfvAwum0Aib4ZXsPDgibHIiauJw1SPH1tWAE7cvBmt33WhjCgBqsFeQT2EwaeDobN6qVpqB4ibzT6z6iauR1Ombg/0?wx_fmt=jpeg'
+                    article.url = 'http://mp.weixin.qq.com/s?__biz=MzU4ODA1NTAyNg==&mid=100000221&idx=1&sn=7421bd9c8ee87945e60328170030e128&chksm=7de3e9404a946056bd11a5587d8e32416bccb306b4bc4e1b4c2dc17efd665cc7b36a769c4ef6#rd'
                     tempMsg = '医院分布'
                 elif msg.key == 'text':
                     tempMsg = '院务办公：0759-3821203\n急救电话：0759-3823120\n防疫电话：0759-3821379\n' \
@@ -81,6 +89,9 @@ def handle_wx(request):
             reply = TextReply(content=content, message=msg)
         elif status == 'image':
             reply = ImageReply(media_id=media_id, message=msg)
+        elif status == 'article':
+            reply = ArticlesReply(message=msg)
+            reply.add_article(article)
         response = HttpResponse(reply.render(), content_type='application/xml')
         return response
 
