@@ -3,5 +3,5 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('setMenu/', views.createMenu())
+    # path('setMenu/', views.createMenu())
 ]
