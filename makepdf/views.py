@@ -31,14 +31,14 @@ def createMenu(request):
                             "key": "hospital"
                         },
                         {
-                            "type": "view",
+                            "type": "click",
                             "name": "来院路线",
-                            "url": "https://www.baidu.com"
+                            "key": "image"
                         },
                         {
-                            "type": "text",
+                            "type": "click",
                             "name": "联系我们",
-                            "url": "院务办公：0759-3821203\n急救电话：0759-3823120\n防疫电话：0759-3821379\n妇产科电话：0759-3822013\n邮箱：2653809347@qq.com\n地址：湛江市坡头区坡头镇红旗路18-20号"
+                            "key": "text"
                         },
                     ]
                 },
