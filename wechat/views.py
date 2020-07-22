@@ -123,7 +123,7 @@ def getInfo(params):
             query_set = Report.objects.filter(phone=text[0], idCard=text[1]).order_by('-id')[:1]
             if query_set.exists():
                 # 有数据
-                template = "新型冠状病毒(COVID-19)核酸检测" \
+                template = "新型冠状病毒(COVID-19)核酸检测\n" \
                            "姓名：%s\n性别：%s\n年龄：%s\n采样时间：%s\n样本状态：%s\n送检医院：%s\n" \
                            "联系方式：%s\n证件号：%s\n" \
                            "检验结果：%s\n检验日期：%s\n报告日期：%s\n检验者：%s\n审核者：%s\n" \
