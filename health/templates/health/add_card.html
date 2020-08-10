@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}注册/绑定电子健康卡{% endblock %}
+{% load static %}
+{% block headerjs %}
+    <script type="text/JavaScript">
+        function gradeChange() {
+            var objS = document.getElementById("pid");
+            var grade = objS.options[objS.selectedIndex].value;
+            if(grade == 1) {
+                document.getElementById('sfz').style.display="block";
+                document.getElementById('qita').style.display="none";
+            } else {
+                {#document.getElementById('').style.display="block";#}
+                document.getElementById('qita').style.display="block";
+                document.getElementById('sfz').style.display="none";
+            }
+        };
+    </script>
+{% endblock %}
+{% block content %}
+    <div class="weui-cells__title">注册/绑定电子健康卡</div>
+    <div class="weui-cells weui-cells_form">
+        {#  <div class="weui-cell weui-cell_switch">#}
+        {#    <div class="weui-cell__bd">将创建的卡作为默认卡</div>#}
+        {#    <div class="weui-cell__ft">#}
+        {#      <input class="weui-switch" type="checkbox" checked="checked">#}
+        {#    </div>#}
+        {#  </div>#}
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入姓名">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+            <div class="weui-cell__hd">
+                <label for="" class="weui-label">证件类型</label>
+            </div>
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="pid" onchange="gradeChange()">
+                    <option value="1">身份证</option>
+                    <option value="2">港澳来往内地通行证(回乡证)</option>
+                    <option value="3">台湾来往大陆通行证(台胞证)</option>
+                    <option value="4">护照</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell" id="sfz" style="display: block">
+            <div class="weui-cell__hd"><label class="weui-label">身份证号</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入身份证号">
+            </div>
+        </div>
+    </div>
+{% endblock %}

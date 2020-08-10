@@ -8,6 +8,7 @@ from wechatpy import parse_message
 from wechatpy.replies import TextReply, ImageReply, ArticlesReply
 from reports.models import Report, Subscription
 from wechatpy import WeChatClient
+from django.views.decorators.csrf import csrf_exempt
 
 #  token 取自微信公众号自己设置的
 token = 'JVWsgSgWG5Lu2z4jEE7OGRY18ixvJm4'
@@ -16,6 +17,7 @@ token = 'JVWsgSgWG5Lu2z4jEE7OGRY18ixvJm4'
 # Create your views here.
 
 
+@csrf_exempt
 def handle_wx(request):
     # GET 方式用于微信公众
     if request.method == 'GET':
@@ -80,11 +82,11 @@ def handle_wx(request):
                 res = getInfo(item_str)
                 content = res
         else:
-            content = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！\n' \
-                      '预约核酸检测请拨打医务科电话3822802，每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，' \
-                      '检验报告请咨询检验科3822806；\n如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；\n如预约疫苗接种，' \
-                      '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！\n' \
-                      '如需查询核酸检验结果，请发送【电话号*证件号】查询检验结果。例：13123456789*441234567894561235'
+            content = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！' \
+                      '\n预约核酸检测请拨打医务科电话3822802，每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，' \
+                      '检验报告请咨询接诊医生；\n如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；\n' \
+                      '如预约疫苗接种，请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！' \
+                      '\n如需查询核酸检验结果，请发送【电话号*证件号】查询检验结果。例：13123456789*441234567894561235'
         if status == 'text':
             reply = TextReply(content=content, message=msg)
         elif status == 'image':
@@ -96,6 +98,7 @@ def handle_wx(request):
         return response
 
 
+@csrf_exempt
 def render(request):
     if request.method == 'GET':
         client = WeChatClient('wxd5191076ca1f7db7', '5a20659127d67fe81a9ea9a84dd3da8a')

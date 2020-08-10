@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}电子健康卡管理{% endblock %}
+{% load static %}
+{% block headerjs %}
+    <link rel="stylesheet" href="{% static "health/css/index.css" %}">
+    <script>
+        function add_card() {
+            console.log(1)
+            window.location.href = {% url 'addCard' %}
+        }
+    </script>
+{% endblock %}
+{% block content %}
+<div class="weui-cells">
+    <div class="weui-cells">
+        {% if card_list.count > 0 %}
+        <view>1</view>
+        {% else %}
+            <div class="weui-loadmore weui-loadmore_line">
+              <span class="weui-loadmore__tips">暂无健康卡，请先绑卡</span>
+            </div>
+        {% endif %}
+    </div>
+    <div style="margin-top: 30px">
+        <a href="{% url 'addCard' %}" class="weui-btn weui-btn_primary">+ 新增健康卡</a>
+    </div>
+</div>
+{% endblock %}
