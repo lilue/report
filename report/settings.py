@@ -25,7 +25,7 @@ SECRET_KEY = '3*v+j3(#kp8t&d9e5*fgi8qipzlwtgfo#qw40hs!2+_fvls_)4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['potou.zhonghefull.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
