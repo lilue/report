@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3*v+j3(#kp8t&d9e5*fgi8qipzlwtgfo#qw40hs!2+_fvls_)4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -137,13 +137,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
 
 API_HOST = 'http://58.62.175.49:8098/api/'
+API_KEY = 'F2D8D966CD3D47788449C19D5EF2081B'
+API_APP_ID = '60C90F3B796B41878B8D9C393E2B6329'
+API_VERSION = 'V2.0.0'
+API_SIGN_MODE = 'SM3'
+API_ENCRYPT_MODE = 'SM4/ECB/ZeroBytePadding'
+API_ORG_CODE = 'KGA00020100000014'
+API_APP_RECORD_NO = '1301A0002QTHX0001'
+API_NONCE_STR = '12345685217'
 
 APP_ID = 'wxd5191076ca1f7db7'
 APP_SECRET = '5a20659127d67fe81a9ea9a84dd3da8a'

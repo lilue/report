@@ -9,7 +9,10 @@ from report import settings
 from .models import UserProfile, UserCard
 from django.shortcuts import redirect
 import json
+from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
+from utils.encrypt import common_api
+
 
 # Create your views here.
 
@@ -62,7 +65,8 @@ def oauth(method):
                     if user:
                         pass
                     else:
-                        user = UserProfile(openid=user_info['openid'], nickname=user_info['nickname'], head_url=user_info['headimgurl'])
+                        user = UserProfile(openid=user_info['openid'], nickname=user_info['nickname'],
+                                           head_url=user_info['headimgurl'])
                         user.save()
                     # {'openid': 'ozCtJt2NDcPEJ3lJCC9CezBFmH2g', 'nickname': 'ʟɪʟᴜᴇ_', 'sex': 1, 'language': 'zh_CN',
                     #  'city': '', 'province': '', 'country': '中国',
@@ -78,6 +82,7 @@ def oauth(method):
             else:
                 return redirect(url)
         return method(request)
+
     return warpper
 
 
@@ -87,8 +92,46 @@ def get_wx_user_info(request):
     return HttpResponse(str(user_info))
 
 
+@oauth
 def add_card(request):
     if request.method == 'GET':
-        # user = request.session.get('user')
-        # print(user)
+        user = request.session.get('user')
+        print(user['openid'])
+        # {'id': 1, 'openid': 'ozCtJt2NDcPEJ3lJCC9CezBFmH2g', 'nickname': 'ʟɪʟᴜᴇ_',
+        #  'head_url': 'http://thirdwx.qlogo.cn/mmopen/vi_32/gcqD8XSIafZADX0lzjsSjEb4kQR14o1EWk7ILBvrXvYY83rGvgBeK60717V6J5mJViaKdjTAhUFmoVY7xzicMDdg/132'}
         return render(request, 'health/add_card.html')
+
+
+def post_add_card(request):
+    if request.method == 'POST':
+        params = request.POST
+        session_user = request.session.get('user')
+        user = UserProfile.objects.get(openid=session_user['openid'])
+        # print(params)
+        res = common_api(params['idType'], params['idCard'], 'queryIfHasRegistered')
+        if res['datas']['parameters'] == 0:
+            print("未注册过")
+        else:
+            res = common_api(params['idType'], params['idCard'], 'getPersonInfo')
+            # print(res['datas'])
+            result = res['datas']
+            # print(user.usercard_set.all())
+            query_set = user.usercard_set.all()
+            # print(query_set)
+            if query_set.exists():
+                for item in query_set:
+                    if item.erhc_card_no == res['datas']['erhcCardNo']:
+                        print(item.id)      # 卡列表id
+            else:
+                user_card = UserCard.objects.create(name=params['name'], id_code=params['idCard'],
+                                                    erhc_card_no=result['erhcCardNo'], empi=result['empi'],
+                                                    user=user)
+                print(user_card.id)         # 创建卡id
+            # if user.usercard_set:
+            #     UserCard.objects.create(name=params['name'], id_code=params['idCard'],
+            #                             erhc_card_no=res['datas']['erhcCardNo'], empi=res['datas']['empi'], user=user)
+            #     pass
+            # else:
+            #     pass
+            # print("已经注册了")
+        return HttpResponse(123)

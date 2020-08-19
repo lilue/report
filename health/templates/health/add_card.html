@@ -1,19 +1,53 @@
 {% extends 'base.html' %}
 {% block title %}注册/绑定电子健康卡{% endblock %}
 {% load static %}
-{% block headerjs %}
+{% block bodyJs %}
     <script type="text/JavaScript">
         function gradeChange() {
             var objS = document.getElementById("pid");
             var grade = objS.options[objS.selectedIndex].value;
-            if(grade == 1) {
-                document.getElementById('sfz').style.display="block";
-                document.getElementById('qita').style.display="none";
+            if (grade == 1) {
+                document.getElementById('card1').style.display = "block";
+                document.getElementById('card2').style.display = "none";
             } else {
-                {#document.getElementById('').style.display="block";#}
-                document.getElementById('qita').style.display="block";
-                document.getElementById('sfz').style.display="none";
+                document.getElementById('card1').style.display = "none";
+                document.getElementById('card2').style.display = "block";
             }
+        };
+
+        function getCookie(name) {
+            var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+            console.log(r);
+            return r ? r[1] : undefined;
+        };
+
+        function postMes() {
+            var params = {};
+            params.name = $('#name').val();
+            params.idType = $('#pid').val();
+            if (params.idType == 1) {
+                params.idCard = $('#idCard').val();
+            } else {
+                params.card = $('#card').val();
+                params.sex = $('#sex').val();
+                params.birDate = $('#birDate').val();
+            }
+            params.phone = $('#phone').val();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'createCard' %}",
+                headers: {"X-CSRFToken": getCookie("csrftoken")},
+                data: params,
+                beforeSend: function () {
+                    $.showLoading("数据加载中");
+                },
+                success: function (res) {
+                    console.log(res)
+                },
+                complete: function () {
+                    $.hideLoading();
+                },
+            })
         };
     </script>
 {% endblock %}
@@ -26,10 +60,11 @@
         {#      <input class="weui-switch" type="checkbox" checked="checked">#}
         {#    </div>#}
         {#  </div>#}
+        {% csrf_token %}
         <div class="weui-cell">
             <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" placeholder="请输入姓名">
+                <input class="weui-input" id="name" type="text" placeholder="请输入姓名">
             </div>
         </div>
         <div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
@@ -38,18 +73,62 @@
             </div>
             <div class="weui-cell__bd">
                 <select class="weui-select" id="pid" onchange="gradeChange()">
-                    <option value="1">身份证</option>
-                    <option value="2">港澳来往内地通行证(回乡证)</option>
-                    <option value="3">台湾来往大陆通行证(台胞证)</option>
-                    <option value="4">护照</option>
+                    <option value="01">身份证</option>
+                    <option value="06">港澳来往内地通行证(回乡证)</option>
+                    <option value="07">台湾来往大陆通行证(台胞证)</option>
+                    <option value="03">护照</option>
                 </select>
             </div>
         </div>
-        <div class="weui-cell" id="sfz" style="display: block">
-            <div class="weui-cell__hd"><label class="weui-label">身份证号</label></div>
+        <block id="card1" style="display:block">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">身份证号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="idCard" type="text" placeholder="请输入身份证号">
+                </div>
+            </div>
+        </block>
+        <block id="card2" style="display:none">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">证件号码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="card" type="text" placeholder="请输入证件号码">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
+                <div class="weui-cell__hd">
+                    <label for="" class="weui-label">性别</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" id="sex">
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label for="" class="weui-label">出生日期</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="birDate" type="date" value="1990-01-01">
+                </div>
+            </div>
+            <!-- 出生日期 -->
+        </block>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" placeholder="请输入身份证号">
+                <input class="weui-input" id="phone" type="tel" placeholder="请输入联系电话">
             </div>
         </div>
+        <div>
+            <p style="padding: 10px;" class="am-ft-sm am-ft-gray">
+					<span class="am-ft-orange">
+						<i class="fa fa-info-circle"></i>
+					</span>
+                温馨提示:请确保您输入的证件号码准确无误。
+            </p>
+        </div>
+        <a href="javascript:;" onclick="postMes()" class="weui-btn weui-btn_primary">确认</a>
     </div>
+
 {% endblock %}
