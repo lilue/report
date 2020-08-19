@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3*v+j3(#kp8t&d9e5*fgi8qipzlwtgfo#qw40hs!2+_fvls_)4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'potou.zhonghefull.com']
 
 
 # Application definition
@@ -77,39 +77,28 @@ WSGI_APPLICATION = 'report.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'report',
-        'USER': 'report',
-        'PASSWORD': 'QQxuwen206420',
-        'HOST': '118.31.68.134',
-        'PORT': '3306',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'report',
+            'USER': 'root',
+            'PASSWORD': '123456',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
     }
-}
-
-# if DEBUG:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': 'report',
-#             'USER': 'root',
-#             'PASSWORD': '123456',
-#             'HOST': '127.0.0.1',
-#             'PORT': '3306',
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': 'report',
-#             'USER': 'report',
-#             'PASSWORD': 'QQxuwen206420',
-#             'HOST': '118.31.68.134',
-#             'PORT': '3306',
-#         }
-#     }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'report',
+            'USER': 'report',
+            'PASSWORD': 'QQxuwen206420',
+            'HOST': '118.31.68.134',
+            'PORT': '3306',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

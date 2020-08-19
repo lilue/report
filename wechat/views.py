@@ -59,7 +59,6 @@ def handle_wx(request):
                     tempMsg = '院务办公：0759-3821203\n急救电话：0759-3823120\n防疫电话：0759-3821379\n' \
                               '妇产科电话：0759-3822013\n邮箱：2653809347@qq.com\n地址：湛江市坡头区坡头镇红旗路18-20号'
                 elif msg.key == 'image':
-                    print('来院路线')
                     status = 'image'
                     media_id = '8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_'
                     tempMsg = '图片回复'
@@ -92,6 +91,7 @@ def handle_wx(request):
             reply = TextReply(content=news, message=msg)
         elif status == 'image':
             reply = ImageReply(media_id=media_id, message=msg)
+            print(reply)
         elif status == 'article':
             reply = ArticlesReply(message=msg)
             reply.add_article(article)
@@ -173,9 +173,9 @@ def createMenu(request):
                             "media_id": "HmciRG5xP_jEQD0HuE5bFN2L8AxiMgyNnIxkwYV9c_w"
                         },
                         {
-                            "type": "media_id",
+                            "type": "click",
                             "name": "来院路线",
-                            "media_id": "8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_"
+                            "key": "image"
                         },
                         {
                             "type": "click",
