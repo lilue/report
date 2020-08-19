@@ -36,7 +36,7 @@ def handle_wx(request):
         status = 'text'
         if msg.type == 'event':
             if msg.event == 'subscribe':
-                content = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打医务科电话3822802，' \
+                news = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打医务科电话3822802，' \
                           '每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，检验报告请咨询检验科3822806；' \
                           '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
                           '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
@@ -59,6 +59,7 @@ def handle_wx(request):
                     tempMsg = '院务办公：0759-3821203\n急救电话：0759-3823120\n防疫电话：0759-3821379\n' \
                               '妇产科电话：0759-3822013\n邮箱：2653809347@qq.com\n地址：湛江市坡头区坡头镇红旗路18-20号'
                 elif msg.key == 'image':
+                    print('来院路线')
                     status = 'image'
                     media_id = '8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_'
                     tempMsg = '图片回复'
@@ -67,7 +68,7 @@ def handle_wx(request):
                           '每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，检验报告请咨询检验科3822806；' \
                           '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
                           '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
-                content = tempMsg
+                news = tempMsg
         elif msg.type == 'text':
             keyword = ['时间', '时候', '上班', '几时']
             for i in keyword:
@@ -75,20 +76,20 @@ def handle_wx(request):
                 if result:
                     break
             if result:
-                content = '急诊科及120急救、住院病房均24小时工作制，门诊、医保报销、预防保健科工作日正常上班，' \
+                news = '急诊科及120急救、住院病房均24小时工作制，门诊、医保报销、预防保健科工作日正常上班，' \
                           '8:00—11:30、14:30—17:30，周六8:00—11:30，如特殊情况，可联系医院或相关医护人员。'
             else:
                 item_str = msg
                 res = getInfo(item_str)
-                content = res
+                news = res
         else:
-            content = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！' \
+            news = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！' \
                       '\n预约核酸检测请拨打医务科电话3822802，每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，' \
                       '检验报告请咨询接诊医生；\n如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；\n' \
                       '如预约疫苗接种，请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！' \
                       '\n如需查询核酸检验结果，请发送【电话号*证件号】查询检验结果。例：13123456789*441234567894561235'
         if status == 'text':
-            reply = TextReply(content=content, message=msg)
+            reply = TextReply(content=news, message=msg)
         elif status == 'image':
             reply = ImageReply(media_id=media_id, message=msg)
         elif status == 'article':
@@ -149,8 +150,8 @@ def getInfo(params):
 
 def createMenu(request):
     if request.method == 'GET':
-        client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
-        # client = WeChatClient("wxd5191076ca1f7db7", "5a20659127d67fe81a9ea9a84dd3da8a")
+        # client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
+        client = WeChatClient("wxd5191076ca1f7db7", "5a20659127d67fe81a9ea9a84dd3da8a")
         client.menu.create({
             "button": [
                 {
@@ -172,9 +173,9 @@ def createMenu(request):
                             "media_id": "HmciRG5xP_jEQD0HuE5bFN2L8AxiMgyNnIxkwYV9c_w"
                         },
                         {
-                            "type": "click",
+                            "type": "media_id",
                             "name": "来院路线",
-                            "key": "image"
+                            "media_id": "8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_"
                         },
                         {
                             "type": "click",
