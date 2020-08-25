@@ -160,7 +160,7 @@ def createMenu(request):
                         {
                             "type": "view",
                             "name": "医院介绍",
-                            "url": "http://mp.weixin.qq.com/s?__biz=MzU4ODA1NTAyNg==&mid=100000735&idx=1&sn=347095cbee115c3b93738c108afbd4d4&chksm=7de3eb424a9462547c62d60ef03572c4fab59f14c4d1d5953f7bd687d0c87d16106db80cab80&scene=18#wechat_redirect"
+                            "url": "https://mp.weixin.qq.com/s/djuFaVy6RFYmaA49tFGQoA"
                         },
                         {
                             "type": "view",

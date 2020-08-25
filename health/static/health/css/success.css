@@ -1,0 +1,14 @@
+/**
+    health/success  css file
+ */
+
+.card_box {
+    background-image: url("../../health/img/cardnewbg.png");
+    height: 3.5rem;
+    width: 6.2rem;
+    margin: 0 auto;
+    position: relative;
+    color: #000;
+    border-radius: 10px;
+    background-size: contain;
+}

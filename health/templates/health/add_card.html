@@ -43,6 +43,12 @@
                 },
                 success: function (res) {
                     console.log(res)
+                    if (res.error_num === 0) {
+                        window.location.href = "/suc?cardNo=" + res.cardNo
+                    } else {
+                        console.log(res.msg);
+                        $.toptip(res.msg + '，开卡失败，请联系工作人员人工开卡。', 20000, 'error');
+                    };
                 },
                 complete: function () {
                     $.hideLoading();
@@ -64,7 +70,7 @@
         <div class="weui-cell">
             <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
             <div class="weui-cell__bd">
-                <input class="weui-input" id="name" type="text" placeholder="请输入姓名">
+                <input class="weui-input" id="name" type="text" placeholder="请输入姓名" required>
             </div>
         </div>
         <div class="weui-cell weui-cell_active weui-cell_select weui-cell_select-after">

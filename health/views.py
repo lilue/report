@@ -1,6 +1,6 @@
 from django.contrib.auth import login
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views import View
 from wechatpy import WeChatClient
 from wechatpy.replies import BaseReply
@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from utils.encrypt import common_api
+from utils.encrypt import card_common_api, no_common_api
 
 
 # Create your views here.
@@ -104,34 +104,45 @@ def add_card(request):
 
 def post_add_card(request):
     if request.method == 'POST':
-        params = request.POST
-        session_user = request.session.get('user')
-        user = UserProfile.objects.get(openid=session_user['openid'])
-        # print(params)
-        res = common_api(params['idType'], params['idCard'], 'queryIfHasRegistered')
-        if res['datas']['parameters'] == 0:
-            print("未注册过")
-        else:
-            res = common_api(params['idType'], params['idCard'], 'getPersonInfo')
-            # print(res['datas'])
-            result = res['datas']
-            # print(user.usercard_set.all())
-            query_set = user.usercard_set.all()
-            # print(query_set)
-            if query_set.exists():
-                for item in query_set:
-                    if item.erhc_card_no == res['datas']['erhcCardNo']:
-                        print(item.id)      # 卡列表id
+        response = {}
+        try:
+            params = request.POST
+            session_user = request.session.get('user')
+            user = UserProfile.objects.get(openid=session_user['openid'])
+            # print(params)
+            res = card_common_api(params['idType'], params['idCard'], 'queryIfHasRegistered')
+            if res['datas']['parameters'] == 0:
+                print("未注册过")
             else:
-                user_card = UserCard.objects.create(name=params['name'], id_code=params['idCard'],
-                                                    erhc_card_no=result['erhcCardNo'], empi=result['empi'],
-                                                    user=user)
-                print(user_card.id)         # 创建卡id
-            # if user.usercard_set:
-            #     UserCard.objects.create(name=params['name'], id_code=params['idCard'],
-            #                             erhc_card_no=res['datas']['erhcCardNo'], empi=res['datas']['empi'], user=user)
-            #     pass
-            # else:
-            #     pass
-            # print("已经注册了")
-        return HttpResponse(123)
+                res = card_common_api(params['idType'], params['idCard'], 'getPersonInfo')
+                result = res['datas']
+                query_set = user.usercard_set.all()
+                if query_set.exists():
+                    for item in query_set:
+                        if item.erhc_card_no == res['datas']['erhcCardNo']:
+                            print(item.id)  # 卡列表id
+                            card_id = item.id
+                            card_no = item.erhc_card_no
+                else:
+                    user_card = UserCard.objects.create(name=params['name'], id_code=params['idCard'],
+                                                        erhc_card_no=result['erhcCardNo'], empi=result['empi'],
+                                                        user=user)
+                    print(user_card.id)  # 创建卡id
+                    card_id = user_card.id
+                    card_no = result['erhcCardNo']
+            response['msg'] = 'success'
+            response['id'] = card_id
+            response['cardNo'] = card_no
+            response['error_num'] = 0
+        except Exception as e:
+            response['msg'] = str(e)
+            response['error_num'] = 1
+        return JsonResponse(response)
+
+
+def bind_success(request):
+    if request.method == 'GET':
+        cardNo = request.GET.get('cardNo')
+        print(cardNo)
+        return render(request, 'health/success.html')
+    pass
