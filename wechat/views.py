@@ -150,8 +150,8 @@ def getInfo(params):
 
 def createMenu(request):
     if request.method == 'GET':
-        # client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
-        client = WeChatClient("wxd5191076ca1f7db7", "5a20659127d67fe81a9ea9a84dd3da8a")
+        client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
+        # client = WeChatClient("wxd5191076ca1f7db7", "5a20659127d67fe81a9ea9a84dd3da8a")
         client.menu.create({
             "button": [
                 {
