@@ -1,0 +1,92 @@
+{% load static %}
+<html>
+    <head>
+        <title>电子健康卡</title>
+        <script type="text/javascript" src="https://js.aq.qq.com/js/aq_common.js"></script>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="stylesheet" type="text/css" href="{% static 'health/css/base.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'health/css/regist_new.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'health/css/weui.min.css' %}" />
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="input-tab">
+                <div class="form">
+                    {% csrf_token %}
+                    <div class="form-element">
+                        <p class="label">姓名</p>
+                        <div class="input-block">
+                            <input class="name" id="name" placeholder="填写持卡人的姓名" />
+                        </div>
+                    </div>
+                    <div class="form-element">
+                        <p class="label">身份证号码</p>
+                        <div class="input-block">
+                            <input class="idCard" id="idCard" placeholder="填写持卡人的身份证号" maxlength="18" />
+                        </div>
+                        <a class="upload-idcard">
+                            <img class="photo-pic" src="{% static 'health/img/photo.png' %}" alt="" />
+                            <span>上传身份证</span>
+                        </a>
+                    </div>
+                    <div class="form-element">
+                        <p class="label">民族</p>
+                        <div class="input-block select-nation">
+                            <input disabled placeholder="选择民族" id="nation" class="nation" value="" />
+                        </div>
+                    </div>
+                    <div class="form-element">
+                        <p class="label">身份证地址</p>
+                        <div class="input-block text-area">
+                            <textarea placeholder="身份证地址" class="address-detail" id="address-detail"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form form-phone-verify" id="form-phone-verify">
+                    <div class="form-element">
+                        <p class="label">联系电话</p>
+                        <div class="input-block">
+                            <input id="phone" maxlength="11" class="phone" placeholder="填写联系电话" />
+                        </div>
+{#                        <a class="valid-btn">获取验证码</a>#}
+                    </div>
+{#                    <div class="form-element">#}
+{#                        <p class="label">验证码</p>#}
+{#                        <div class="input-block">#}
+{#                            <input maxlength="6" placeholder="输入验证码" class="validnumber" />#}
+{#                        </div>#}
+{#                    </div>#}
+                </div>
+{#                disabled#}
+                <button class="next-btn">完成申领</button>
+                <!-- <a href="regist_other.html" class="other-btn">使用其它证件申领 ></a> -->
+            </div>
+        </div>
+        <div class="loading-mask">
+            <div class="loading">
+                <img src="{% static 'health/img/loading.gif' %}" alt="" />
+                <p>识别中...</p>
+            </div>
+        </div>
+        <div class="mask" id="ocrfail-alert">
+            <div class="alert">
+                <div class="text">
+                    <p>不能正确识别身份信息，请重新上传。</p>
+                </div>
+                <div class="operation">
+                    <a class="confirm-btn" id="confirm-btn">确定</a>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="{% static 'health/js/common.js' %}"></script>
+        <script type="text/javascript" src="{% static 'health/js/zepto.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'health/js/picker.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'health/js/jweixin-1.4.0.js' %}"></script>
+        <script type="text/javascript" src="{% static 'health/js/weui.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'health/js/regist_new.js' %}"></script>
+    </body>
+</html>

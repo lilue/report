@@ -1,0 +1,30 @@
+{% load static %}
+<html>
+<head>
+    <title>电子健康卡</title>
+    <script type="text/javascript" src="https://js.aq.qq.com/js/aq_common.js"></script>
+    <meta charset="utf-8"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'health/css/base.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'health/css/list.css' %}"/>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="cardlist" id="cardlist"></div>
+    <div class="button">
+        <div class="addbtn" id="addcard">+ 添加健康卡</div>
+        <p class="tips" id="tips"></p>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="{% static 'health/js/common.js' %}"></script>
+<script type="text/javascript" src="{% static 'health/js/jweixin-1.4.0.js' %}"></script>
+<script type="text/javascript" src="{% static 'health/js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'health/js/jquery.qrcode.js' %}"></script>
+<script type="text/javascript" src="{% static 'health/js/qrcode.js' %}"></script>
+<script type="text/javascript" src="{% static 'health/js/list.js' %}"></script>
+</html>

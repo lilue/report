@@ -1,13 +1,15 @@
 from health import views
 from django.urls import path
+from .views import oauth
 
 
 urlpatterns = [
-    path('', views.Management.as_view(), name='index'),
+    path('', oauth(views.Management.as_view()), name='index'),
     path('user/info', views.get_wx_user_info),
-    path('newCard', views.add_card, name='addCard'),
-    path('createCard', views.post_add_card, name='createCard'),
-    path('suc', views.bind_success, name='suc'),
-    path('MP_verify_PJRLUusp1NXyuD70.txt', views.wx_verify)
+    path('card', oauth(views.health.as_view()), name='card'),
+    path('personal/<int:no>/', views.bind_success, name='suc'),
+    path('untie/', views.untie_health, name='untie'),
+    path('health_list/', views.health_card_list, name='cardList'),
+    path('MP_verify_PJRLUusp1NXyuD70.txt', views.wx_verify),
     # path('render/', views.render),
 ]

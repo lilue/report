@@ -1,0 +1,75 @@
+{% load static %}
+<html>
+    <head>
+        <title>电子健康卡</title>
+        <script type="text/javascript" src="https://js.aq.qq.com/js/aq_common.js"></script>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="stylesheet" type="text/css" href="{% static 'health/css/base.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'health/css/weui.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'health/css/personal.css' %}" />
+        <script type="text/javascript">
+            var name = '{{ name }}';
+            var idCard = '{{ idCard }}';
+            var phone = '{{ phone }}';
+            var qrCodeText = '{{ qrCodeText }}';
+            var medical = '{{ medical }}';
+        </script>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="qrcode-block">
+                <img class="qrcode-logo" src="{% static 'health/img/logo_.png' %}" alt="" />
+                <div class="qrcode"></div>
+            </div>
+            <div class="text-block">
+                <div class="text-element border">
+                    <div class="label">姓名</div>
+                    <div class="value" id="name">{{ name }}</div>
+                </div>
+                <div class="text-element border">
+                    <div class="label">身份证号</div>
+                    <div class="value" id="idcard"></div>
+                </div>
+                <div class="text-element border">
+                    <div class="label">手机号</div>
+                    <div class="value" id="phone"></div>
+                </div>
+                <div class="text-element">
+                    <div class="label">诊疗卡号</div>
+                    <div class="value" id="medical"><img style="margin: 0" id="imgcode"/></div>
+                </div>
+            </div>
+            <div class="operation">
+                {% csrf_token %}
+                <a class="button" id="entercard">返回首页</a>
+                <a class="link" id="openpopwindow">解绑电子健康卡 ></a>
+            </div>
+        </div>
+        <div class="mask" style="display: none">
+            <div id="popwindow" class="popwindow">
+                <div class="text">
+                    <h5>操作确认</h5>
+                    <p>确认要解除当前就诊人与当前微信账号的绑定关系吗？</p>
+                </div>
+                <div class="operation">
+                    <a class="unbind" id="unbing-btn" data-id="{{ id }}">解绑</a>
+                    <div class="line"></div>
+                    <a class="cancel" id="cancel-btn">取消</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="{% static 'health/js/common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'health/js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'health/js/jquery.qrcode.js' %}"></script>
+    <script type="text/javascript" src="{% static 'health/js/jquery-barcode.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'health/js/qrcode.js' %}"></script>
+    <script type="text/javascript" src="{% static 'health/js/utf.js' %}"></script>
+    <script type="text/javascript" src="{% static 'health/js/JsBarcode.all.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'health/js/weui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'health/js/personal.js' %}"></script>
+</html>
