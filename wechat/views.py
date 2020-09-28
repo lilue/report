@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from wechatpy import parse_message
 from wechatpy.replies import TextReply, ImageReply, ArticlesReply
 from reports.models import Report, Subscription
+from wage.models import Payroll
 from wechatpy import WeChatClient
 from django.views.decorators.csrf import csrf_exempt
 
@@ -79,7 +80,16 @@ def handle_wx(request):
                           '8:00—11:30、14:30—17:30，周六8:00—11:30，如特殊情况，可联系医院或相关医护人员。'
             else:
                 item_str = msg
-                res = getInfo(item_str)
+                if '+' in msg.content:
+                    res = getSlip(msg.content)
+                elif '*' in msg.content:
+                    res = getInfo(item_str)
+                else:
+                    res = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！' \
+                      '\n预约核酸检测请拨打医务科电话3822802，每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，' \
+                      '检验报告请咨询接诊医生；\n如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；\n' \
+                      '如预约疫苗接种，请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！' \
+                      '\n如需查询核酸检验结果，请发送【电话号*证件号】查询检验结果。例：13123456789*441234567894561235'
                 news = res
         else:
             news = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！' \
@@ -146,6 +156,21 @@ def getInfo(params):
                       '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！\n' \
                       '如需查询核酸检验结果，请发送【电话号*证件号】查询检验结果。例：13123456789*441234567894561235'
     return result
+
+
+def getSlip(params):
+    text = params.split('+', 1)
+    query_set = Payroll.objects.filter(idCard=text[0], random_code=text[1]).order_by('-id')[:1]
+    if query_set.exists():
+        for i in query_set:
+            res = i.content
+    else:
+        res = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！\n' \
+                      '预约核酸检测请拨打医务科电话3822802，每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，' \
+                      '检验报告请咨询检验科3822806；\n如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；\n如预约疫苗接种，' \
+                      '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！\n' \
+                      '如需查询核酸检验结果，请发送【电话号*证件号】查询检验结果。例：13123456789*441234567894561235'
+    return res
 
 
 def createMenu(request):
