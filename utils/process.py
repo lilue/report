@@ -1,5 +1,4 @@
 
-
 def process_date(date):
     folder = date.replace('/', '')
     list_folder = list(folder)

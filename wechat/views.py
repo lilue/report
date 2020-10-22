@@ -81,7 +81,7 @@ def handle_wx(request):
                           '8:00—11:30、14:30—17:30，周六8:00—11:30，如特殊情况，可联系医院或相关医护人员。'
             else:
                 item_str = msg
-                if '+' in msg.content:
+                if 'gz' in msg.content:
                     res = getSlip(msg.content)
                 elif '*' in msg.content:
                     res = getInfo(item_str)
@@ -165,8 +165,8 @@ def getInfo(params):
 
 
 def getSlip(params):
-    text = params.split('+', 1)
-    query_set = Payroll.objects.filter(idCard=text[0], random_code=text[1]).order_by('-id')[:1]
+    code = params.replace('gz', '')
+    query_set = Payroll.objects.filter(random_code=code).order_by('-id')[:1]
     if query_set.exists():
         for i in query_set:
             res = i.content
