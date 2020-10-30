@@ -151,8 +151,8 @@ def getInfo(params):
                     pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s_%s.pdf" % (folder, folder, report.sample_num)
                     result = template % (report.name, report.inspection_date, report.proposal,  pdfUrl)
             else:
-                if phone_res and id_card_res:
-                    result = "暂无手机号%s，证件号%s的检验结果，请稍后查询。" % (text[0], text[1])
+                if id_card_res:
+                    result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
     else:
         result = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！\n' \
                       '预约核酸检测请拨打医务科电话3822802，每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，' \
