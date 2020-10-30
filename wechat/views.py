@@ -138,20 +138,18 @@ def getInfo(params):
             query_set = Report.objects.filter(phone=text[0], idCard=text[1]).order_by('-id')[:1]
             if query_set.exists():
                 # 有数据
-                template = "【新型冠状病毒(COVID-19)核酸检测报告】\n" \
-                           "姓名：%s\n性别：%s\n年龄：%s\n采样时间：%s\n样本状态：%s\n送检医院：%s\n" \
-                           "联系方式：%s\n证件号：%s\n" \
-                           "检验结果：%s\n检验日期：%s\n报告日期：%s\n检验者：%s\n审核者：%s\n" \
+                template = "【新型冠状病毒(COVID-19)核酸检测结果】\n" \
+                           "姓名：%s\n" \
+                           "检测日期：%s\n" \
+                           "检测机构：湛江市坡头区人民医院\n" \
+                           "检测结果：%s\n" \
                            "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
                            "PDF版报告：【%s】, 请复制至浏览器打开。"
                 for report in query_set:
                     temporary = report.report_date.split(' ', 1)
                     folder = process_date(temporary[0])
                     pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s_%s.pdf" % (folder, folder, report.sample_num)
-                    result = template % (report.name, report.gender, report.age, report.sampling_time,
-                                         report.sample_status, report.hospital, report.phone, report.idCard,
-                                         report.proposal, report.inspection_date, report.report_date,
-                                         report.examiner, report.reviewer, pdfUrl)
+                    result = template % (report.name, report.inspection_date, report.proposal,  pdfUrl)
             else:
                 if phone_res and id_card_res:
                     result = "暂无手机号%s，证件号%s的检验结果，请稍后查询。" % (text[0], text[1])
