@@ -128,11 +128,11 @@ def getInfo(params):
     response = symbol in msg
     if response:
         text = msg.split(symbol, 1)
-        phone_res = re.match("^(13\d|14[5|7]|15\d|166|17[3|6|7]|18\d)\d{8}$", text[0])
+        # phone_res = re.match("^(13\d|14[5|7]|15\d|166|17[3|6|7]|18\d)\d{8}$", text[0])
         id_card_res = re.match(
             "/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(("
             "[0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$", text[1])
-        if not phone_res or not id_card_res:
+        if not id_card_res:
             result = "输入格式不正确，请检查后重新发送。"
         else:
             query_set = Report.objects.filter(phone=text[0], idCard=text[1]).order_by('-id')[:1]
