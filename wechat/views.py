@@ -128,33 +128,25 @@ def getInfo(params):
     response = symbol in msg
     if response:
         text = msg.split(symbol, 1)
-        # phone_res = re.match("^(13\d|14[5|7]|15\d|166|17[3|6|7]|18\d)\d{8}$", text[0])
-        id_card_res = re.match(
-            "/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(("
-            "[0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$", text[1])
-        if not id_card_res:
-            result = "输入格式不正确，请检查后重新发送。"
+        query_set = Report.objects.filter(phone=text[0], idCard=text[1]).order_by('-id')[:1]
+        if query_set.exists():
+            # 有数据
+            template = "【新型冠状病毒(COVID-19)核酸检测结果】\n" \
+                       "姓名：%s\n" \
+                       "检测日期：%s\n" \
+                       "检测机构：湛江市坡头区人民医院\n" \
+                       "检测结果：%s\n" \
+                       "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
+                       "PDF版报告：【%s】, 请复制至浏览器打开。"
+            for report in query_set:
+                # temporary = report.report_date.split(' ', 1)
+                # print(type(report.report_date))
+                # print(report.report_date)
+                folder = process_date(report.report_date)
+                pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s_%s.pdf" % (folder, folder, report.sample_num)
+                result = template % (report.name, report.inspection_date, report.proposal,  pdfUrl)
         else:
-            query_set = Report.objects.filter(phone=text[0], idCard=text[1]).order_by('-id')[:1]
-            if query_set.exists():
-                # 有数据
-                template = "【新型冠状病毒(COVID-19)核酸检测结果】\n" \
-                           "姓名：%s\n" \
-                           "检测日期：%s\n" \
-                           "检测机构：湛江市坡头区人民医院\n" \
-                           "检测结果：%s\n" \
-                           "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
-                           "PDF版报告：【%s】, 请复制至浏览器打开。"
-                for report in query_set:
-                    # temporary = report.report_date.split(' ', 1)
-                    # print(type(report.report_date))
-                    # print(report.report_date)
-                    folder = process_date(report.report_date)
-                    pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s_%s.pdf" % (folder, folder, report.sample_num)
-                    result = template % (report.name, report.inspection_date, report.proposal,  pdfUrl)
-            else:
-                if id_card_res:
-                    result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
+            result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
     else:
         result = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！\n' \
                       '预约核酸检测请拨打医务科电话3822802，每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，' \
