@@ -146,8 +146,10 @@ def getInfo(params):
                            "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
                            "PDF版报告：【%s】, 请复制至浏览器打开。"
                 for report in query_set:
-                    temporary = report.report_date.split(' ', 1)
-                    folder = process_date(temporary[0])
+                    # temporary = report.report_date.split(' ', 1)
+                    # print(type(report.report_date))
+                    # print(report.report_date)
+                    folder = process_date(report.report_date)
                     pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s_%s.pdf" % (folder, folder, report.sample_num)
                     result = template % (report.name, report.inspection_date, report.proposal,  pdfUrl)
             else:
