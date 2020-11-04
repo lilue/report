@@ -142,7 +142,7 @@ def getInfo(params):
                 # temporary = report.report_date.split(' ', 1)
                 # print(type(report.report_date))
                 # print(report.report_date)
-                folder = process_date(report.report_date)
+                folder = process_date(report.inspection_date)
                 pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s_%s.pdf" % (folder, folder, report.sample_num)
                 result = template % (report.name, report.inspection_date, report.proposal,  pdfUrl)
         else:
