@@ -97,7 +97,7 @@ DATABASES = {
         'NAME': 'report',
         'USER': 'report',
         'PASSWORD': 'QQxuwen206420',
-        'HOST': '118.31.68.134',
+        'HOST': '42.194.237.4',
         'PORT': '3306',
     }
 }
