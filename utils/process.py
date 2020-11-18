@@ -22,9 +22,5 @@ def process_date(date):
 
 
 if __name__ == '__main__':
-    # dd = process_date('2020/7/03')
-    # print(dd)
-    dd = '2020/11/1 17:04:16'
-    res = process_date(dd)
-    print(res)
+    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
