@@ -34,6 +34,7 @@ def handle_wx(request):
         response = HttpResponse(echo_str)
         return response
     else:
+        print(request.body)
         msg = parse_message(request.body)
         status = 'text'
         if msg.type == 'event':
