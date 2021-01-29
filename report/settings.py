@@ -169,3 +169,21 @@ TOKEN = 'JVWsgSgWG5Lu2z4jEE7OGRY18ixvJm4'
 # 坡头小程序
 WX_APP_ID = 'wx761dedfc357039bc'
 WX_APP_SECRET = 'd894cbe83769f622397350e9d780c9d4'
+
+# 统计字段分隔符
+STATISTICS_SPLIT_FLAG = '||'
+
+# 首页标题
+SIMPLEUI_HOME_TITLE = '快速开始'
+
+# 服务器信息
+SIMPLEUI_HOME_INFO = False
+
+# 使用分析
+SIMPLEUI_ANALYSIS = False
+
+# 确定库是否会在数据导入中使用数据库事务，以确保安全。
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+# 离线模式
+SIMPLEUI_STATIC_OFFLINE = True
