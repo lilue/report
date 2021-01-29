@@ -30,5 +30,5 @@ class UserAdmin(admin.ModelAdmin):
     list_editable = ['is_staff']
 
 
-admin.site.site_title = "众拓信息"
-admin.site.site_header = "湛江众拓信息科技有限公司"
+admin.site.site_title = "发票管理"
+admin.site.site_header = "坡头人民医院发票管理"
