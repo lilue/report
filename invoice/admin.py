@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Invoice
+from .models import Invoice, InvoiceLog
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.safestring import mark_safe
 # Register your models here.
@@ -40,6 +40,22 @@ class InvoiceAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+    # 禁用删除按钮
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    # 重写保存事件
+    def save_model(self, request, obj, form, change):
+        if obj.confirm:
+            content = "修改发票号码【" + obj.number + "】的确认状态为 已确认"
+        else:
+            content = "修改发票号码【" + obj.number + "】的确认状态为 未确认"
+        InvoiceLog.objects.create(content=content, edit_user=request.user)
+        obj.save()
+
+    def get_queryset(self, request):
+        return Invoice.objects.filter()
+
     # 判断是否勾选确认
     def confirm_txt(self, obj):
         if obj.confirm:
@@ -64,10 +80,12 @@ class InvoiceAdmin(admin.ModelAdmin):
     # 函数实现确认发票
     def confirm_btn(self, request, *args, **kwargs):
         obj = get_object_or_404(Invoice, pk=kwargs['pk'])
-        print(request.user)
+        # print(request.user)
         if not obj.confirm:
             obj.confirm = True
             obj.save()
+            content = "修改发票号码【" + obj.number + "】的确认状态为 已确认"
+            InvoiceLog.objects.create(content=content, edit_user=request.user)
         path = request.path.split('/')
         path = '/'.join(path[:-2]).strip('')
         return redirect(path)
@@ -94,3 +112,17 @@ class InvoiceAdmin(admin.ModelAdmin):
     fields = ('number', 'code', 'seller', 'seller_number', 'amount', 'purchaser', 'purchaser_number', 'date',
               'user', 'create_date', 'confirm')
     list_filter = (TitleKeywordFilter,)
+
+
+@admin.register(InvoiceLog)
+class InvoiceLogAdmin(admin.ModelAdmin):
+    # 屏蔽管理界面的添加按钮
+    def has_add_permission(self, request):
+        return False
+
+    # 禁用删除按钮
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    list_display = ('content', 'edit_user')
+    list_display_links = None

@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from report import settings
 
 urlpatterns = [
+    # path('', admin.site.urls),
     path('admin/', admin.site.urls),
     path('wx/', include('wechat.urls')),
     path('health/', include('health.urls')),

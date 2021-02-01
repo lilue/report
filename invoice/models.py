@@ -1,6 +1,7 @@
 from django.db import models
 from authorization.models import User
 from django.utils import timezone
+from django.contrib.auth.models import User as AUser
 # Create your models here.
 
 
@@ -43,3 +44,16 @@ class Invoice(models.Model):
             'confirm': self.confirm,
             'create_date': self.create_date
         }
+
+
+class InvoiceLog(models.Model):
+    content = models.CharField(max_length=256, verbose_name="操作内容")
+    edit_date = models.DateField(default=timezone.now, verbose_name="修改时间")
+    edit_user = models.ForeignKey(AUser, on_delete=models.PROTECT, default='', verbose_name='修改用户')
+
+    class Meta:
+        verbose_name = '操作日志'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.pk
