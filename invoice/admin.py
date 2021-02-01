@@ -101,11 +101,22 @@ class InvoiceAdmin(admin.ModelAdmin):
         else:
             return mark_safe('<text style="color: red;">{}</text>'.format(obj.purchaser))
 
+    # 提交人姓名
+    def submitter_txt(self, obj):
+        if obj.user.username:
+            name = obj.user.username
+        else:
+            name = obj.user.nickname
+        return mark_safe('<text>{}</text>'.format(name))
+
+    submitter_txt.short_description = '提交人'
+    submitter_txt.allow_tags = True
+
     check_purchaser.short_description = '受票方名称'
     check_purchaser.allow_tags = True
 
     list_display = ['number', 'code', 'seller', 'seller_number', 'amount', 'check_purchaser', 'date', 'confirm_txt',
-                    'user', 'create_date']
+                    'submitter_txt', 'create_date']
     list_display_links = ['number']
     readonly_fields = ['number', 'code', 'seller', 'seller_number', 'amount', 'purchaser',
                        'purchaser_number', 'date', 'user', 'create_date']
