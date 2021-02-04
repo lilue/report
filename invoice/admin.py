@@ -91,11 +91,12 @@ class InvoiceAdmin(admin.ModelAdmin):
         return redirect(path)
 
     def check_purchaser(self, obj):
-        judgment = True
-        if obj.purchaser != '湛江市坡头区人民医院' and obj.purchaser_number != '12440804456250892W':
-            judgment = False
-        if obj.purchaser != '坡头区坡头镇中心卫生院' and obj.purchaser_number != '124408047993279516':
-            judgment = False
+        judgment = False
+        if obj.purchaser == '湛江市坡头区人民医院' and obj.purchaser_number == '12440804456250892W':
+            judgment = True
+        elif obj.purchaser == '坡头区坡头镇中心卫生院' and obj.purchaser_number == '124408047993279516':
+            judgment = True
+
         if judgment:
             return mark_safe('<text>{}</text>')
         else:
