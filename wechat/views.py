@@ -257,7 +257,7 @@ def createMenu(request):
                         {
                             "type": "view",
                             "name": "核酸检测",
-                            "url": "https://www.wjx.cn/jq/81216464.aspx"
+                            "url": "http://2021quarantine.17xueba.cn/?openid=oTIPM0b7tRvXGNugHhVftfmxS_nk&time=1612928051"
                         },
                         {
                             'type': 'miniprogram',
