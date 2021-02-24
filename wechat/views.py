@@ -34,12 +34,12 @@ def handle_wx(request):
         response = HttpResponse(echo_str)
         return response
     else:
-        print(request.body)
+        # print(request.body)
         msg = parse_message(request.body)
         status = 'text'
         if msg.type == 'event':
             if msg.event == 'subscribe':
-                news = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打医务科电话3822802，' \
+                news = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请致电院务办：3821203，' \
                           '每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，检验报告请咨询检验科3822806；' \
                           '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
                           '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
@@ -66,7 +66,7 @@ def handle_wx(request):
                     media_id = '8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_'
                     tempMsg = '图片回复'
                 else:
-                    tempMsg = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打医务科电话3822802，' \
+                    tempMsg = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请致电院务办：3821203，' \
                           '每天早上8点至10点为核酸采样时间，具体以医务科的安排为准，检验报告请咨询检验科3822806；' \
                           '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
                           '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
