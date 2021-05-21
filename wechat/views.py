@@ -255,11 +255,6 @@ def createMenu(request):
                             "media_id": "HmciRG5xP_jEQD0HuE5bFHt0ItcB8Vxhwkk1-VHpuSA"
                         },
                         {
-                            "type": "view",
-                            "name": "核酸检测",
-                            "url": "http://2021quarantine.17xueba.cn/?openid=oTIPM0b7tRvXGNugHhVftfmxS_nk&time=1612928051"
-                        },
-                        {
                             'type': 'miniprogram',
                             'name': '预约疫苗接种',
                             'url': 'https://app.cn2030.com/html/xiaochengxu.html',
