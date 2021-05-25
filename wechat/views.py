@@ -103,13 +103,13 @@ def handle_wx(request):
         return response
 
 
-@csrf_exempt
-def render(request):
-    if request.method == 'GET':
-        client = WeChatClient('wxd5191076ca1f7db7', '5a20659127d67fe81a9ea9a84dd3da8a')
-        res = client.message.send_text('ozCtJt2NDcPEJ3lJCC9CezBFmH2g', '测试主动发消息')
-        response = HttpResponse(json.dumps(res), content_type='application/json')
-        return response
+# @csrf_exempt
+# def render(request):
+#     if request.method == 'GET':
+#         client = WeChatClient('wxd5191076ca1f7db7', '5a20659127d67fe81a9ea9a84dd3da8a')
+#         res = client.message.send_text('ozCtJt2NDcPEJ3lJCC9CezBFmH2g', '测试主动发消息')
+#         response = HttpResponse(json.dumps(res), content_type='application/json')
+#         return response
 
 
 def getInfo(params):
@@ -173,6 +173,17 @@ def replayMes():
     #       '例：13123456789*441234567894561235查询\n' \
     #       '报告时间：上午采样的，当天晚上可以查询结果，下午采样的第二天晚上可以查询结果。'
     return res
+
+
+def menu(request):
+    return render(request, 'wechat/menu.html')
+
+
+def getMenu(request):
+    client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
+    menu_info = client.menu.get_menu_info()
+    print(type(menu_info))
+    print(menu_info)
 
 
 def createMenu(request):
