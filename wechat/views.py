@@ -3,7 +3,7 @@ import re
 from django.shortcuts import render
 from wechatpy.utils import check_signature, ObjectDict
 from wechatpy.exceptions import InvalidSignatureException
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from wechatpy import parse_message
 from wechatpy.replies import TextReply, ImageReply, ArticlesReply
 from reports.models import Report, Subscription
@@ -179,18 +179,20 @@ def menu(request):
     return render(request, 'wechat/menu.html')
 
 
+@csrf_exempt
 def getMenu(request):
-    client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
-    menu_info = client.menu.get_menu_info()
-    print(type(menu_info))
+    client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")  # 坡头
+    menu_info = client.menu.get()
     print(menu_info)
+    # print(menu_info['selfmenu_info'])
+    return JsonResponse(menu_info)
 
 
 def createMenu(request):
     if request.method == 'GET':
-        client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
-        # client = WeChatClient("wxd5191076ca1f7db7", "5a20659127d67fe81a9ea9a84dd3da8a")
-        client.menu.create({
+        # client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
+        # client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")
+        menuList = {
             "button": [
                 {
                     "name": "医院概括",
@@ -280,5 +282,20 @@ def createMenu(request):
                     ]
                 }
             ]
-        })
+        }
+        # print(menuList)
+        # print(type(menuList))
+        # client.menu.create(menuList)
         return HttpResponse("OK")
+
+    elif request.method == 'POST':
+        request_body = request.POST
+        request_body.encoding = "utf-8"
+        menuList = request_body['menu']
+        menuList = json.loads(menuList)
+        try:
+            client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")
+            client.menu.create(menuList)
+            return JsonResponse({"msg": "修改成功"}, safe=False)
+        except Exception as e:
+            return JsonResponse({"msg": "修改出错了，请联系开发人员！" + str(e)}, safe=False)

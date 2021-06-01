@@ -1,44 +1,15 @@
 ;$(function(){
 	var mId=null;
-	//显示自定义按钮组
-	var obj={
-		    "menu": {
-		        "button": [
-		            {
-		                "type": "click", 
-		                "name": "今日歌曲", 
-		                "key": "col_2", 
-		                "sub_button": [ ]
-		            }, 
-		            {
-		                "type": "view", 
-		                "name": "百度一下", 
-		                "url": "http://www.baidu.com/",
-		                "sub_button": [ ]
-		            }, 
-		            {
-		                "name": "菜单", 
-		                "sub_button": [
-		                    {
-		                        "type": "view", 
-		                        "name": "搜索", 
-		                        "url": "http://www.soso.com/"
-		                    }, 
-		                    {
-		                        "type": "view", 
-		                        "name": "视频", 
-		                        "url": "http://v.qq.com/"
-		                    }, 
-		                    {
-		                        "type": "click", 
-		                        "name": "赞一下我们", 
-		                        "key": "col_1"
-		                    }
-		                ]
-		            }
-		        ]
-		    }
-		};
+	var obj = {};
+	$.ajax({
+		type: 'GET',
+		url: '/wx/getMenu',
+		async: false,
+		success: function(res) {
+			// console.log(res)
+			obj = res
+		}
+	});
 	var tempObj={};//存储HTML对象
 	var button=obj.menu.button;//一级菜单
 	//显示异常
@@ -218,7 +189,7 @@
 		setInput(value);
 		updateTit(value);
 		
-		radios[0].checked=true;
+		radios[1].checked=true;
 		$('#editMsg').show();
   		$('#editPage').hide();
   		$('.msg-context__item').show();
@@ -231,7 +202,7 @@
 			setInput(activedTxt);
 			updateTit(activedTxt);
 			
-			radios[0].checked=true;
+			radios[1].checked=true;
 			$('#editMsg').show();
 	  		$('#editPage').hide();
 	  		$('.msg-context__item').show();
@@ -677,21 +648,21 @@
 			if(button[rowIndex].hasOwnProperty('url')){
 				url=button[rowIndex].url;
 				if (!re.test(url)) {   
-					layer.msg("请输入正确的url地址！");
+					alert("请输入正确的url地址！");
 				   return false;   
 				  }  
 				saveAjax();
 			}else if(button[rowIndex].hasOwnProperty('key')){
 				saveAjax();
 			}else{
-				layer.msg("菜单内容不能为空！");
+				alert("菜单内容不能为空！");
 			}
 		}else if(activeSubBtn){
 			//二级菜单
 			if(button[rowIndex].sub_button[colIndex].hasOwnProperty('url')){
 				url=button[rowIndex].sub_button[colIndex].url;
 				if (!re.test(url)) {   
-					layer.msg("请输入正确的url地址！");
+					alert("请输入正确的url地址！");
 				   return false;   
 				  }  
 				saveAjax();
@@ -699,29 +670,37 @@
 				//layer.msg("请选择图文信息！");
 				saveAjax();
 			}else{
-				layer.msg("菜单内容不能为空！");
+				alert("菜单内容不能为空!");
+				// layer.msg("菜单内容不能为空！");
 			}
 		}else{
 			saveAjax();
 		}
 	});
-	//保存
+	// 保存
 	function saveAjax(){
+		console.log(JSON.stringify(obj.menu))
 		$.ajax({
     		type: "POST",
-			url: "<%=path%>/menu/saveButton.html",
+			url: "/wx/menu",
 			data : {
-				"menu" :JSON.stringify(obj) ,//先将对象转换为字符串再传给后台
+				"menu" :JSON.stringify(obj.menu) ,//先将对象转换为字符串再传给后台
 			},
 			dataType : "json",
 			success : function(data) {
-				if (data.flag==true) {
-					layer.msg("创建成功！");
-					location.reload();
-				} else {
-					layer.alert(data.msg);
-				}
+    			console.log(data)
+    			alert("创建成功!");
+				location.reload();
 			}
+			// 	if (data.flag==true) {
+			// 		// layer.msg("创建成功！");
+			// 		alert("创建成功!");
+			// 		location.reload();
+			// 	} else {
+			// 		alert(data.msg);
+			// 		// layer.alert(data.msg);
+			// 	}
+			// }
     	});
 	}
 });
