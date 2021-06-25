@@ -136,7 +136,7 @@ def getInfo(params):
                 # print(type(report.report_date))
                 # print(report.report_date)
                 folder = process_date(report.inspection_date)
-                pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s%s.pdf" % (folder, folder, report.idCard)
+                pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s.pdf" % (folder, report.idCard)
                 result = template % (report.name, report.inspection_date, report.proposal,  pdfUrl)
         else:
             result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
