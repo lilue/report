@@ -25,6 +25,9 @@ class Report(models.Model):
     examiner = models.CharField(max_length=100, null=True, blank=True, verbose_name="检验者")
     reviewer = models.CharField(max_length=100, null=True, blank=True, verbose_name="审核者")
     remarks = models.CharField(max_length=200, null=True, blank=True, verbose_name="备注")
+    zjg = models.CharField(max_length=200, null=True, blank=True, default='', verbose_name="总结果")
+    ORFlab = models.CharField(max_length=200, null=True, blank=True, default='', verbose_name="ORFlab基因")
+    N = models.CharField(max_length=200, null=True, blank=True, default='', verbose_name="N基因")
     # models.TextField
     # null = True, blank = True
 

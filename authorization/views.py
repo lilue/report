@@ -3,6 +3,7 @@ import utils.response
 from django.core import serializers
 from django.http import JsonResponse
 from django.views import View
+from reports.models import Report
 from utils.response import wrap_json_response, ReturnCode, CommonResponseMixin
 from utils.auth import already_authorized, c2s
 from .models import User
@@ -12,6 +13,11 @@ from invoice.models import Invoice
 
 
 def test_session(request):
+    phone = '14767922931'
+    idcard = '440804200709251657'
+    query_set = Report.objects.filter(phone=phone, idCard=idcard).order_by('-id')[:1]
+    for report in query_set:
+        print(report.zjg)
     request.session['message'] = 'Test Django Session OK!'
     response = wrap_json_response(code=ReturnCode.SUCCESS)
     return JsonResponse(data=response, safe=False)
