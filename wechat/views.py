@@ -117,10 +117,9 @@ def getInfo(params):
             # 有数据
             template = "【新型冠状病毒(COVID-19)核酸检测结果】\n" \
                        "姓名：%s\n" \
+                       "采样机构：%s\n" \
                        "检测机构：湛江市坡头区人民医院\n" \
                        "检测结果：%s\n" \
-                       "ORFlab基因：%s\n" \
-                       "N基因：%s\n" \
                        "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
                        "PDF版报告：【%s】, 请复制至浏览器打开。"
             for report in query_set:
@@ -128,20 +127,12 @@ def getInfo(params):
                     zjg = '阴性(-)'
                 else:
                     zjg = report.zjg
-                if not report.ORFlab:
-                    ORFlab = '阴性(-)'
-                else:
-                    ORFlab = report.ORFlab
-                if not report.N:
-                    N = '阴性(-)'
-                else:
-                    N = report.N
                 # temporary = report.report_date.split(' ', 1)
                 # print(type(report.report_date))
                 # print(report.report_date)
                 folder = process_date(report.inspection_date)
                 pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s.pdf" % (folder, report.idCard)
-                result = template % (report.name, zjg, ORFlab, N, pdfUrl)
+                result = template % (report.name, report.sampling_agency, zjg, pdfUrl)
         else:
             result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
     else:
