@@ -28,7 +28,6 @@ class Report(models.Model):
     zjg = models.CharField(max_length=200, null=True, blank=True, default='', verbose_name="总结果")
     ORFlab = models.CharField(max_length=200, null=True, blank=True, default='', verbose_name="ORFlab基因")
     N = models.CharField(max_length=200, null=True, blank=True, default='', verbose_name="N基因")
-    sampling_agency = models.CharField(max_length=200, null=True, blank=True, default='', verbose_name="采样机构")
     # models.TextField
     # null = True, blank = True
 
