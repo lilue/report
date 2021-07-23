@@ -119,6 +119,7 @@ def getInfo(params):
                        "姓名：%s\n" \
                        "采样机构：%s\n" \
                        "检测机构：湛江市坡头区人民医院\n" \
+                       "检测日期：%s\n" \
                        "检测结果：%s\n" \
                        "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
                        "PDF版报告：【%s】, 请复制至浏览器打开。"
@@ -132,7 +133,7 @@ def getInfo(params):
                 # print(report.report_date)
                 folder = process_date(report.inspection_date)
                 pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s.pdf" % (folder, report.idCard)
-                result = template % (report.name, report.hospital, zjg, pdfUrl)
+                result = template % (report.name, report.hospital, report.inspection_date, zjg, pdfUrl)
         else:
             result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
     else:
