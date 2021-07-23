@@ -128,12 +128,13 @@ def getInfo(params):
                     zjg = '阴性(-)'
                 else:
                     zjg = report.zjg
+                str_ss = report.inspection_date.split(' ', 1)
                 # temporary = report.report_date.split(' ', 1)
                 # print(type(report.report_date))
                 # print(report.report_date)
                 folder = process_date(report.inspection_date)
                 pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s.pdf" % (folder, report.idCard)
-                result = template % (report.name, report.hospital, report.inspection_date, zjg, pdfUrl)
+                result = template % (report.name, report.hospital, str_ss[0], zjg, pdfUrl)
         else:
             result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
     else:
