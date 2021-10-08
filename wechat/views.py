@@ -178,10 +178,10 @@ def menu(request):
 
 @csrf_exempt
 def getMenu(request):
-    # client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")  # 坡头
-    client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")
+    client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")  # 坡头
+    # client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")
     menu_info = client.menu.get()
-    print(menu_info)
+    # print(menu_info)
     # print(menu_info['selfmenu_info'])
     return JsonResponse(menu_info)
 
