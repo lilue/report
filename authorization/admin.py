@@ -31,4 +31,4 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.site_title = "发票管理"
-admin.site.site_header = "坡头人民医院"
+admin.site.site_header = "坡头区人民医院"
