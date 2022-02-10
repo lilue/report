@@ -7,8 +7,9 @@ from django.http import HttpResponse, JsonResponse
 from wechatpy import parse_message
 from wechatpy.replies import TextReply, ImageReply, ArticlesReply
 from reports.models import Report, Subscription
-from wage.models import Payroll
+# from wage.models import Payroll
 from wechatpy import WeChatClient
+from report import settings
 from django.views.decorators.csrf import csrf_exempt
 from utils.process import process_date
 
@@ -28,7 +29,7 @@ def handle_wx(request):
         nonce = request.GET.get('nonce', '')
         echo_str = request.GET.get('echostr', '')
         try:
-            check_signature(token, signature, timestamp, nonce)
+            check_signature(settings.TOKEN, signature, timestamp, nonce)
         except InvalidSignatureException:
             echo_str = '错误的请求'
         response = HttpResponse(echo_str)
@@ -39,25 +40,12 @@ def handle_wx(request):
         status = 'text'
         if msg.type == 'event':
             if msg.event == 'subscribe':
-                news = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打院务办电话3821203，' \
-                          '每天上午8:00-11:30及下午14:30-17:00为核酸采样时间，具体以医务科的安排为准，检验报告请咨询检验科3822806；' \
-                          '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
-                          '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
+                news = '欢迎关注"湛江市赤坎区人民医院"\n我们将竭诚为您服务，为您的健康保驾护航！\n地址：湛江市赤坎区民主路73号'
             elif msg.event == 'click':
                 article = ObjectDict()
                 if msg.key == 'vaccine':
                     status = 'article'
                     tempMsg = '疫苗'
-                elif msg.key == 'family':
-                    status = 'article'
-                    tempMsg = '家庭医生'
-                elif msg.key == 'hospital':
-                    status = 'article'
-                    article.title = '坡头镇家庭医生服务团队名单及服务所属自然村'
-                    article.description = ''
-                    article.image = 'http://mmbiz.qpic.cn/mmbiz_jpg/CYRHfvAwum0Aib4ZXsPDgibHIiauJw1SPH1tWAE7cvBmt33WhjCgBqsFeQT2EwaeDobN6qVpqB4ibzT6z6iauR1Ombg/0?wx_fmt=jpeg'
-                    article.url = 'http://mp.weixin.qq.com/s?__biz=MzU4ODA1NTAyNg==&mid=100000221&idx=1&sn=7421bd9c8ee87945e60328170030e128&chksm=7de3e9404a946056bd11a5587d8e32416bccb306b4bc4e1b4c2dc17efd665cc7b36a769c4ef6#rd'
-                    tempMsg = '医院分布'
                 elif msg.key == 'text':
                     tempMsg = '院务办公：0759-3821203\n急救电话：0759-3823120\n防疫电话：0759-3821379\n' \
                               '妇产科电话：0759-3822013\n邮箱：2653809347@qq.com\n地址：湛江市坡头区坡头镇红旗路18-20号'
@@ -66,10 +54,7 @@ def handle_wx(request):
                     media_id = '8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_'
                     tempMsg = '图片回复'
                 else:
-                    tempMsg = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打院务办电话3821203，' \
-                          '每天上午8:00-11:30及下午14:30-17:00为核酸采样时间，具体以医务科的安排为准，检验报告请咨询检验科3822806；' \
-                          '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
-                          '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
+                    tempMsg = replayMes()
                 news = tempMsg
         elif msg.type == 'text':
             keyword = ['时间', '时候', '上班', '几时']
@@ -82,9 +67,7 @@ def handle_wx(request):
                           '8:00—11:30、14:30—17:30，周六8:00—11:30，如特殊情况，可联系医院或相关医护人员。'
             else:
                 item_str = msg
-                if '+' in msg.content:
-                    res = getSlip(msg.content)
-                elif '*' in msg.content:
+                if '*' in msg.content:
                     res = getInfo(item_str)
                 else:
                     res = replayMes()
@@ -118,7 +101,7 @@ def getInfo(params):
             template = "【新型冠状病毒(COVID-19)核酸检测结果】\n" \
                        "姓名：%s\n" \
                        "采样机构：%s\n" \
-                       "检测机构：湛江市坡头区人民医院\n" \
+                       "检测机构：湛江市赤坎区人民医院\n" \
                        "检测日期：%s\n" \
                        "检测结果：%s\n" \
                        "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
@@ -133,7 +116,7 @@ def getInfo(params):
                 # print(type(report.report_date))
                 # print(report.report_date)
                 folder = process_date(report.inspection_date)
-                pdfUrl = "https://image.zhonghefull.com/pdf/%s/%s.pdf" % (folder, report.idCard)
+                pdfUrl = "https://image.zhonghefull.com/ckpdf/%s/%s.pdf" % (folder, report.idCard)
                 result = template % (report.name, report.hospital, str_ss[0], zjg, pdfUrl)
         else:
             result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
@@ -141,18 +124,18 @@ def getInfo(params):
         result = replayMes()
     return result
 
-
-def getSlip(params):
-    # code = params.replace('gz', '')
-    # query_set = Payroll.objects.filter(random_code=code).order_by('-id')[:1]
-    text = params.split('+', 1)
-    query_set = Payroll.objects.filter(idCard=text[0], random_code=text[1]).order_by('-id')[:1]
-    if query_set.exists():
-        for i in query_set:
-            res = i.content
-    else:
-        res = replayMes()
-    return res
+# 工资查询，赤坎没有该功能
+# def getSlip(params):
+#     # code = params.replace('gz', '')
+#     # query_set = Payroll.objects.filter(random_code=code).order_by('-id')[:1]
+#     text = params.split('+', 1)
+#     query_set = Payroll.objects.filter(idCard=text[0], random_code=text[1]).order_by('-id')[:1]
+#     if query_set.exists():
+#         for i in query_set:
+#             res = i.content
+#     else:
+#         res = replayMes()
+#     return res
 
 
 def replayMes():
@@ -162,13 +145,6 @@ def replayMes():
           '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；\n' \
           '如预约疫苗接种，请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！\n' \
           '如需查询并下载新冠核酸检验结果，请发送【采样时登记的手机号码或电话号码*证件号】获取。例：13123456789*441234567894561235'
-    # res = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！\n' \
-    #       '预约核酸检测请拨打医务科电话3822802，每天8点至11点及14:30至16:30为核酸采样时间。\n' \
-    #       '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；\n' \
-    #       '如预约疫苗接种，请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！\n' \
-    #       '如需查询并下载新冠核酸检验结果，请发送【采样时登记的手机号码或电话号码*证件号】获取。\n' \
-    #       '例：13123456789*441234567894561235查询\n' \
-    #       '报告时间：上午采样的，当天晚上可以查询结果，下午采样的第二天晚上可以查询结果。'
     return res
 
 
@@ -178,12 +154,33 @@ def menu(request):
 
 @csrf_exempt
 def getMenu(request):
-    client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")  # 坡头
+    client = WeChatClient(settings.APP_ID, settings.APP_SECRET)  # 坡头
     # client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")
     menu_info = client.menu.get()
     # print(menu_info)
     # print(menu_info['selfmenu_info'])
     return JsonResponse(menu_info)
+
+
+@csrf_exempt
+def getMaterialsCount(request):
+    client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
+    materials_count = client.material.get_count()
+    return JsonResponse(materials_count)
+
+
+@csrf_exempt
+def getMaterialsList(request):
+    client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
+    materials_list = client.material.batchget(media_type='news')
+    return JsonResponse(materials_list)
+
+
+@csrf_exempt
+def getMessageList(request):
+    client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
+    messageList = client.message.get_autoreply_info()
+    return JsonResponse(messageList)
 
 
 def createMenu(request):

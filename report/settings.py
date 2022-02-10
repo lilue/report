@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3*v+j3(#kp8t&d9e5*fgi8qipzlwtgfo#qw40hs!2+_fvls_)4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '118.31.68.134', '42.194.237.4', 'potou.zhonghefull.com', '*']
 
@@ -40,11 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'wechat',
     'reports',
-    'health',
-    'interface',
-    'wage',
-    'authorization',
-    'invoice',
 ]
 
 MIDDLEWARE = [
@@ -85,7 +80,7 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'report',
+            'NAME': 'ck',
             'USER': 'root',
             'PASSWORD': '123456',
             'HOST': '127.0.0.1',
@@ -96,8 +91,8 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'report',
-            'USER': 'report',
+            'NAME': 'zjck',
+            'USER': 'zjck',
             'PASSWORD': 'QQxuwen206420',
             'HOST': '127.0.0.1',
             'PORT': '3306',
@@ -147,15 +142,15 @@ STATICFILES_DIRS = [
 
 USE_PROXY = True
 
-API_HOST = 'http://58.62.175.49:8098/api/'
-API_KEY = 'F2D8D966CD3D47788449C19D5EF2081B'
-API_APP_ID = '60C90F3B796B41878B8D9C393E2B6329'
-API_VERSION = 'V2.0.0'
-API_SIGN_MODE = 'SM3'
-API_ENCRYPT_MODE = 'SM4/ECB/ZeroBytePadding'
-API_ORG_CODE = 'KGA00020100000014'
-API_APP_RECORD_NO = '1301A0002QTHX0001'
-API_NONCE_STR = '12345685217'
+# API_HOST = 'http://58.62.175.49:8098/api/'
+# API_KEY = 'F2D8D966CD3D47788449C19D5EF2081B'
+# API_APP_ID = '60C90F3B796B41878B8D9C393E2B6329'
+# API_VERSION = 'V2.0.0'
+# API_SIGN_MODE = 'SM3'
+# API_ENCRYPT_MODE = 'SM4/ECB/ZeroBytePadding'
+# API_ORG_CODE = 'KGA00020100000014'
+# API_APP_RECORD_NO = '1301A0002QTHX0001'
+# API_NONCE_STR = '12345685217'
 
 # APP_ID = 'wxd5191076ca1f7db7'
 # APP_SECRET = '5a20659127d67fe81a9ea9a84dd3da8a'
@@ -168,8 +163,8 @@ TOKEN = 'JVWsgSgWG5Lu2z4jEE7OGRY18ixvJm4'
 # WX_APP_SECRET = 'f946932fc5ab6ec1d95de1a4ef9fa72c'
 
 # 坡头小程序
-WX_APP_ID = 'wx761dedfc357039bc'
-WX_APP_SECRET = 'd894cbe83769f622397350e9d780c9d4'
+# WX_APP_ID = 'wx761dedfc357039bc'
+# WX_APP_SECRET = 'd894cbe83769f622397350e9d780c9d4'
 
 # 统计字段分隔符
 STATISTICS_SPLIT_FLAG = '||'

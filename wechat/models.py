@@ -7,3 +7,7 @@ class Menu(models.Model):
     class Meta:
         verbose_name = '微信菜单'
         verbose_name_plural = verbose_name
+
+
+class Material(models.Model):
+    pass
