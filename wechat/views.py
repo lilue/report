@@ -13,9 +13,6 @@ from report import settings
 from django.views.decorators.csrf import csrf_exempt
 from utils.process import process_date
 
-#  token 取自微信公众号自己设置的
-token = 'JVWsgSgWG5Lu2z4jEE7OGRY18ixvJm4'
-
 
 # Create your views here.
 
@@ -166,21 +163,21 @@ def getMenu(request):
 def getMaterialsCount(request):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     materials_count = client.material.get_count()
-    return JsonResponse(materials_count)
+    return JsonResponse(materials_count, safe=False)
 
 
 @csrf_exempt
 def getMaterialsList(request):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     materials_list = client.material.batchget(media_type='news')
-    return JsonResponse(materials_list)
+    return JsonResponse(materials_list, safe=False)
 
 
 @csrf_exempt
 def getMessageList(request):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     messageList = client.message.get_autoreply_info()
-    return JsonResponse(messageList)
+    return JsonResponse(messageList, safe=False)
 
 
 def createMenu(request):
