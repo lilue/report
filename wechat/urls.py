@@ -4,7 +4,7 @@ from django.urls import path
 urlpatterns = [
     path('', views.handle_wx),
     path('materials', views.getMaterialsCount),
-    path('materialsList/<int:offset>/', views.getMaterialsList),
+    path('materialsList/<str:media>/<int:offset>/', views.getMaterialsList),
     path('message', views.getMessageList),
     path('test', views.menu),
     path('getMenu', views.getMenu),

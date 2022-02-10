@@ -164,9 +164,10 @@ def getMaterialsCount(request):
 
 
 @csrf_exempt
-def getMaterialsList(request, offset):
+def getMaterialsList(request, media, offset):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
-    materials_list = client.material.batchget(media_type='image', offset=offset, count=350)
+    # media 分别有图片（image）、语音（voice）、视频（video）和缩略图（news）
+    materials_list = client.material.batchget(media_type=media, offset=offset, count=350)
     # materials_list = client.material.batchget(media_type='news')
     return JsonResponse(materials_list, json_dumps_params={'ensure_ascii': False})
 
@@ -223,9 +224,9 @@ def createMenu(request):
                     "name": "就诊服务",
                     "sub_button": [
                         {
-                            "type": "click",
+                            "type": "img",
                             "name": "健康申报卡",
-                            "key": "health"
+                            "value": "VGSuBmSVPkhR8yhfeYakY-DxZlC9KD8r2KXtVp0AxXp3ANj3taScfsG_uJJzByFd"
                         },
                         {
                             "type": "img",
@@ -233,19 +234,19 @@ def createMenu(request):
                             "value": "VGSuBmSVPkhR8yhfeYakY01_EtEOhzcm8MKPKqWUpVkCQkptcQhLMD3zK08KuNYj"
                         },
                         {
-                            "type": "view",
-                            "name": "通知公告",
-                            "url": "http://mp.weixin.qq.com/mp/homepage?__biz=MzU4ODA1NTAyNg==&hid=2&sn=29b38ba124689f3220bee403e7afb0aa&scene=18#wechat_redirect"
+                            "type": "img",
+                            "name": "就医须知",
+                            "value": "VGSuBmSVPkhR8yhfeYakYypnwiiJyUZYNsHcy9VdwQOzXyCoqDyNaArC1eL2qNDH"
                         },
                         {
                             "type": "view",
-                            "name": "公共卫生宣传",
-                            "url": "http://mp.weixin.qq.com/mp/homepage?__biz=MzU4ODA1NTAyNg==&hid=3&sn=e3190f3cf3a56e39a2f169881e61e58f&scene=18#wechat_redirect"
+                            "name": "预约挂号",
+                            "url": "https://app.hospital-payment.com/zjsckqrmyy/register?appid=wxc9bc2330d8cd6664"
                         },
                         {
                             "type": "view",
-                            "name": "孕前检查",
-                            "url": "http://mp.weixin.qq.com/s?__biz=MzU4ODA1NTAyNg==&mid=100000986&idx=1&sn=fd63f6fcd1adf8e08d5f77d7f0c5a3cd&chksm=7de3ec474a9465517978e656d9061fd72d119e2929388e98bcb2a2fe23a0d38726b80d5a1cb6&scene=18#wechat_redirect"
+                            "name": "满意度调查",
+                            "url": "https://www.wjx.cn/vm/OJaf8nU.aspx"
                         },
                     ]
                 },
@@ -253,14 +254,14 @@ def createMenu(request):
                     "name": "便民服务",
                     "sub_button": [
                         {
-                            "type": "view",
-                            "name": "停车缴费",
-                            "url": "http://wx.ymiot.net/dwz?p=c1gd9dsk"
+                            "type": "view_limited",
+                            "name": "健康证驾驶证体检",
+                            "media_id": "http://wx.ymiot.net/dwz?p=c1gd9dsk"
                         },
                         {
                             "type": "view_limited",
-                            "name": "疫苗种类接种时间",
-                            "media_id": "HmciRG5xP_jEQD0HuE5bFHt0ItcB8Vxhwkk1-VHpuSA"
+                            "name": "核酸检测",
+                            "media_id": "VGSuBmSVPkhR8yhfeYakYy107VXMZAoWaYMejvxsG6053nQ9Pbg8oT8Em8284qQ3"
                         },
                         {
                             'type': 'miniprogram',
