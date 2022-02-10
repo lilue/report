@@ -148,12 +148,12 @@ def menu(request):
 
 @csrf_exempt
 def getMenu(request):
-    client = WeChatClient(settings.APP_ID, settings.APP_SECRET)  # 坡头
+    client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     # client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")
     menu_info = client.menu.get()
     # print(menu_info)
     # print(menu_info['selfmenu_info'])
-    return JsonResponse(menu_info)
+    return JsonResponse(menu_info, json_dumps_params={'ensure_ascii': False})
 
 
 @csrf_exempt
@@ -179,6 +179,7 @@ def getMessageList(request):
 
 def createMenu(request):
     if request.method == 'GET':
+        client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
         # client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
         # client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")
         menuList = {
@@ -283,7 +284,7 @@ def createMenu(request):
         menuList = request_body['menu']
         menuList = json.loads(menuList)
         try:
-            client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")
+            client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
             client.menu.create(menuList)
             return JsonResponse({"msg": "修改成功"}, safe=False)
         except Exception as e:

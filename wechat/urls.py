@@ -7,7 +7,7 @@ urlpatterns = [
     path('materialsList', views.getMaterialsList),
     path('message', views.getMessageList),
     path('test', views.menu),
-    # path('getMenu', views.getMenu),
-    # path('menu', views.createMenu)
+    path('getMenu', views.getMenu),
+    path('menu', views.createMenu),
     # path('render/', views.render),
 ]
