@@ -164,9 +164,9 @@ def getMaterialsCount(request):
 
 
 @csrf_exempt
-def getMaterialsList(request):
+def getMaterialsList(request, offset):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
-    materials_list = client.material.batchget(media_type='image', offset=21, count=20)
+    materials_list = client.material.batchget(media_type='image', offset=offset, count=350)
     # materials_list = client.material.batchget(media_type='news')
     return JsonResponse(materials_list, json_dumps_params={'ensure_ascii': False})
 
