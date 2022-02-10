@@ -109,9 +109,6 @@ def getInfo(params):
                 else:
                     zjg = report.zjg
                 str_ss = report.inspection_date.split(' ', 1)
-                # temporary = report.report_date.split(' ', 1)
-                # print(type(report.report_date))
-                # print(report.report_date)
                 folder = process_date(report.inspection_date)
                 pdfUrl = "https://image.zhonghefull.com/ckpdf/%s/%s.pdf" % (folder, report.idCard)
                 result = template % (report.name, report.hospital, str_ss[0], zjg, pdfUrl)
