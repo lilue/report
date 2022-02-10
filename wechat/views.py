@@ -43,9 +43,9 @@ def handle_wx(request):
                 if msg.key == 'vaccine':
                     status = 'article'
                     tempMsg = '疫苗'
-                elif msg.key == 'text':
-                    tempMsg = '院务办公：0759-3821203\n急救电话：0759-3823120\n防疫电话：0759-3821379\n' \
-                              '妇产科电话：0759-3822013\n邮箱：2653809347@qq.com\n地址：湛江市坡头区坡头镇红旗路18-20号'
+                elif msg.key == 'route':
+                    tempMsg = "①【11路，12路，13路，15路，16路，1路，22路，23路，25路，27路，29路，2路，33路，809路，8路】-南华广场站，往民主路方向步行680米。\n②【21" \
+                              "路，29路东线，809路，821路】-民主路中站，往幸福路方向步行50米。 "
                 elif msg.key == 'image':
                     status = 'image'
                     media_id = '8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_'
@@ -166,7 +166,8 @@ def getMaterialsCount(request):
 @csrf_exempt
 def getMaterialsList(request):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
-    materials_list = client.material.batchget(media_type='news')
+    materials_list = client.material.batchget(media_type='image', offset=0, count=350)
+    # materials_list = client.material.batchget(media_type='news')
     return JsonResponse(materials_list, json_dumps_params={'ensure_ascii': False})
 
 
@@ -185,47 +186,51 @@ def createMenu(request):
         menuList = {
             "button": [
                 {
-                    "name": "医院概括",
+                    "name": "医院概况",
                     "sub_button": [
                         {
                             "type": "view",
-                            "name": "医院介绍",
-                            "url": "https://mp.weixin.qq.com/s/djuFaVy6RFYmaA49tFGQoA"
+                            "name": "医院简介",
+                            "url": "http://mp.weixin.qq.com/s?__biz=MzI1MjU0MTMzOQ==&mid=100000003&idx=1&sn"
+                                   "=d5cf1a1121d979086dad9f2e01d52ed1&chksm"
+                                   "=69e361f75e94e8e1c1c6c51ec9fc633c4cb706cd92e92954eca948ff631ab088d2aad9762f42"
+                                   "&scene=18#wechat_redirect "
                         },
                         {
                             "type": "view",
-                            "name": "康复医学",
-                            "url": "https://v.youku.com/v_show/id_XNDQ5MjE0OTg1Mg=="
-                        },
-                        {
-                            "type": "view_limited",
-                            "name": "医院分布",
-                            "media_id": "HmciRG5xP_jEQD0HuE5bFN2L8AxiMgyNnIxkwYV9c_w"
-                        },
-                        {
-                            "type": "click",
-                            "name": "来院路线",
-                            "key": "image"
+                            "name": "楼层布局",
+                            "url": "http://mp.weixin.qq.com/s?__biz=MzI1MjU0MTMzOQ==&mid=100000018&idx=1&sn"
+                                   "=ff39a0c7e966e5093d9965243b2d7c0c&chksm"
+                                   "=69e361e65e94e8f0cfd24923a7ba8b2b26da91e03cf2c11642b5d4f7de5a66f1c893c60a5276"
+                                   "&scene=18#wechat_redirect "
                         },
                         {
                             "type": "click",
-                            "name": "联系我们",
-                            "key": "text"
+                            "name": "来院线路",
+                            "key": "route"
+                        },
+                        {
+                            "type": "view",
+                            "name": "招聘信息",
+                            "key": "http://mp.weixin.qq.com/s?__biz=MzI1MjU0MTMzOQ==&mid=2247484762&idx=1&sn"
+                                   "=ef96ea38bc448bded2a11f3d65e7f839&chksm"
+                                   "=e9e365aede94ecb8fefd8c56f98712bcca0c04197a08f34a44f3c045279791c78285f548856c"
+                                   "&scene=18#wechat_redirect "
                         },
                     ]
                 },
                 {
-                    "name": "医院资讯",
+                    "name": "就诊服务",
                     "sub_button": [
                         {
-                            "type": "view",
-                            "name": "医院动态",
-                            "url": "http://mp.weixin.qq.com/mp/homepage?__biz=MzU4ODA1NTAyNg==&hid=1&sn=47bb912d49328559ae48fdc8369ecf4d&scene=18#wechat_redirect"
+                            "type": "click",
+                            "name": "健康申报卡",
+                            "key": "health"
                         },
                         {
                             "type": "view_limited",
                             "name": "家庭医生服务团队",
-                            "media_id": "HmciRG5xP_jEQD0HuE5bFPl2PYR2iAGPxN2Sd4HdW2E"
+                            "media_id": "escort"
                         },
                         {
                             "type": "view",
