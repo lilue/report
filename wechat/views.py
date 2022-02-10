@@ -166,7 +166,7 @@ def getMaterialsCount(request):
 @csrf_exempt
 def getMaterialsList(request):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
-    materials_list = client.material.batchget(media_type='image', offset=0, count=350)
+    materials_list = client.material.batchget(media_type='image', offset=21, count=20)
     # materials_list = client.material.batchget(media_type='news')
     return JsonResponse(materials_list, json_dumps_params={'ensure_ascii': False})
 
@@ -228,9 +228,9 @@ def createMenu(request):
                             "key": "health"
                         },
                         {
-                            "type": "view_limited",
-                            "name": "家庭医生服务团队",
-                            "media_id": "escort"
+                            "type": "img",
+                            "name": "电子陪护证",
+                            "value": "VGSuBmSVPkhR8yhfeYakY01_EtEOhzcm8MKPKqWUpVkCQkptcQhLMD3zK08KuNYj"
                         },
                         {
                             "type": "view",
