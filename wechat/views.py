@@ -163,21 +163,21 @@ def getMenu(request):
 def getMaterialsCount(request):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     materials_count = client.material.get_count()
-    return JsonResponse(materials_count, safe=False)
+    return JsonResponse(materials_count, json_dumps_params={'ensure_ascii': False})
 
 
 @csrf_exempt
 def getMaterialsList(request):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     materials_list = client.material.batchget(media_type='news')
-    return JsonResponse(materials_list, safe=False)
+    return JsonResponse(materials_list, json_dumps_params={'ensure_ascii': False})
 
 
 @csrf_exempt
 def getMessageList(request):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     messageList = client.message.get_autoreply_info()
-    return JsonResponse(messageList, safe=False)
+    return JsonResponse(messageList, json_dumps_params={'ensure_ascii': False})
 
 
 def createMenu(request):
