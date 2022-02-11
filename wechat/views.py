@@ -48,10 +48,6 @@ def handle_wx(request):
                 elif msg.key == 'route':
                     tempMsg = "①【11路，12路，13路，15路，16路，1路，22路，23路，25路，27路，29路，2路，33路，809路，8路】-南华广场站，往民主路方向步行680米。\n②【21" \
                               "路，29路东线，809路，821路】-民主路中站，往幸福路方向步行50米。 "
-                elif msg.key == 'image':
-                    status = 'image'
-                    media_id = '8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_'
-                    tempMsg = '图片回复'
                 else:
                     tempMsg = replayMes()
                 news = tempMsg
@@ -75,8 +71,6 @@ def handle_wx(request):
             news = replayMes()
         if status == 'text':
             reply = TextReply(content=news, message=msg)
-        elif status == 'image':
-            reply = ImageReply(media_id=media_id, message=msg)
             # print(reply)
         elif status == 'article':
             reply = ArticlesReply(message=msg)
@@ -135,11 +129,7 @@ def getInfo(params):
 
 
 def replayMes():
-    res = '非常感谢您的留言，如在上班时间我们将第一时间回复，如节假日因48小时未回复，按微信平台规则不能再回复，敬请谅解！\n' \
-          '预约核酸检测请拨打院务办电话3821203，每天上午8:00-11:30及下午14:30-17:00为核酸采样时间，具体以医务科的安排为准，' \
-          '检验报告方面上午采样的，当天晚上可以查询结果，下午采样的第二天晚上可以查询结果；\n' \
-          '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；\n' \
-          '如预约疫苗接种，请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！\n' \
+    res = '您的留言我们已收到，我们将会尽快回复，感谢您的关注！\n' \
           '如需查询并下载新冠核酸检验结果，请发送【采样时登记的手机号码或电话号码*证件号】获取。例：13123456789*441234567894561235'
     return res
 
@@ -207,20 +197,14 @@ def createMenu(request):
                     "name": "医院概况",
                     "sub_button": [
                         {
-                            "type": "view",
+                            "type": "view_limited",
                             "name": "医院简介",
-                            "url": "http://mp.weixin.qq.com/s?__biz=MzI1MjU0MTMzOQ==&mid=100000003&idx=1&sn"
-                                   "=d5cf1a1121d979086dad9f2e01d52ed1&chksm"
-                                   "=69e361f75e94e8e1c1c6c51ec9fc633c4cb706cd92e92954eca948ff631ab088d2aad9762f42"
-                                   "&scene=18#wechat_redirect "
+                            "media_id": "VGSuBmSVPkhR8yhfeYakYwpevUxs16MCwqpImOOuhY9Hb6Rg5kTb5bLuCvFfIA_j"
                         },
                         {
-                            "type": "view",
+                            "type": "view_limited",
                             "name": "楼层布局",
-                            "url": "http://mp.weixin.qq.com/s?__biz=MzI1MjU0MTMzOQ==&mid=100000018&idx=1&sn"
-                                   "=ff39a0c7e966e5093d9965243b2d7c0c&chksm"
-                                   "=69e361e65e94e8f0cfd24923a7ba8b2b26da91e03cf2c11642b5d4f7de5a66f1c893c60a5276"
-                                   "&scene=18#wechat_redirect "
+                            "media_id": "VGSuBmSVPkhR8yhfeYakY8vleeiGR9lnPRnAwuaI55H1b72evkVbGeZmTDpSU4Ji"
                         },
                         {
                             "type": "click",
@@ -228,12 +212,9 @@ def createMenu(request):
                             "key": "route"
                         },
                         {
-                            "type": "view",
+                            "type": "view_limited",
                             "name": "招聘信息",
-                            "key": "http://mp.weixin.qq.com/s?__biz=MzI1MjU0MTMzOQ==&mid=2247484762&idx=1&sn"
-                                   "=ef96ea38bc448bded2a11f3d65e7f839&chksm"
-                                   "=e9e365aede94ecb8fefd8c56f98712bcca0c04197a08f34a44f3c045279791c78285f548856c"
-                                   "&scene=18#wechat_redirect "
+                            "media_id": "VGSuBmSVPkhR8yhfeYakY0BjbKqWdddFZKcnbQU9Y0SK5PesCez-5r1ptxvpU3GW"
                         },
                     ]
                 },
@@ -271,9 +252,12 @@ def createMenu(request):
                     "name": "便民服务",
                     "sub_button": [
                         {
-                            "type": "view_limited",
+                            "type": "vie",
                             "name": "健康证驾驶证体检",
-                            "media_id": "http://wx.ymiot.net/dwz?p=c1gd9dsk"
+                            "url": "http://mp.weixin.qq.com/s?__biz=MzI1MjU0MTMzOQ==&mid=2247484748&idx=1&sn"
+                                   "=93446a175ddc35111bfcba283529e612&chksm"
+                                   "=e9e365b8de94ecae180eba472cc07d30e3e24d32e2425b1652ecca37353e0b0b210087ddf21b"
+                                   "&scene=18#wechat_redirect "
                         },
                         {
                             "type": "view_limited",
@@ -281,16 +265,14 @@ def createMenu(request):
                             "media_id": "VGSuBmSVPkhR8yhfeYakYy107VXMZAoWaYMejvxsG6053nQ9Pbg8oT8Em8284qQ3"
                         },
                         {
-                            'type': 'miniprogram',
-                            'name': '预约疫苗接种',
-                            'url': 'https://app.cn2030.com/html/xiaochengxu.html',
-                            'appid': 'wx2c7f0f3c30d99445',
-                            'pagepath': 'tabs/tab_1/tab_1'
+                            "type": "img",
+                            'name': '犬伤疫苗接种',
+                            "value": "VGSuBmSVPkhR8yhfeYakYwmlPcpr94JG6p2tf_MVcsXt6G5aglpWxQ0Cmmki7fqx"
                         },
                         {
-                            'type': 'view',
-                            'name': '满意度调查',
-                            'url': 'https://www.wjx.cn/jq/13633050.aspx'
+                            'type': 'view_limited',
+                            'name': '出生证申领',
+                            'media_id': 'VGSuBmSVPkhR8yhfeYakY4B435o_9KtoIrYpQLTUVYNmEG4L_DgDZMgxWd0PRE99'
                         },
                     ]
                 }
@@ -298,7 +280,7 @@ def createMenu(request):
         }
         # print(menuList)
         # print(type(menuList))
-        # client.menu.create(menuList)
+        client.menu.create(menuList)
         return HttpResponse("OK")
 
     elif request.method == 'POST':
