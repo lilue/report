@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
+
+env = environ.Env()
+env.read_env('.env')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,9 +27,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3*v+j3(#kp8t&d9e5*fgi8qipzlwtgfo#qw40hs!2+_fvls_)4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env.bool('DEBUG', False)
 
-ALLOWED_HOSTS = ['127.0.0.1', '118.31.68.134', '42.194.237.4', 'ck.zhonghefull.com', '*']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 
 # Application definition
@@ -76,28 +80,11 @@ WSGI_APPLICATION = 'report.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'ck',
-            'USER': 'root',
-            'PASSWORD': '123456',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'zjck',
-            'USER': 'zjck',
-            'PASSWORD': 'QQxuwen206420',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-        }
-    }
+DATABASES = {
+    'default': env.db('DATABASE_URL')
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -142,23 +129,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 USE_PROXY = True
 
-# API_HOST = 'http://58.62.175.49:8098/api/'
-# API_KEY = 'F2D8D966CD3D47788449C19D5EF2081B'
-# API_APP_ID = '60C90F3B796B41878B8D9C393E2B6329'
-# API_VERSION = 'V2.0.0'
-# API_SIGN_MODE = 'SM3'
-# API_ENCRYPT_MODE = 'SM4/ECB/ZeroBytePadding'
-# API_ORG_CODE = 'KGA00020100000014'
-# API_APP_RECORD_NO = '1301A0002QTHX0001'
-# API_NONCE_STR = '12345685217'
-
-# 测试环境
-# APP_ID = 'wx896da0e215f91253'
-# APP_SECRET = '21df20f1f63944f9f0eeb65e5a5e6450'
-# 正式环境
-APP_ID = 'wxc9bc2330d8cd6664'
-APP_SECRET = 'a8bf776ad256f629b5ed691b765b7258'
-TOKEN = 'JVWsgSgWG5Lu2z4jEE7OGRY18ixvJm4'
+APP_ID = env.str('APPID')
+APP_SECRET = env.str('wx896da0e215f91253')
+TOKEN = env.str('TOKEN')
 
 
 # 统计字段分隔符
