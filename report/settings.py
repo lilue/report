@@ -130,7 +130,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 USE_PROXY = True
 
 APP_ID = env.str('APPID')
-APP_SECRET = env.str('wx896da0e215f91253')
+APP_SECRET = env.str('APPSECRET')
 TOKEN = env.str('TOKEN')
 
 
