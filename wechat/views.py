@@ -58,8 +58,7 @@ def handle_wx(request):
                 if result:
                     break
             if result:
-                news = '急诊科及120急救、住院病房均24小时工作制，门诊、医保报销、预防保健科工作日正常上班，' \
-                          '8:00—11:30、14:30—17:30，周六8:00—11:30，如特殊情况，可联系医院或相关医护人员。'
+                news = replayMes()
             else:
                 item_str = msg
                 if '*' in msg.content:
@@ -114,6 +113,7 @@ def getInfo(params):
         result = replayMes()
     return result
 
+
 # 工资查询，赤坎没有该功能
 # def getSlip(params):
 #     # code = params.replace('gz', '')
@@ -129,8 +129,8 @@ def getInfo(params):
 
 
 def replayMes():
-    res = '您的留言我们已收到，我们将会尽快回复，感谢您的关注！\n' \
-          '如需查询并下载新冠核酸检验结果，请发送【采样时登记的手机号码或电话号码*证件号】获取。例：13123456789*441234567894561235'
+    res = '您的留言我们已收到，我们将会尽快回复，感谢您的关注！\n'
+    # '如需查询并下载新冠核酸检验结果，请发送【采样时登记的手机号码或电话号码*证件号】获取。例：13123456789*441234567894561235'
     return res
 
 
