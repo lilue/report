@@ -1,5 +1,7 @@
 import json
 import re
+
+import requests
 from django.shortcuts import render
 from wechatpy.utils import check_signature, ObjectDict
 from wechatpy.exceptions import InvalidSignatureException
@@ -173,12 +175,18 @@ def getMaterialsList(request, media, offset):
 
 
 @csrf_exempt
-def getBatchget(request):
+def getBatchget(request, media, offset):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     access_token = client.fetch_access_token()
-    print(access_token)
-    API_BASE_URL = 'https://api.weixin.qq.com/cgi-bin/freepublish/batchget?access_token='
-    return JsonResponse(access_token, json_dumps_params={'ensure_ascii': False})
+    API_BASE_URL = 'https://api.weixin.qq.com/cgi-bin/freepublish/batchget?access_token=' + access_token['access_token']
+    data = {
+        'type': media,
+        'offset': offset,
+        'count': 20
+    }
+    response = requests.post(url=API_BASE_URL, json=data)
+    result = json.loads(response.text)
+    return JsonResponse(result, json_dumps_params={'ensure_ascii': False})
 
 
 @csrf_exempt
