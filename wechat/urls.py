@@ -8,7 +8,7 @@ urlpatterns = [
     path('message', views.getMessageList),
     path('test', views.menu),
     path('getMenu', views.getMenu),
-    path('batchget/<str:media>/<int:offset>/', views.getBatchget),
+    path('batchget/<int:offset>/', views.getBatchget),
     path('menu', views.createMenu),
     # path('render/', views.render),
 ]

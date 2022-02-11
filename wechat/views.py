@@ -175,14 +175,14 @@ def getMaterialsList(request, media, offset):
 
 
 @csrf_exempt
-def getBatchget(request, media, offset):
+def getBatchget(request, offset):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     access_token = client.fetch_access_token()
     API_BASE_URL = 'https://api.weixin.qq.com/cgi-bin/freepublish/batchget?access_token=' + access_token['access_token']
     data = {
-        'type': media,
-        'offset': offset,
-        'count': 20
+        "offset": offset,
+        "count": 20,
+        "no_content": 0
     }
     response = requests.post(url=API_BASE_URL, json=data)
     result = json.loads(response.text)
