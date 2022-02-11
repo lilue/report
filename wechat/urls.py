@@ -8,6 +8,7 @@ urlpatterns = [
     path('message', views.getMessageList),
     path('test', views.menu),
     path('getMenu', views.getMenu),
+    path('batchget', views.getBatchget),
     path('menu', views.createMenu),
     # path('render/', views.render),
 ]
