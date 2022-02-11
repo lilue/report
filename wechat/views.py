@@ -222,19 +222,19 @@ def createMenu(request):
                     "name": "就诊服务",
                     "sub_button": [
                         {
-                            "type": "img",
+                            "type": "media_id",
                             "name": "健康申报卡",
-                            "value": "VGSuBmSVPkhR8yhfeYakY-DxZlC9KD8r2KXtVp0AxXp3ANj3taScfsG_uJJzByFd"
+                            "media_id": "VGSuBmSVPkhR8yhfeYakY-DxZlC9KD8r2KXtVp0AxXp3ANj3taScfsG_uJJzByFd"
                         },
                         {
-                            "type": "img",
+                            "type": "media_id",
                             "name": "电子陪护证",
-                            "value": "VGSuBmSVPkhR8yhfeYakY01_EtEOhzcm8MKPKqWUpVkCQkptcQhLMD3zK08KuNYj"
+                            "media_id": "VGSuBmSVPkhR8yhfeYakY01_EtEOhzcm8MKPKqWUpVkCQkptcQhLMD3zK08KuNYj"
                         },
                         {
-                            "type": "img",
+                            "type": "media_id",
                             "name": "就医须知",
-                            "value": "VGSuBmSVPkhR8yhfeYakYypnwiiJyUZYNsHcy9VdwQOzXyCoqDyNaArC1eL2qNDH"
+                            "media_id": "VGSuBmSVPkhR8yhfeYakYypnwiiJyUZYNsHcy9VdwQOzXyCoqDyNaArC1eL2qNDH"
                         },
                         {
                             "type": "view",
@@ -252,7 +252,7 @@ def createMenu(request):
                     "name": "便民服务",
                     "sub_button": [
                         {
-                            "type": "vie",
+                            "type": "view",
                             "name": "健康证驾驶证体检",
                             "url": "http://mp.weixin.qq.com/s?__biz=MzI1MjU0MTMzOQ==&mid=2247484748&idx=1&sn"
                                    "=93446a175ddc35111bfcba283529e612&chksm"
@@ -265,9 +265,9 @@ def createMenu(request):
                             "media_id": "VGSuBmSVPkhR8yhfeYakYy107VXMZAoWaYMejvxsG6053nQ9Pbg8oT8Em8284qQ3"
                         },
                         {
-                            "type": "img",
+                            "type": "media_id",
                             'name': '犬伤疫苗接种',
-                            "value": "VGSuBmSVPkhR8yhfeYakYwmlPcpr94JG6p2tf_MVcsXt6G5aglpWxQ0Cmmki7fqx"
+                            "media_id": "VGSuBmSVPkhR8yhfeYakYwmlPcpr94JG6p2tf_MVcsXt6G5aglpWxQ0Cmmki7fqx"
                         },
                         {
                             'type': 'view_limited',
