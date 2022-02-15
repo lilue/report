@@ -48,6 +48,8 @@ def handle_wx(request):
                 elif msg.key == 'route':
                     tempMsg = "①【11路，12路，13路，15路，16路，1路，22路，23路，25路，27路，29路，2路，33路，809路，8路】-南华广场站，往民主路方向步行680米。\n②【21" \
                               "路，29路东线，809路，821路】-民主路中站，往幸福路方向步行50米。 "
+                elif msg.key == 'report':
+                    tempMsg = "查询并下载新冠核酸检验结果，请发送【采样时登记的手机号码或电话号码*证件号】获取。例：13123456789*441234567894561235"
                 else:
                     tempMsg = replayMes()
                 news = tempMsg
@@ -269,6 +271,11 @@ def createMenu(request):
                 {
                     "name": "便民服务",
                     "sub_button": [
+                        {
+                            "type": "click",
+                            "name": "查询核酸报告",
+                            "key": "report"
+                        },
                         {
                             "type": "view",
                             "name": "健康证驾驶证体检",
