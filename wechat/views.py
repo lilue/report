@@ -68,14 +68,17 @@ def handle_wx(request):
                         client.message.send_image(msg.source, item['content'])
                         status = 'send'
                     elif item['type'] == 'news':
-                        news_info = item['news_info']['list'][0]
-                        article = {
-                            "title": news_info['title'],
-                            "description": news_info['digest'],
-                            "url": news_info['content_url'],
-                            "thumb_url": news_info['cover_url']
-                        }
-                        client.message.send_link(msg.source, article)
+                        try:
+                            news_info = item['news_info']['list'][0]
+                            article = {
+                                "title": news_info['title'],
+                                "description": news_info['digest'],
+                                "url": news_info['content_url'],
+                                "thumb_url": news_info['cover_url']
+                            }
+                            client.message.send_link(msg.source, article)
+                        except Exception as e:
+                            print(str(e))
                         status = 'send'
                 # return HttpResponse(reply.render(), content_type='application/xml')
             news = res
