@@ -4,7 +4,11 @@ import re
 
 
 def process_date(date):
-    timeArray = time.strptime(date, "%Y-%m-%d %H:%M:%S")
+    try:
+        timeArray = time.strptime(date, "%Y-%m-%d %H:%M:%S")
+    except Exception as e:
+        print(str(e))
+        timeArray = time.strptime(date, "%Y/%m/%d %H:%M:%S")
     timeStamp = int(time.mktime(timeArray))
     time_local = time.localtime(timeStamp)
     dt = time.strftime("%Y-%m-%d %H:%M:%S", time_local)
