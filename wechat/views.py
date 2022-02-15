@@ -337,4 +337,4 @@ def uploadImg(request):
 def getMaterial(requset, media):
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     res = client.material.get(media)
-    return JsonResponse(res, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse(res, json_dumps_params={'ensure_ascii': False}, safe=False)

@@ -243,10 +243,6 @@ def jsonData():
                     {
                         "type": "text",
                         "content": "您好，体检科上班时间：周一至周五上午8：00-11：30，下午2：30-4：30，周六上午8:00-11:30。体检咨询电话：3119173,谢谢！"
-                    },
-                    {
-                        "type": "news",
-                        "content": "2kQjzN6QbMSXyWOavEayHZQnk0AOjzUnSQXSaaqNxys"
                     }
                 ]
             },
