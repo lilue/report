@@ -11,6 +11,7 @@ urlpatterns = [
     path('batchget/<int:offset>/', views.getBatchget),
     path('menu', views.createMenu),
     path('demo', views.getJson),
-    path('uploadImg', views.uploadImg)
+    path('uploadImg', views.uploadImg),
+    path('getmaterials/<str:media>', views.getMaterial)
     # path('render/', views.render),
 ]

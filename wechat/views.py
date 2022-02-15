@@ -65,7 +65,7 @@ def handle_wx(request):
                         status = 'send'
                         # reply = TextReply(content=item['content'], message=msg)
                     elif item['type'] == 'img':
-                        client.message.send_image(msg.source, '2Y3CUzDYqOZqcA67Yd9ToYiZZBe7sbnmmUorNjrxHEOLR5mgZD6xMLLaaK3RhVUG')
+                        client.message.send_image(msg.source, item['content'])
                         status = 'send'
                     elif item['type'] == 'news':
                         news_info = item['news_info']['list'][0]
@@ -319,9 +319,7 @@ def getJson(content):
         # print(a['keyword_list_info'])
         for b in a['keyword_list_info']:
             if content in b['content']:
-                print('中了，返回')
                 return a['reply_list_info']
-    print('没中，返回通用回复')
     return replayMes()
 
 
@@ -334,3 +332,9 @@ def uploadImg(request):
     aa = client.material.add(media_type='image', media_file=files['file'])
     print(aa)
     return JsonResponse("ddd", safe=False)
+
+
+def getMaterial(requset, media):
+    client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
+    res = client.material.get(media)
+    return JsonResponse(res, json_dumps_params={'ensure_ascii': False})
