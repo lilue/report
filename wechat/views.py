@@ -7,7 +7,7 @@ from wechatpy.utils import check_signature, ObjectDict
 from wechatpy.exceptions import InvalidSignatureException
 from django.http import HttpResponse, JsonResponse
 from wechatpy import parse_message
-from wechatpy.replies import TextReply, ImageReply, ArticlesReply
+from wechatpy.replies import TextReply, ImageReply, ArticlesReply, EmptyReply
 from reports.models import Report, Subscription
 # from wage.models import Payroll
 from wechatpy import WeChatClient
@@ -57,34 +57,28 @@ def handle_wx(request):
                 res = getInfo(item_str)
             else:
                 res = replayMes()
+                client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
+                datalist = getJson(msg.content)
+                for item in datalist:
+                    if item['type'] == 'text':
+                        client.message.send_text(msg.source, item['content'])
+                        status = 'send'
+                        # reply = TextReply(content=item['content'], message=msg)
+                    elif item['type'] == 'img':
+                        client.message.send_image(msg.source, '2Y3CUzDYqOZqcA67Yd9ToYiZZBe7sbnmmUorNjrxHEOLR5mgZD6xMLLaaK3RhVUG')
+                        status = 'send'
+                    elif item['type'] == 'news':
+                        news_info = item['news_info']['list'][0]
+                        article = {
+                            "title": news_info['title'],
+                            "description": news_info['digest'],
+                            "url": news_info['content_url'],
+                            "thumb_url": news_info['cover_url']
+                        }
+                        client.message.send_link(msg.source, article)
+                        status = 'send'
+                # return HttpResponse(reply.render(), content_type='application/xml')
             news = res
-            # crown = ['新冠疫苗']
-            # screening = ['免费两癌', '两癌筛查', '两癌', '两癌筛查预约']
-            # ninePrice = ['四价', '九价疫苗', '四价疫苗', 'HPV疫苗', '九价']
-            # injury = ['犬伤', '狂犬疫苗', '狂犬疫苗接种', '狗针', '狗咬伤', '猫抓伤', '鼠咬伤']
-            # physical = ['体检', '驾驶证体验', '驾驶证年审', '健康证', '健康证结果', '体检结果', '体检报告']
-            # nucleic = ['核酸', '核酸检测', '核酸结果', '查询核酸结果']
-            # obstetrics = ['产检', '产科', '妇产科', '妇科', '产前检查', '生孩子', '生产']
-            # registered = ['挂号', '预约', '预约挂号', '门诊挂号', '看病', '门诊']
-            # for i in registered:
-            #     result = i in msg.content
-            #     if result:
-            #         news = '微信挂号系统正在建设中，请到收费处咨询办理，留意最新动态。\n感谢关注！'
-            #         break
-            # for i in crown:
-            #     result = i in msg.content
-            #     if result:
-            #         news = '我医院目前不是新冠疫苗接种点，您可以到寸金、北桥等社区卫生服务中心接种，谢谢'
-            #         break
-            # if result:
-            #     pass
-            # else:
-            #     item_str = msg
-            #     if '*' in msg.content:
-            #         res = getInfo(item_str)
-            #     else:
-            #         res = replayMes()
-            #     news = res
         else:
             news = replayMes()
         if status == 'text':
@@ -93,8 +87,9 @@ def handle_wx(request):
         elif status == 'article':
             reply = ArticlesReply(message=msg)
             reply.add_article(article)
-        response = HttpResponse(reply.render(), content_type='application/xml')
-        return response
+        elif status == 'send':
+            reply = EmptyReply()
+        return HttpResponse(reply.render(), content_type='application/xml')
 
 
 def getInfo(params):
@@ -315,18 +310,27 @@ def createMenu(request):
             return JsonResponse({"msg": "修改出错了，请联系开发人员！" + str(e)}, safe=False)
 
 
-def getJson(request):
+def getJson(content):
     dd = jsonData()
     res = dd['list']
-    text = '门诊'
-    anchor = False
+    # text = '门诊'
+    # anchor = False
     for a in res:
         # print(a['keyword_list_info'])
         for b in a['keyword_list_info']:
-            if text in b['content']:
-                print(a['reply_list_info'])
-                anchor = True
-                break
-        if anchor:
-            break
-    return JsonResponse(data=dd, json_dumps_params={'ensure_ascii': False})
+            if content in b['content']:
+                print('中了，返回')
+                return a['reply_list_info']
+    print('没中，返回通用回复')
+    return replayMes()
+
+
+def uploadImg(request):
+    import os
+    url = '/Users/lilue/Desktop/title.jpg'
+    files = {'file': open(url, 'rb')}
+    print(files['file'])
+    client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
+    aa = client.material.add(media_type='image', media_file=files['file'])
+    print(aa)
+    return JsonResponse("ddd", safe=False)

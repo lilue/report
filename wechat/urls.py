@@ -10,6 +10,7 @@ urlpatterns = [
     path('getMenu', views.getMenu),
     path('batchget/<int:offset>/', views.getBatchget),
     path('menu', views.createMenu),
-    path('demo', views.getJson)
+    path('demo', views.getJson),
+    path('uploadImg', views.uploadImg)
     # path('render/', views.render),
 ]

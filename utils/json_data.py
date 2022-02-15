@@ -282,6 +282,10 @@ def jsonData():
                         "content": "我院核酸检测无需预约！\n检测结果查询和领取：\n一、在医院标本不超量的情况下，当日11：00前采样，检测结果于16：00后在粤省事－健康码中查询，16:30前采样，结果于21：00后查询。\n二、在医院标本量超量的情况下，检测结果可能会延迟，但不会超过24小时（国务院联防联控机制：“愿检尽检”人群核酸检测一般在24小时内报告结果）。\n三、如您在上述时间段还没有查询到自己的核酸检测结果，请您把姓名，身份证号、手机号发给我或致电15975912000，我会尽快帮你核查，由此给您带来不便,我们深表歉意,感谢您的理解和支持!"
                     },
                     {
+                        "type": "img",
+                        "content": "np3TeEIYX3GPRv5JY-lxd8C43iinve4rNdomVkwCekNrnO3dCMy0C90LVFdfY9qO"
+                    },
+                    {
                         "type": "news",
                         "content": "VGSuBmSVPkhR8yhfeYakY0xVNkLFs-fyZ3uRf6XrAMw",
                         "news_info": {
@@ -297,10 +301,6 @@ def jsonData():
                                 }
                             ]
                         }
-                    },
-                    {
-                        "type": "img",
-                        "content": "np3TeEIYX3GPRv5JY-lxd8C43iinve4rNdomVkwCekNrnO3dCMy0C90LVFdfY9qO"
                     }
                 ]
             },
