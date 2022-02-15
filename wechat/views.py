@@ -323,7 +323,7 @@ def getJson(content):
         for b in a['keyword_list_info']:
             if content in b['content']:
                 return a['reply_list_info']
-    return replayMes()
+    return ''
 
 
 def uploadImg(request):
