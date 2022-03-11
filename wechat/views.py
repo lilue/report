@@ -336,16 +336,14 @@ def getJson(content):
 
 def uploadImg(request):
     import os
+    # print(request.POST.get('name'))
+    url = request.POST.get('name')
     # url = '/Users/lilue/Desktop/title.jpg'
-    # files = {'file': open(url, 'rb')}
+    files = {'file': open(url, 'rb')}
     # print(files['file'])
-    files = request.FILES.get('file')
-    # print(files.file)
-    # files = {'file': open(url, 'rb')}
-    # print(request.FILES.get('file'))
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
-    aa = client.material.add(media_type='image', media_file=files.file)
-    return JsonResponse({'aa': aa}, safe=False)
+    aa = client.material.add(media_type='image', media_file=files['file'])
+    return JsonResponse(aa, safe=False)
 
 
 def getMaterial(requset, media):
