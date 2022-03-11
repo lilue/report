@@ -1,0 +1,247 @@
+.weui-btn {
+    position: relative;
+    display: block;
+    width: 184px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 8px 24px;
+    box-sizing: border-box;
+    font-weight: 700;
+    font-size: 17px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    line-height: 1.41176471;
+    border-radius: 4px;
+    overflow: hidden;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.weui-btn_block {
+    width: auto;
+}
+
+.weui-btn_inline {
+    display: inline-block;
+}
+
+.weui-btn_default {
+    color: #06ae56;
+    color: var(--weui-BTN-DEFAULT-COLOR);
+    background-color: #f2f2f2;
+    background-color: var(--weui-BTN-DEFAULT-BG);
+}
+
+.weui-btn_default:not(.weui-btn_disabled):visited {
+    color: #06ae56;
+    color: var(--weui-BTN-DEFAULT-COLOR);
+}
+
+.weui-btn_default:not(.weui-btn_disabled):active {
+    background-color: #e6e6e6;
+    background-color: var(--weui-BTN-DEFAULT-ACTIVE-BG);
+}
+
+.weui-btn_primary {
+    background-color: #07c160;
+    background-color: var(--weui-BRAND);
+}
+
+.weui-btn_primary:not(.weui-btn_disabled):visited {
+    color: #fff;
+}
+
+.weui-btn_primary:not(.weui-btn_disabled):active {
+    background-color: #06ae56;
+    background-color: var(--weui-TAG-TEXT-GREEN);
+}
+
+.weui-btn_warn {
+    color: #fa5151;
+    color: var(--weui-RED);
+    background-color: #f2f2f2;
+    background-color: var(--weui-BTN-DEFAULT-BG);
+}
+
+.weui-btn_warn:not(.weui-btn_disabled):visited {
+    color: #fa5151;
+    color: var(--weui-RED);
+}
+
+.weui-btn_warn:not(.weui-btn_disabled):active {
+    background-color: #e6e6e6;
+    background-color: var(--weui-BTN-DEFAULT-ACTIVE-BG);
+}
+
+.weui-btn_disabled {
+    color: rgba(0,0,0,0.2);
+    color: var(--weui-BTN-DISABLED-FONT-COLOR);
+    background-color: #f2f2f2;
+    background-color: var(--weui-BTN-DEFAULT-BG);
+}
+
+.weui-btn_loading .weui-loading {
+    margin: -0.2em 0.34em 0 0;
+}
+
+.weui-btn_loading.weui-btn_primary {
+    background-color: #06ae56;
+    background-color: var(--weui-TAG-TEXT-GREEN);
+    color: #fff;
+    color: var(--weui-WHITE);
+}
+
+.weui-btn_loading.weui-btn_default {
+    background-color: #e6e6e6;
+    background-color: var(--weui-BTN-DEFAULT-ACTIVE-BG);
+}
+
+.weui-btn_loading.weui-btn_warn {
+    background-color: #e6e6e6;
+    background-color: var(--weui-BTN-DEFAULT-ACTIVE-BG);
+}
+
+.weui-btn_cell {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    font-size: 17px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    line-height: 1.41176471;
+    padding: 16px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    overflow: hidden;
+    background-color: #fff;
+    background-color: var(--weui-BG-5);
+}
+
+.weui-btn_cell+.weui-btn_cell {
+    margin-top: 16px;
+}
+
+.weui-btn_cell:active {
+    background-color: #ececec;
+    background-color: var(--weui-BG-COLOR-ACTIVE);
+}
+
+.weui-btn_cell__icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+    margin: -0.2em 0.34em 0 0;
+}
+
+.weui-btn_cell-default {
+    color: rgba(0,0,0,0.9);
+    color: var(--weui-FG-0);
+}
+
+.weui-btn_cell-primary {
+    color: #576b95;
+    color: var(--weui-LINK);
+}
+
+.weui-btn_cell-warn {
+    color: #fa5151;
+    color: var(--weui-RED);
+}
+
+button.weui-btn,input.weui-btn {
+    border-width: 0;
+    outline: 0;
+    -webkit-appearance: none;
+}
+
+button.weui-btn:focus,input.weui-btn:focus {
+    outline: 0;
+}
+
+button.weui-btn_inline,input.weui-btn_inline,button.weui-btn_mini,input.weui-btn_mini {
+    width: auto;
+}
+
+.weui-btn_mini {
+    display: inline-block;
+    width: auto;
+    padding: 0 0.75em;
+    line-height: 2;
+    font-size: 16px;
+}
+
+.weui-btn:not(.weui-btn_mini)+.weui-btn:not(.weui-btn_mini) {
+    margin-top: 16px;
+}
+
+.weui-btn.weui-btn_inline+.weui-btn.weui-btn_inline {
+    margin-top: auto;
+    margin-left: 16px;
+}
+
+.weui-btn-area {
+    margin: 48px 16px 8px;
+}
+
+.weui-btn-area_inline {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.weui-btn-area_inline .weui-btn {
+    margin-top: auto;
+    margin-right: 16px;
+    width: 100%;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+.weui-btn-area_inline .weui-btn:last-child {
+    margin-right: 0;
+}
+
+.weui-btn_reset {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    outline: 0;
+}
+
+.weui-btn_icon {
+    font-size: 0;
+}
+
+.weui-btn_icon:active [class*="weui-icon-"] {
+    color: rgba(0,0,0,0.5);
+    color: var(--weui-FG-1);
+}
+
+.weui-btn_input-clear {
+    display: none;
+    padding-left: 8px;
+}
+
+.weui-btn_input-clear [class*="weui-icon-"] {
+    width: 18px;
+}
+.weui-swiped-btn {
+    display: block;
+    padding: 16px 1em;
+    line-height: 1.41176471;
+    color: inherit;
+}
+
+.weui-swiped-btn_default {
+    background-color: #ededed;
+    background-color: var(--weui-BG-0);
+}
+
+.weui-swiped-btn_warn {
+    background-color: #fa5151;
+    background-color: var(--weui-RED);
+}

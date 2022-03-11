@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-msg.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/nodata.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="reveal">
+        <img src="{% static 'hospital/img/data.png' %}">
+        <div class="weui-msg__tips">暂无数据</div>
+    </div>
+{% endblock %}

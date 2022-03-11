@@ -1,0 +1,27 @@
+.status-container {
+    background-color: #fff;
+	flex-direction: column;
+	display: flex;
+	justify-content: center;
+}
+.reveal {
+    flex-direction: column;
+	display: flex;
+	justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.reveal img {
+    width: 200px;
+    height: 200px;
+}
+
+.reveal div {
+    font-size: 16px !important;
+}
+
+/*.reveal img {*/
+/*	width: 176px !important;*/
+/*	height: 260px !important;*/
+/*}*/

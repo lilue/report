@@ -24,6 +24,7 @@ urlpatterns = [
     path('wx/', include('wechat.urls')),
     path('health/', include('health.urls')),
     path('api/', include('interface.urls')),
-    path('auth/', include('authorization.urls'))
+    path('auth/', include('authorization.urls')),
+    path('website/', include('hospital.urls'))
     # path('menu/', include('makepdf.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

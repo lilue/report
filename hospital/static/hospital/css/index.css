@@ -1,0 +1,9 @@
+.back_img {
+    overflow: hidden;
+}
+
+.back_img img {
+    display: block;
+    height: auto;
+    width: 100%;
+}

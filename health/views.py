@@ -63,8 +63,8 @@ def oauth(method):
                 # print(user_info['openid'])
                 try:
                     user = UserProfile.objects.get(openid=user_info['openid'])
-                    print(user)
-                except Exception as e:
+                    # print(user)
+                except UserProfile.DoesNotExist:
                     print('没有用户，抛出异常')
                     user = None
                 if user:
@@ -75,11 +75,10 @@ def oauth(method):
                                        head_url=user_info['headimgurl'])
                     user.save()
                 # {'openid': 'ozCtJt2NDcPEJ3lJCC9CezBFmH2g', 'nickname': 'ʟɪʟᴜᴇ_', 'sex': 1, 'language': 'zh_CN',
-                #  'city': '', 'province': '', 'country': '中国',
-                #  'headimgurl': 'http://thirdwx.qlogo.cn/mmopen/vi_32/gcqD8XSIafZADX0lzjsSjEb4kQR14o1EWk7ILBvrXvYY83rGvgBeK60717V6J5mJViaKdjhUFmoVY7xzicMDdg/132',
-                #  'privilege': ['chinaunicom']}
-                # 这里需要处理请求里包含的 code 无效的情况
-                # abort(403)
+                # 'city': '', 'province': '', 'country': '中国', 'headimgurl':
+                # 'http://thirdwx.qlogo.cn/mmopen/vi_32
+                # /gcqD8XSIafZADX0lzjsSjEb4kQR14o1EWk7ILBvrXvYY83rGvgBeK60717V6J5mJViaKdjhUFmoVY7xzicMDdg/132',
+                # 'privilege': ['chinaunicom']} 这里需要处理请求里包含的 code 无效的情况 abort(403)
                 request.session['user'] = user.to_dict()
                 request.session['user_info'] = user_info
             else:
@@ -216,8 +215,8 @@ def post_add_card(request):
             response['id'] = card_id
             response['cardNo'] = card_no
             response['error_num'] = 0
-        except Exception as e:
-            response['msg'] = str(e)
+        except UserProfile.DoesNotExist:
+            response['msg'] = '没找到信息'
             response['error_num'] = 1
         return JsonResponse(response)
 
@@ -237,9 +236,8 @@ def untie_health(request):
         user_card.is_untie = 1
         user_card.save()
         response = {'retcode': 0, 'msg': '解绑成功'}
-    except Exception as e:
-        print(str(e))
-        response = {'retcode': 1, 'msg': str(e)}
+    except UserCard.DoesNotExist:
+        response = {'retcode': 1, 'msg': '解绑失败，没有找到。'}
     return JsonResponse(response)
 
 
