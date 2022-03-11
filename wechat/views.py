@@ -244,12 +244,12 @@ def createMenu(request):
                         {
                             "type": "media_id",
                             "name": "健康申报卡",
-                            "media_id": "VGSuBmSVPkhR8yhfeYakY-DxZlC9KD8r2KXtVp0AxXp3ANj3taScfsG_uJJzByFd"
+                            "media_id": "VGSuBmSVPkhR8yhfeYakY-xuminm2PW2WzsFcpRmOSHYvLbflvBi1CCcD0pEWfKj"
                         },
                         {
                             "type": "media_id",
                             "name": "电子陪护证",
-                            "media_id": "VGSuBmSVPkhR8yhfeYakY01_EtEOhzcm8MKPKqWUpVkCQkptcQhLMD3zK08KuNYj"
+                            "media_id": "VGSuBmSVPkhR8yhfeYakY8o0FzosKPW7edEeYBJXpCKUxGm8EUYBa23nt2O2djBJ"
                         },
                         {
                             "type": "media_id",
