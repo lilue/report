@@ -345,7 +345,7 @@ def uploadImg(request):
     # print(request.FILES.get('file'))
     client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
     aa = client.material.add(media_type='image', media_file=files.file)
-    return JsonResponse(data={'data': aa}, safe=False)
+    return JsonResponse(aa, safe=False)
 
 
 def getMaterial(requset, media):
