@@ -87,6 +87,32 @@
         <script type="text/javascript" src="{% static 'health/js/picker.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'health/js/jweixin-1.4.0.js' %}"></script>
         <script type="text/javascript" src="{% static 'health/js/weui.min.js' %}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $.ajax({
+                    type: "POST",       // POST方法
+                    url: "{% url 'getConfig' %}",     // 处理请求的url
+                    data: {'url': window.location.href},
+                    async: true,
+                    cache: false,
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");    // 重点是这里! 注意{{ csrf_token }}必须加上引号!
+                    },
+                    success: function (res) {
+                        if (res.retcode === 0) {
+                            wx.config({
+                                debug: false,
+                                appId: res.data.appId,
+                                timestamp: res.data.timestamp,
+                                nonceStr: res.data.nonceStr,
+                                signature: res.data.signature,
+                                jsApiList: ['config', 'chooseImage', 'uploadImage', 'getLocalImgData']
+                            });
+                        }
+                    },
+                });
+            });
+        </script>
         <script type="text/javascript" src="{% static 'health/js/regist_new.js' %}"></script>
     </body>
 </html>

@@ -1,0 +1,190 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-form.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/expense.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="weui-tab">
+        <div class="weui-tab__panel">
+            <div class="weui-cells__title message_color">费用明细</div>
+            {% for item in change_data %}
+                <div class="weui-form-preview">
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">费用名称</label>
+                            <span class="weui-form-preview__value">{{ item.itemname }}</span>
+                        </div>
+                        <div class="weui-form-preview__item row_div">
+                            <div class="row_div_left">
+                                <label class="weui-form-preview__label">单价</label>
+                                <span class="weui-form-preview__value">{{ item.price }}元</span>
+                            </div>
+                            <div class="row_div_right">
+                                <label class="weui-form-preview__label">数量</label>
+                                <span class="weui-form-preview__value">{{ item.quantity }}*{{ item.unit }}</span>
+                            </div>
+                        </div>
+                        <div class="weui-form-preview__item row_div">
+                            <div class="row_div_left">
+                                <label class="weui-form-preview__label">规格</label>
+                                <span class="weui-form-preview__value">{{ item.unit }}</span>
+                            </div>
+                            <div class="row_div_right">
+                                <label class="weui-form-preview__label">总价</label>
+                                <span class="weui-form-preview__value">{{ item.summoney }}元</span>
+                            </div>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">执行科室</label>
+                            <span class="weui-form-preview__value">{{ item.execdeptname_vchr }}</span>
+                        </div>
+                    </div>
+        {#            <div class="weui-form-preview__ft">#}
+        {#                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">查看资料</a>#}
+        {#                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">消费记录</a>#}
+        {#            </div>#}
+                </div>
+                <br />
+            {% endfor %}
+            <div class="weui-cells__title message_color">诊疗项目</div>
+            {% for item in therapy_data %}
+                <div class="weui-form-preview">
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">费用名称</label>
+                            <span class="weui-form-preview__value">{{ item.orderdicname_vchr }}</span>
+                        </div>
+                        <div class="weui-form-preview__item row_div">
+                            <div class="row_div_left">
+                                <label class="weui-form-preview__label">单价</label>
+                                <span class="weui-form-preview__value">{{ item.pricemny_dec }}元</span>
+                            </div>
+                            <div class="row_div_right">
+                                <label class="weui-form-preview__label">数量</label>
+                                <span class="weui-form-preview__value">{{ item.qty_dec }}*{{ item.spec_vchr }}</span>
+                            </div>
+                        </div>
+                        <div class="weui-form-preview__item row_div">
+                            <div class="row_div_left">
+                                <label class="weui-form-preview__label">规格</label>
+                                <span class="weui-form-preview__value">{{ item.spec_vchr }}</span>
+                            </div>
+                            <div class="row_div_right">
+                                <label class="weui-form-preview__label">总价</label>
+                                <span class="weui-form-preview__value">{{ item.totalmny_dec }}元</span>
+                            </div>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">执行科室</label>
+                            <span class="weui-form-preview__value">{{ item.execdeptname_vchr }}</span>
+                        </div>
+                    </div>
+        {#            <div class="weui-form-preview__ft">#}
+        {#                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">查看资料</a>#}
+        {#                <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">消费记录</a>#}
+        {#            </div>#}
+                </div>
+                <br />
+            {% endfor %}
+        </div>
+        <div class="weui-tabbar">
+            <div class="weui-tabbar__item t_right">
+                <div class="t_right_box">
+                    <div><p>医院门诊缴费</p></div>
+                    <div class="am_div">合计：<p>{{ amount }}元</p></div>
+                </div>
+            </div>
+            <div class="weui-tabbar__item">
+                <a href="javascript:" class="weui-btn weui-btn_primary" id="wxpay">支付</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block bodyJs %}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vconsole@latest/dist/vconsole.min.js"></script>
+    <script type="text/javascript" src="{% static 'hospital/js/jweixin-1.6.0.js' %}"></script>
+    <script type="text/javascript" src="{% static 'hospital/js/jquery-2.1.3.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.ajax({
+                type: "POST",       // POST方法
+                url: "{% url 'getConfig' %}",     // 处理请求的url
+                data: {'url': window.location.href},
+                async: true,
+                cache: false,
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");    // 重点是这里! 注意 csrf_token 必须加上引号!
+                },
+                success: function (res) {
+                    if (res.retcode === 0) {
+                        wx.config({
+                            debug: false,
+                            appId: res.data.appId,
+                            timestamp: res.data.timestamp,
+                            nonceStr: res.data.nonceStr,
+                            signature: res.data.signature,
+                            jsApiList: ['config', 'chooseWXPay']
+                        });
+                    }
+                },
+            });
+            var vConsole = new window.VConsole();
+            vConsole.setOption('log.maxLogNumber', 5000);
+        });
+        wx.ready(function() {
+            let oneClick = true;
+            $('#wxpay').on('click', function (e) {
+                e.preventDefault();
+                if(oneClick) {
+                    oneClick = false;
+                    $('#wxpay').addClass('weui-btn_disabled');
+                    document.getElementById("wxpay").innerText = "支付中，请稍侯";
+                    let order = '{{ order }}';
+                    $.ajax({
+                        type: "POST",       // POST方法
+                        url: "{% url 'place' %}",     // 处理请求的url
+                        data: {'order': order },
+                        async: true,
+                        cache: false,
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");    // 重点是这里! 注意 csrf_token 必须加上引号!
+                        },
+                        success: function (res) {
+                            if(res.retcode === 0) {
+                                {#pay(res.data)#}
+                                wx.chooseWXPay({
+                                    appId: res.data.appid,
+                                    timestamp: res.data.timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                                    nonceStr: res.data.nonce_str, // 支付签名随机串，不长于 32 位
+                                    package: res.data.prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                                    signType: 'MD5', // 微信支付V3的传入RSA,微信支付V2的传入格式与V2统一下单的签名格式保持一致
+                                    paySign: res.data.paySign, // 支付签名
+                                    success: function (result) {
+                                        {#console.log(result);#}
+                                        if (result.errMsg === 'chooseWXPay:ok') {
+                                            window.location.replace("{% url 'nodata' %}");  // 关闭当前页，打开新页面
+                                        }
+                                    }
+                                });
+                            } else {
+                                console.log(res.msg);
+                            }
+                        },
+                        fail: function (err) {
+                            alert(err);
+                        },
+                        complete: function () {
+                            oneClick = true;
+                            $('#wxpay').removeClass('weui-btn_disabled');
+                            document.getElementById("wxpay").innerText = "支付";
+                        }
+                    });
+                } else {
+                    return
+                }
+            });
+        });
+    </script>
+{#    <script type="text/javascript" src="{% static 'hospital/js/expense.js' %}"></script>#}
+{% endblock %}

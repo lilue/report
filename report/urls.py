@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from report import settings
+from hospital import views
 
 urlpatterns = [
+    path('MP_verify_mQJFPw6llNu89Htp.txt', views.wx_verify),
     # path('', admin.site.urls),
     path('admin/', admin.site.urls),
     path('wx/', include('wechat.urls')),

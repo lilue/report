@@ -52,7 +52,7 @@ def wx_verify(request):
 
 # 定义授权装饰器
 def oauth(method):
-    def warpper(request):
+    def warpper(request, *args, **kwargs):
         if request.session.get('user', None) is None:
             code = request.GET.get('code', None)
             wx_oauth = getWeChatOAuth(request.get_raw_uri())
@@ -70,7 +70,6 @@ def oauth(method):
                 if user:
                     print("用户已存在，不需要创建")
                 else:
-                    print("没用用户，创建")
                     user = UserProfile(openid=user_info['openid'], nickname=user_info['nickname'],
                                        head_url=user_info['headimgurl'])
                     user.save()
@@ -83,8 +82,7 @@ def oauth(method):
                 request.session['user_info'] = user_info
             else:
                 return redirect(url)
-        return method(request)
-
+        return method(request, *args, **kwargs)
     return warpper
 
 

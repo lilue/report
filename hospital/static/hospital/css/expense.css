@@ -1,0 +1,43 @@
+.t_right {
+    text-align: left !important;
+}
+
+.t_right_box {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    color: #0d0d0d;
+}
+
+.t_right_box p{
+    color: #ff0000;
+}
+
+.am_div {
+    display: flex;
+}
+
+.row_div {
+    display: flex;
+    flex-direction: row;
+}
+
+.row_div_left {
+    float: left;
+    width: 50%;
+}
+
+.row_div_right {
+    padding-left: 10px;
+    float: right;
+    width: 50%;
+}
+
+.row_div span {
+    text-align: left !important;
+}
+
+.message_color {
+    color: #0d0d0d;
+}

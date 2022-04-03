@@ -54,12 +54,11 @@ class Obtain(View):
                 times = int(time.time())
                 nonce = ''.join(random.sample(string.ascii_letters + string.digits, 8))
                 sign = wxClient.jsapi.get_jsapi_signature(nonce, ticket, times, url)
-                data = {'appId': 'wxd5191076ca1f7db7', 'timestamp': times,
+                data = {'appId': settings.APP_ID, 'timestamp': times,
                         'nonceStr': nonce, 'signature': sign}
                 response = {'data': data, 'retcode': 0}
                 return JsonResponse(response)
             except Exception as e:
-                print("身份证识别异常")
                 print(str(e))
 
 

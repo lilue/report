@@ -5,25 +5,48 @@
     <link rel="stylesheet" type="text/css" href="{% static 'hospital/css/weui-css/weui-dialog.css' %}">
     <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-media-box.css' %}">
     <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-btn.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-tips.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-loading.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-form.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-icon.css' %}">
 {% endblock %}
 {% block content %}
+    <div id="loadingToast" style="position: fixed;top: 0;width: 100%;display: none;z-index: 6000">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-loading weui-icon_toast"></i>
+            <p class="weui-toast__content">表单提交中</p>
+        </div>
+    </div>
+    <div id="loadingRemind" style="position: fixed;top: 0;width: 100%;display: none;z-index: 6000">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-icon-warn weui-icon_toast"></i>
+            <p id="remind_msg" class="weui-toast__content">表单提交中</p>
+        </div>
+    </div>
     <div class="weui-tab">
+        {% if message %}
+            <div class="weui-cells__title message_color">{{ message }}</div>
+        {% endif %}
         <div class="card_list">
             {#这里循环#}
+            {% for item in  querySet%}
             <div class="patient_card">
-                <div class="card_top" onclick="window.location.href='{% url 'home' %}'">
-                    <div class="card_left">姓名1</div>
-                    <div class="card_right">卡号<text>00435505</text></div>
+                <div class="card_top" onclick="window.location.href='{% url page item.id %}'">
+                    <div class="card_left">{{ item.name }}</div>
+                    <div class="card_right">卡号<text>{{ item.cardId }}</text></div>
                 </div>
                 <div class="divider"></div>
-                <div class="card_bottom" data-id="00" onclick="showDialog('00435505')">
+                <div class="card_bottom">
                     <div class="card_left"></div>
-                    <div class="card_right"><img src={% static 'hospital/img/barcode.png' %}>查看条形码</div>
+                    <div class="card_right" data-id="00" onclick="showDialog('{{ item.cardId }}')"><img src={% static 'hospital/img/barcode.png' %}>查看条形码</div>
                 </div>
             </div>
+            {% endfor %}
         </div>
         <div class="weui-tabbar">
-            <a href="javascript:" class="weui-btn weui-btn_primary">添加就诊人</a>
+            <a href="javascript:" class="weui-btn weui-btn_primary" id="addDialog">添加就诊人</a>
         </div>
         <div class="dialog_box" id="dialog_box" style="display: none;">
             <div class="weui-mask"></div>
@@ -37,19 +60,93 @@
                 </div>
             </div>
         </div>
+        <div class="dialog_wrapper">
+            <div class="weui-mask" style="display: none;"></div>
+            <div class="weui-half-screen-dialog">
+                <div class="weui-half-screen-dialog__hd">
+                    <div class="weui-half-screen-dialog__hd__main">
+                        <strong class="weui-half-screen-dialog__title">添加就诊人</strong>
+{#                        <span class="weui-half-screen-dialog__subtitle">标题</span>#}
+                    </div>
+                    <div class="weui-half-screen-dialog__hd__side">
+                        <button class="weui-icon-btn">更多<i class="weui-icon-close-thin"></i></button>
+                    </div>
+                </div>
+                <div class="weui-half-screen-dialog__bd">
+                    <div class="weui-cells weui-cells_form">
+                        <form id="form" method="post">
+                            {% csrf_token %}
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label" for="name">姓名</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" id="name" name="name" type="text" placeholder="请输入姓名" />
+                                </div>
+                                <small>错误信息</small>
+                            </div>
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label" for="idCard">身份证号</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" id="idCard" name="idCard" type="text" placeholder="请输入身份证号" />
+                                </div>
+                                <small>错误信息</small>
+                            </div>
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label" for="cardId">诊疗卡号</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" id="cardId" name="cardId" type="text" placeholder="请输入诊疗卡号" />
+                                </div>
+                                <small>错误信息</small>
+                            </div>
+                            <div class="weui-cell">
+                                <input class="weui-btn weui-btn_default" id="btn_loading" type="button" value="提交" onclick="sub_btn()" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+{#                <div class="weui-half-screen-dialog__ft">#}
+{#                    <a href="javascript:" class="weui-btn weui-btn_default">辅助操作</a>#}
+{#                    <a href="javascript:" class="weui-btn weui-btn_primary">主操作</a>#}
+{#                </div>#}
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block bodyJs %}
+{#    <script type="text/javascript" src="{% static 'hospital/js/form_validation.js' %}"></script>#}
     <script type="text/javascript" src="{% static 'hospital/js/jquery-2.1.3.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'hospital/js/JsBarcode.all.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'hospital/js/zepto.min.js' %}"></script>
     <script type="text/javascript">
         $(function() {
+            function hide_dialog() {
+                $('.weui-half-screen-dialog').css({
+                    "-webkit-transform": "translate(0,100%)",
+                    "transform": "translate(0,100%)"
+                });
+                $('.weui-mask').fadeOut(200);
+            };
+            // 显示全屏幕弹层
+            $('#addDialog').on('click', function () {
+                $('.weui-half-screen-dialog').css({
+                    "-webkit-transform": "translate(0, 0)",
+                    "transform": "translate(0, 0)",
+                    "top": "0px",
+                    "max-height": "100%"
+                });
+                $('.weui-mask').fadeIn(200);
+            });
+            // 点击半透明黑色遮罩关闭全屏幕弹层
+            $('.weui-mask').on('click', hide_dialog);
+            // 点击操作按钮关闭全屏幕弹层
+            $('.weui-half-screen-dialog__ft').on('click', '.weui-btn', hide_dialog);
+            // 点击关闭按钮关闭全屏幕弹层
+            $('.weui-icon-close-thin').on('click', hide_dialog);
             function hideDialog(element) {
                 $(element).parents('.dialog_box').fadeOut(200);
             };
             // 显示操作对话框
             $('#showDialog').on('click', function() {
-                console.log($(this).attr("data-id"));
+                {#console.log($(this).attr("data-id"));#}
                 $('.dialog_box').fadeIn(200);
             });
             //点击对话框操作按钮关闭操作对话框
@@ -65,5 +162,61 @@
             JsBarcode("#imgcode", num);
             document.getElementById("dialog_box").style.display="";
         };
+        function showToastMessage() {
+            const $loadingToast = $('#loadingToast');
+            $loadingToast.fadeIn(100);
+            setTimeout(function() {
+                $loadingToast.fadeOut(100);
+            }, 2000);
+        };
+        function showRemind(msg) {
+            const loadingRemind = $('#loadingRemind');
+            const remind = document.getElementById("remind_msg");
+            remind.innerText = msg;
+            loadingRemind.fadeIn(100);
+            setTimeout(function() {
+                loadingRemind.fadeOut(100);
+            }, 2000);
+        }
+        function sub_btn() {
+            {#showToastMessage();#}
+            {#console.log($("#name").val());#}
+            const name_va = $("#name").val();
+            const idCard_va = $("#idCard").val();
+            const cardId_va = $("#cardId").val();
+            if (name_va == null || name_va === "") {
+                showRemind("请填写姓名");
+                return
+            } else if (idCard_va == null || idCard_va === "") {
+                showRemind("请填写身份证号码");
+                return
+            } else if (cardId_va == null || cardId_va === "") {
+                showRemind("请填写诊疗卡号码");
+                return
+            }
+            const $loadingToast = $('#loadingToast');
+            $loadingToast.fadeIn(100);
+            const params = $('#form').serialize();
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/website/addMedical",
+                data: params,
+                success: function(res) {
+                    if(res.message == 'success') {
+                        window.location.reload();
+                    } else {
+                        showRemind(res.message);
+                    }
+                    console.log(res.message);
+                },
+                error: function (err) {
+                    showRemind(err);
+                },
+                complete: function () {
+                    $loadingToast.fadeOut(100);
+                }
+            })
+        }
     </script>
 {% endblock %}

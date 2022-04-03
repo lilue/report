@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
+
+env = environ.Env()
+env.read_env('.env')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '3*v+j3(#kp8t&d9e5*fgi8qipzlwtgfo#qw40hs!2+_fvls_)4'
+SECRET_KEY = env.str('SECRET_KEY', '3*v+j3(#kp8t&d9e5*fgi8qipzlwtgfo#qw40hs!2+_fvls_)4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', False)
 
-ALLOWED_HOSTS = ['127.0.0.1', '118.31.68.134', '42.194.237.4', 'potou.zhonghefull.com', '*']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 
 # Application definition
@@ -52,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -81,29 +85,31 @@ WSGI_APPLICATION = 'report.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'report',
-            'USER': 'root',
-            'PASSWORD': '123456',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'report',
-            'USER': 'report',
-            'PASSWORD': 'QQxuwen206420',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-        }
-    }
+DATABASES = {
+    'default': env.db('DATABASE_URL')
+}
+# if DEBUG:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'NAME': 'report',
+#             'USER': 'root',
+#             'PASSWORD': '123456',
+#             'HOST': '127.0.0.1',
+#             'PORT': '3306',
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'NAME': 'report',
+#             'USER': 'report',
+#             'PASSWORD': '',
+#             'HOST': '127.0.0.1',
+#             'PORT': '3306',
+#         }
+#     }
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -134,7 +140,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -160,17 +166,13 @@ API_NONCE_STR = '12345685217'
 
 # APP_ID = 'wxd5191076ca1f7db7'
 # APP_SECRET = '5a20659127d67fe81a9ea9a84dd3da8a'
-APP_ID = 'wx896da0e215f91253'
-APP_SECRET = '21df20f1f63944f9f0eeb65e5a5e6450'
-TOKEN = 'JVWsgSgWG5Lu2z4jEE7OGRY18ixvJm4'
-
-# 测试小程序
-# WX_APP_ID = 'wxf44bb855d11bd5f6'
-# WX_APP_SECRET = 'f946932fc5ab6ec1d95de1a4ef9fa72c'
+APP_ID = env.str('APPID')
+APP_SECRET = env.str('APPSECRET')
+TOKEN = env.str('TOKEN')
 
 # 坡头小程序
-WX_APP_ID = 'wx761dedfc357039bc'
-WX_APP_SECRET = 'd894cbe83769f622397350e9d780c9d4'
+WX_APP_ID = env.str('APPLETS_APPID')
+WX_APP_SECRET = env.str('APPLETS_APPSECRET')
 
 # 统计字段分隔符
 STATISTICS_SPLIT_FLAG = '||'
@@ -189,3 +191,21 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 # 离线模式
 SIMPLEUI_STATIC_OFFLINE = True
+
+WECHAT_PAY = {
+    'TYPE': 'JSAPI',
+    'APPID': env.str('APPID'),
+    'APPSECRET': env.str('APPSECRET'),
+    'MCHID': env.str('MCHID'),
+    'APIKEY': env.str('APIKEY'),
+    'NOTIFY': env.str('NOTIFY'),
+    'SANDBOX': env.bool('SANDBOX', False),
+    'MCHCERT': env.str('MCHCERT'),
+    'MCHKEY': env.str('MCHKEY')
+}
+
+FRONT_END = {
+    'HOST': env.str('FRONTIP'),
+    'TOKEN': env.str('FRONTTOKEN')
+}
+

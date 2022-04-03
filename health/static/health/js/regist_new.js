@@ -1,25 +1,27 @@
-var domain = window.location.host;
 (function() {
-    $.ajax({
-        url: '/api/config',
-        data: {
-            url: window.location.href
-        },
-        dataType: 'json',
-        type: 'post',
-        success: function(res) {
-            if (res.retcode === 0) {
-                wx.config({
-                    debug: false,
-                    appId: res.data.appId,
-                    timestamp: res.data.timestamp,
-                    nonceStr: res.data.nonceStr,
-                    signature: res.data.signature,
-                    jsApiList: ['config', 'chooseImage', 'uploadImage', 'getLocalImgData']
-                });
-            }
-        }
-    });
+    // $.ajax({
+    //     url: '/api/config',
+    //     data: {
+    //         url: window.location.href
+    //     },
+    //     beforeSend: function (xhr, settings) {
+    //         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    //     },
+    //     dataType: 'json',
+    //     type: 'post',
+    //     success: function(res) {
+    //         if (res.retcode === 0) {
+    //             wx.config({
+    //                 debug: false,
+    //                 appId: res.data.appId,
+    //                 timestamp: res.data.timestamp,
+    //                 nonceStr: res.data.nonceStr,
+    //                 signature: res.data.signature,
+    //                 jsApiList: ['config', 'chooseImage', 'uploadImage', 'getLocalImgData']
+    //             });
+    //         }
+    //     }
+    // });
 
     wx.ready(function() {
         $('.upload-idcard').on('click', function(e) {

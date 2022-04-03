@@ -11,9 +11,10 @@ from wage.models import Payroll
 from wechatpy import WeChatClient
 from django.views.decorators.csrf import csrf_exempt
 from utils.process import process_date
+from report import settings
 
 #  token 取自微信公众号自己设置的
-token = 'JVWsgSgWG5Lu2z4jEE7OGRY18ixvJm4'
+token = '87EkCYK4NurGaSFSYj4IADKe84P5oZ5q'
 
 
 # Create your views here.
