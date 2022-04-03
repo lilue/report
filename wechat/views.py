@@ -56,7 +56,36 @@ def handle_wx(request):
         elif msg.type == 'text':
             item_str = msg
             if '*' in msg.content:
-                res = getInfo(item_str)
+                # res = getInfo(item_str)
+                res = ''
+                str_msg = msg.content
+                text_str = str_msg.split('*', 1)
+                query_set = Report.objects.filter(phone=text_str[0], idCard=text_str[1]).order_by('-id')[:3]
+                if query_set.exists():
+                    # 有数据
+                    result = ''
+                    template = "【新型冠状病毒(COVID-19)核酸检测结果】\n" \
+                               "姓名：%s\n" \
+                               "采样机构：%s\n" \
+                               "检测机构：湛江市赤坎区人民医院\n" \
+                               "检测日期：%s\n" \
+                               "检测结果：%s\n" \
+                               "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
+                               "PDF版报告：【%s】, 请复制至浏览器打开。"
+                    client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
+                    for report in reversed(query_set):
+                        if not report.zjg:
+                            zjg = '阴性(-)'
+                        else:
+                            zjg = report.zjg
+                        str_ss = report.inspection_date.split(' ', 1)
+                        folder = process_date(report.inspection_date)
+                        pdfUrl = "https://image.zhonghefull.com/ckpdf/%s/%s.pdf" % (folder, report.idCard)
+                        item_content = template % (report.name, report.hospital, str_ss[0], zjg, pdfUrl)
+                        client.message.send_text(msg.source, item_content)
+                        status = 'send'
+                else:
+                    res = "暂无证件号%s的检验结果，请稍后查询。" % (text_str[1])
             else:
                 res = replayMes()
                 client = WeChatClient(settings.APP_ID, settings.APP_SECRET)
@@ -97,40 +126,40 @@ def handle_wx(request):
         return HttpResponse(reply.render(), content_type='application/xml')
 
 
-def getInfo(params):
-    # print(params.content)
-    symbol = '*'
-    msg = params.content
-    # open_id = params.source
-    # print(open_id)
-    response = symbol in msg
-    if response:
-        text = msg.split(symbol, 1)
-        query_set = Report.objects.filter(phone=text[0], idCard=text[1]).order_by('-id')[:1]
-        if query_set.exists():
-            # 有数据
-            template = "【新型冠状病毒(COVID-19)核酸检测结果】\n" \
-                       "姓名：%s\n" \
-                       "采样机构：%s\n" \
-                       "检测机构：湛江市赤坎区人民医院\n" \
-                       "检测日期：%s\n" \
-                       "检测结果：%s\n" \
-                       "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
-                       "PDF版报告：【%s】, 请复制至浏览器打开。"
-            for report in query_set:
-                if not report.zjg:
-                    zjg = '阴性(-)'
-                else:
-                    zjg = report.zjg
-                str_ss = report.inspection_date.split(' ', 1)
-                folder = process_date(report.inspection_date)
-                pdfUrl = "https://image.zhonghefull.com/ckpdf/%s/%s.pdf" % (folder, report.idCard)
-                result = template % (report.name, report.hospital, str_ss[0], zjg, pdfUrl)
-        else:
-            result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
-    else:
-        result = replayMes()
-    return result
+# def getInfo(params):
+#     # print(params.content)
+#     symbol = '*'
+#     msg = params.content
+#     # open_id = params.source
+#     # print(open_id)
+#     response = symbol in msg
+#     if response:
+#         text = msg.split(symbol, 1)
+#         query_set = Report.objects.filter(phone=text[0], idCard=text[1]).order_by('-id')[:1]
+#         if query_set.exists():
+#             # 有数据
+#             template = "【新型冠状病毒(COVID-19)核酸检测结果】\n" \
+#                        "姓名：%s\n" \
+#                        "采样机构：%s\n" \
+#                        "检测机构：湛江市赤坎区人民医院\n" \
+#                        "检测日期：%s\n" \
+#                        "检测结果：%s\n" \
+#                        "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
+#                        "PDF版报告：【%s】, 请复制至浏览器打开。"
+#             for report in query_set:
+#                 if not report.zjg:
+#                     zjg = '阴性(-)'
+#                 else:
+#                     zjg = report.zjg
+#                 str_ss = report.inspection_date.split(' ', 1)
+#                 folder = process_date(report.inspection_date)
+#                 pdfUrl = "https://image.zhonghefull.com/ckpdf/%s/%s.pdf" % (folder, report.idCard)
+#                 result = template % (report.name, report.hospital, str_ss[0], zjg, pdfUrl)
+#         else:
+#             result = "暂无证件号%s的检验结果，请稍后查询。" % (text[1])
+#     else:
+#         result = replayMes()
+#     return result
 
 
 # 工资查询，赤坎没有该功能
