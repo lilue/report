@@ -1,0 +1,33 @@
+.card_list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    -webkit-box-flex: 1;
+    overflow: auto;
+    flex: 1;
+}
+
+.patient_card {
+    background-color: #FFFFFF;
+    padding: 12px 16px 12px 16px;
+    width: 80%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.card_top {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: flex-start;
+    padding-bottom: 5px;
+}
+
+.card_left {
+    display: flex;
+    align-items: center;
+}

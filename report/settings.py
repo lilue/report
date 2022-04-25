@@ -29,8 +29,8 @@ SECRET_KEY = env.str('SECRET_KEY', '3*v+j3(#kp8t&d9e5*fgi8qipzlwtgfo#qw40hs!2+_f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', False)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
-
+# ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = "*"
 
 # Application definition
 
@@ -88,28 +88,7 @@ WSGI_APPLICATION = 'report.wsgi.application'
 DATABASES = {
     'default': env.db('DATABASE_URL')
 }
-# if DEBUG:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': 'report',
-#             'USER': 'root',
-#             'PASSWORD': '123456',
-#             'HOST': '127.0.0.1',
-#             'PORT': '3306',
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': 'report',
-#             'USER': 'report',
-#             'PASSWORD': '',
-#             'HOST': '127.0.0.1',
-#             'PORT': '3306',
-#         }
-#     }
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 

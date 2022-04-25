@@ -1,0 +1,71 @@
+.precautions {
+    text-align: justify !important;
+    color: #000000 !important;
+    font-size: 14px !important;
+}
+
+.locked {
+    padding-left: 20px;
+    font-size: 13px !important;
+}
+
+.locked p:last-child {
+    color: #ff0000;
+}
+
+.form_b {
+    padding-top: 10px !important;
+    min-height: auto !important;
+    padding-bottom: 10px !important;
+}
+
+.info_card {
+    margin-top: 20px;
+    background-color: #FFFFFF;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.info_card span {
+    padding-left: 20px;
+}
+
+.info_card_text {
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.p_right {
+    text-align: right;
+    margin: 0 0 0 auto;
+}
+
+.t_right {
+    text-align: left !important;
+}
+
+.t_right_box {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    color: #0d0d0d;
+}
+
+.t_right_box p{
+    color: #ff0000;
+}
+
+.am_div {
+    display: flex;
+}
+
+.footViewStyle {
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+}

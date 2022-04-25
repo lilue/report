@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    核酸缴费列表
+{% endblock %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static 'hospital/css/acidList.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="card_list">
+        {% for item in querySet %}
+            <div class="patient_card">
+                <div class="card_top" onclick="window.location.href='{% url 'acidRes' item.id %}'">
+                    <div class="card_left">姓名:{{ item.name }}</div>
+                    <div class="card_left">证件号:{{ item.idCard }}</div>
+                    <div class="card_left">支付时间:{{ item.timeEnd }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

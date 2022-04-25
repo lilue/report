@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    缴费结果
+{% endblock %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-msg.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-icon.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-btn.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area">
+            {% if nucleic.status == '2' %}
+                <i class="weui-icon-success weui-icon_msg"></i>
+            {% else %}
+                <i class="weui-icon-warn weui-icon_msg"></i>
+            {% endif %}
+        </div>
+        <div class="weui-msg__text-area">
+            <h3 class="weui-msg__title">姓名:{{ nucleic.name }}</h3>
+            <h3 class="weui-msg__title">身份证:{{ nucleic.idCard }}</h3>
+            {% if nucleic.status != '2' %}
+                <p class="weui-msg__desc">未查询到支付成功结果，如已经支付，刷新页面重新获取。</p>
+            {% else %}
+                <p class="weui-msg__desc">支付时间:{{ nucleic.timeEnd }}</p>
+            {% endif %}
+        </div>
+        <div class="weui-msg__opr-area">
+            <p class="weui-btn-area">
+                <a href="{% url 'acidList' %}" class="weui-btn weui-btn_primary">返回列表</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

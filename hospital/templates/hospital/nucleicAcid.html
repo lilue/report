@@ -1,0 +1,208 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    核酸检测
+{% endblock %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-dialog.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/weui-css/weui-form.css' %}">
+    <link rel="stylesheet" href="{% static 'hospital/css/nucleicAcid.css' %}">
+{% endblock %}
+{% block content %}
+    <div id="disabled_div" style="display: none;"></div>
+    <div class="message_box" style="opacity: 1; display: none;">
+        <div class="weui-mask"></div>
+        <div class="weui-dialog">
+            <div class="weui-dialog__hd"><strong class="weui-dialog__title">提示</strong></div>
+            <div class="weui-dialog__bd" id="message_content"></div>
+            <div class="weui-dialog__ft">
+                <a href="javascript:" class="weui-dialog__btn weui-dialog__btn_default">确认</a>
+            </div>
+        </div>
+    </div>
+    <div class="dialog_box" style="opacity: 1;">
+        <div class="weui-mask"></div>
+        <div class="weui-dialog">
+            <div class="weui-dialog__hd">
+                <strong class="weui-dialog__title">注意事项</strong>
+            </div>
+            <div class="weui-dialog__bd">
+                <div class="precautions">
+                    <p>一、门诊核酸检测，面对人群为"愿检尽检"的自费人群，线上完成核酸检测缴费，如是非自费人群的，请到现场开单，进行核酸检测。</p>
+                    <p>二、发热人员，健康码为红色或黄色的人员请到发热门诊就诊，不要在线上进行核酸检测缴费。</p>
+                    <p>三、预约缴费成功后当天有效，核酸采样24小时上班。</p>
+                    <p>四、核酸检测出纸质报告时间：</p>
+                        <div class="locked">
+                            <p>1、当天03:00-07:30采集的标本，检测结果与当天11:30左右发放</p>
+                            <p>2、当天07:30-11:30采集的标本，检测结果与当天16:30左右发放</p>
+                            <p>3、当天11:30-16:30采集的标本，检测结果与当天21:30左右发放</p>
+                            <p>4、当天16:30-21:30采集的标本，检测结果与次日02:30左右发放</p>
+                            <p>5、当天21:00-次日03:30采集的标本，检测结果与次日07:30左右发放</p>
+                            <p>6、检测结果同步上传到省新冠病毒检测核酸检测结果信息平台。</p>
+                            <p>注：以上为正常情况参考时间，如遇特殊情况（复查、标本不合格、标本量突增、标本泄露、仪器、系统故障等情况）检测结果发放时间会适当延长。</p>
+                        </div>
+                    <p>五、目前暂不支持手机退费，退费需持身份证或者诊疗卡到现场办理，请谨慎缴费。</p>
+                </div>
+            </div>
+            <div class="weui-dialog__ft">
+                <a href="javascript:" class="weui-dialog__btn">确认</a>
+            </div>
+        </div>
+    </div>
+    <div class="weui-form form_b">
+        <div class="weui-form__text-area">
+            <h6 class="weui-form__title">填写就诊人信息</h6>
+        </div>
+        <div class="weui-cells__group weui-cells__group_form">
+            <div class="weui-cell weui-cell_active">
+                <div class="weui-cell__hd">
+                    <label class="weui-label" style="white-space:nowrap;">就诊人姓名</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input type="text" class="weui-input" id="name" placeholder="请输入就诊人姓名" value>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_active">
+                <div class="weui-cell__hd">
+                    <label class="weui-label" style="white-space:nowrap;">身份证号码</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input type="text" class="weui-input" id="idCard" placeholder="请输入就诊人身份证号码" value>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="info_card">
+        <span>就诊项目</span>
+        <div class="info_card_text"><div class="p_left">新型冠状病毒RNA测定（单样检测）</div><div class="p_right">25.00元</div></div>
+        <div class="info_card_text"><div class="p_left">新型冠状病毒2019-nCov核酸检测试剂盒</div><div class="p_right">9.81元</div></div>
+    </div>
+    <div class="weui-tabbar footViewStyle">
+        <div class="weui-tabbar__item t_right">
+            <div class="t_right_box">
+                <div><p>套餐总金额</p></div>
+                <div class="am_div">合计：<p>34.81元</p></div>
+            </div>
+        </div>
+        <div class="weui-tabbar__item">
+            <a href="javascript:" class="weui-btn weui-btn_primary" id="wxpay">支付</a>
+        </div>
+    </div>
+{% endblock %}
+{% block bodyJs %}
+    <script type="text/javascript" src="{% static 'hospital/js/jquery-2.1.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'hospital/js/jweixin-1.6.0.js' %}"></script>
+    <script type="text/javascript" src="{% static 'hospital/js/zepto.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.ajax({
+                type: "POST",       // POST方法
+                url: "{% url 'getConfig' %}",     // 处理请求的url
+                data: {'url': window.location.href},
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function (res) {
+                    if (res.retcode === 0) {
+                        wx.config({
+                            debug: false,
+                            appId: res.data.appId,
+                            timestamp: res.data.timestamp,
+                            nonceStr: res.data.nonceStr,
+                            signature: res.data.signature,
+                            jsApiList: ['config', 'chooseWXPay']
+                        });
+                    }
+                },
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            function hideDialog(element) {
+                $(element).parents('.dialog_box').fadeOut(200);
+            };
+            function hideDialogMsg(element) {
+                $(element).parents('.message_box').fadeOut(200);
+            };
+            // 点击对话框操作按钮关闭操作对话框
+            $('.dialog_box').on('click', '.weui-dialog__btn', function () {
+                hideDialog(this);
+            });
+            $('.message_box').on('click', '.weui-dialog__btn', function () {
+                hideDialogMsg(this);
+            });
+
+        });
+        wx.ready(function() {
+            let oneClick = true;
+            $('#wxpay').on('click', function(e) {
+                e.preventDefault();
+                if(oneClick) {
+                    oneClick = false;
+                    $('#wxpay').addClass('weui-btn_disabled');
+                    document.getElementById("wxpay").innerText = "支付中，请稍侯";
+                    const name = document.getElementById("name").value;
+                    const idCard = document.getElementById("idCard").value;
+                    if (name === "") {
+                        document.getElementById("message_content").innerText = "请输入就诊人姓名";
+                        $('.message_box').fadeIn(200);
+                        oneClick = true;
+                        $('#wxpay').removeClass('weui-btn_disabled');
+                        document.getElementById("wxpay").innerText = "支付";
+                        return
+                    }
+                    if (idCard === "") {
+                        document.getElementById("message_content").innerText = "请输入就诊人身份证号码";
+                        $('.message_box').fadeIn(200);
+                        oneClick = true;
+                        $('#wxpay').removeClass('weui-btn_disabled');
+                        document.getElementById("wxpay").innerText = "支付";
+                        return
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'acid' %}",
+                        data: {'name': name, 'idCard': idCard},
+                        async: true,
+                        cache: false,
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        },
+                        success: function (res) {
+                            if(res.retcode === 0) {
+                                wx.chooseWXPay({
+                                    appId: res.data.appid,
+                                    timestamp: res.data.timestamp,
+                                    nonceStr: res.data.nonce_str,
+                                    package: res.data.prepay_id,
+                                    signType: 'MD5',
+                                    paySign: res.data.paySign,
+                                    success: function (result) {
+                                        if (result.errMsg === 'chooseWXPay:ok') {
+                                            document.getElementById("message_content").innerText = "支付成功，等待跳转";
+                                            $('.message_box').fadeIn(200);
+                                            setTimeout(function () {
+                                                window.location.replace("{% url 'acidList' %}");
+                                            }, 1000);
+                                        }
+                                    }
+                                })
+                            }
+                        },
+                        fail: function (err) {
+                            alert(err);
+                        },
+                        complete: function () {
+                            oneClick = true;
+                            $('#wxpay').removeClass('weui-btn_disabled');
+                            document.getElementById("wxpay").innerText = "支付";
+                        }
+                    });
+                } else {
+                    return
+                }
+            });
+        });
+    </script>
+{% endblock %}

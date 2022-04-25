@@ -57,3 +57,37 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.orderNo
+
+
+class Nucleic(models.Model):
+    orderNo = models.CharField(max_length=32, blank=True, unique=True, verbose_name="微信支付订单号与电子票据业务单号")
+    transactionID = models.CharField(max_length=32, blank=True, null=True, default='', verbose_name="微信支付订单号")
+    name = models.CharField(max_length=32, null=True, blank=True, verbose_name="就诊人姓名")
+    idCard = models.CharField(max_length=20, null=True, blank=True, verbose_name="身份证号码")
+    prepayId = models.CharField(max_length=100, blank=True, null=True, verbose_name="预支付交易会话标识")
+    preTime = models.CharField(max_length=100, blank=True, null=True, verbose_name="统一下单时间戳")
+    preNonce = models.CharField(max_length=100, blank=True, null=True, verbose_name="统一下单随机字符串")
+    paySign = models.CharField(max_length=200, blank=True, null=True, verbose_name="支付签名")
+    code_url = models.CharField(max_length=200, blank=True, null=True, verbose_name="支付二维码链接")
+    openid = models.CharField(max_length=50, blank=True, null=True, verbose_name="缴费的微信openid")
+    status = models.CharField(max_length=2, default='1', verbose_name="支付状态")
+    prStatus = models.CharField(max_length=2, default='0', verbose_name="打印状态")
+    expDate = models.DateTimeField(default=timezone.now, blank=True, null=True, verbose_name="过期时间")
+    timeEnd = models.CharField(default='', max_length=50, blank=True, null=True, verbose_name="支付完成时间")
+
+    class Meta:
+        verbose_name = '核酸缴费'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.orderNo
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'orderNo': self.orderNo,
+            'name': self.name,
+            'idCard': self.idCard,
+            'status': self.status,
+            'timeEnd': self.timeEnd
+        }

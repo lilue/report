@@ -1,14 +1,9 @@
 import base64
 import random
 import string
-from cProfile import label
-from typing import Set, Dict, Any, Union, Callable, Tuple
-
-from django.shortcuts import render
 from aip import AipOcr
 from django.views import View
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import time
 from report import settings
 from wechatpy import WeChatClient
@@ -52,7 +47,7 @@ class Obtain(View):
                 wxClient = getWxClient()
                 ticket = wxClient.jsapi.get_jsapi_ticket()
                 times = int(time.time())
-                nonce = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+                nonce = ''.join(random.sample(string.ascii_letters + string.digits, 32))
                 sign = wxClient.jsapi.get_jsapi_signature(nonce, ticket, times, url)
                 data = {'appId': settings.APP_ID, 'timestamp': times,
                         'nonceStr': nonce, 'signature': sign}

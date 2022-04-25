@@ -38,6 +38,7 @@ def handle_wx(request):
         # print(request.body)
         msg = parse_message(request.body)
         status = 'text'
+        news = ''
         if msg.type == 'event':
             if msg.event == 'subscribe':
                 news = '非常感谢您关注湛江市坡头区人民医院，预约核酸检测请拨打院务办电话3821203，' \
