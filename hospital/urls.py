@@ -18,5 +18,5 @@ urlpatterns = [
     path('nodata', oauth(views.notData), name="nodata"),
     path('obtain', csrf_exempt(views.obtain), name="getPayUrl"),
     path('query/<str:order>', csrf_exempt(views.query_pay), name="queryPay"),
-    path('microPay', csrf_exempt(views.microPay), name="microPay")
+    path('microPay', csrf_exempt(views.microPay), name="microPay"),
 ]

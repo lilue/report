@@ -180,8 +180,7 @@ def acid_order(request):
     order_no = ''.join(random.sample(string.ascii_letters + string.digits, 16))
     description = name + idCard + "核酸检测套餐"
     order_amount = 3481
-    pay = WeChatPay(appid=settings.WECHAT_PAY['APPID'], mch_id=settings.WECHAT_PAY['MCHID'],
-                    api_key=settings.WECHAT_PAY['APIKEY'], sandbox=settings.WECHAT_PAY['SANDBOX'])
+    pay = get_entity()
     result = pay.order.create(trade_type=settings.WECHAT_PAY['TYPE'], body=description, total_fee=order_amount,
                               notify_url=settings.WECHAT_PAY['NOTIFY'] + '/website/acid_notify',
                               out_trade_no=order_no, user_id=user_info)
@@ -244,8 +243,8 @@ def unified_order(request):
         if recipe.status == '1':
             order_no = ''.join(random.sample(string.ascii_letters + string.digits, 16))
             description = "门诊缴费"
-            # order_amount = int(recipe.recipe_sum)   # 参数单位为分，不能带小数点
-            order_amount = 1
+            order_amount = int(recipe.recipe_sum)   # 参数单位为分，不能带小数点
+            # order_amount = 1
             pay = get_entity()
             result = pay.order.create(trade_type=settings.WECHAT_PAY['TYPE'], body=description, total_fee=order_amount,
                                       notify_url=settings.WECHAT_PAY['NOTIFY'] + '/website/notify_url',
@@ -284,8 +283,7 @@ def unified_order(request):
 
 @require_http_methods("POST")
 def acid_notify(request):
-    wechatPay = WeChatPay(appid=settings.WECHAT_PAY['APPID'], mch_id=settings.WECHAT_PAY['MCHID'],
-                          api_key=settings.WECHAT_PAY['APIKEY'], sandbox=settings.WECHAT_PAY['SANDBOX'])
+    wechatPay = get_entity()
     try:
         response = wechatPay.parse_payment_result(request.body)
     except Exception as err:
@@ -322,7 +320,8 @@ def notify(request):
     if result['result_code'] == "SUCCESS" and result['return_code'] == "SUCCESS":
         out_trade_no = result['out_trade_no']
         queryResult = Pay.order.query(out_trade_no=out_trade_no)
-        if queryResult['trade_state'] == "SUCCESS":  # 主动查询支付状态
+        if queryResult['result_code'] == "SUCCESS" and queryResult['return_code'] == "SUCCESS" and queryResult[
+            'trade_state'] == "SUCCESS":  # 主动查询支付状态
             # 查询数据库，修改数据库，通知his支付完成
             querySet = Payment.objects.filter(orderNo=out_trade_no, status=1)
             if querySet.exists():
@@ -348,7 +347,7 @@ def notify(request):
 
 def close_order(no):
     try:
-        pay =get_entity()
+        pay = get_entity()
         pay.order.close(out_trade_no=no)
         pay_order = Payment.objects.get(orderNo=no)
         pay_order.status = 0
@@ -376,7 +375,9 @@ def acid(request):
 
 
 def get_entity():
-    pay = WeChatPay(appid=settings.WECHAT_PAY['APPID'], mch_id=settings.WECHAT_PAY['MCHID'],
+    pay = WeChatPay(appid=settings.WECHAT_PAY['APPID'], sub_appid=settings.WECHAT_PAY['SUB_APPID'],
+                    mch_id=settings.WECHAT_PAY['MCHID'], sub_mch_id=settings.WECHAT_PAY['SUB_MCHID'],
+                    mch_cert=settings.WECHAT_PAY['MCHCERT'], mch_key=settings.WECHAT_PAY['MCHKEY'],
                     api_key=settings.WECHAT_PAY['APIKEY'], sandbox=settings.WECHAT_PAY['SANDBOX'])
     return pay
 
@@ -418,8 +419,7 @@ def obtain(request):
 
 @require_http_methods("GET")
 def query_pay(request, order):
-    pay = WeChatPay(appid=settings.WECHAT_PAY['APPID'], mch_id=settings.WECHAT_PAY['MCHID'],
-                    api_key=settings.WECHAT_PAY['APIKEY'], sandbox=settings.WECHAT_PAY['SANDBOX'])
+    pay = get_entity()
     result = pay.order.query(out_trade_no=order)
     return JsonResponse(result, safe=False)
 
@@ -440,29 +440,51 @@ def microPay(request):
         description = "坡头区人民医院门诊缴费"
         order_no = order
         order_amount = int(float(total) * 100)
+        # order_amount = 1
         try:
-            result = pay.micropay.create(body=description, total_fee=order_amount, client_ip="113.110.76.188",
+            result = pay.micropay.create(body=description, total_fee=order_amount, client_ip=settings.SPBILLIP,
                                          out_trade_no=order_no, auth_code=auth_code)
-            # print(result)
-            # OrderedDict( [('return_code', 'SUCCESS'), ('return_msg', 'OK'), ('result_code', 'SUCCESS'), ('mch_id',
-            # '1494202812'), ('appid', 'wxa2d15b53871a5fb5'), ('nonce_str', 'svKRnceDqmA6b7Ay'), ('sign',
-            # 'B1337C9EE41DEA0E4736D6C19A1C7730'), ('openid', 'oyNgwwrZczcklZWefVNF15Ii2Ioc'), ('is_subscribe', 'Y'),
-            # ('trade_type', 'MICROPAY'), ('bank_type', 'OTHERS'), ('fee_type', 'CNY'), ('total_fee', '1'),
-            # ('cash_fee_type', 'CNY'), ('cash_fee', '1'), ('transaction_id', '4200001354202204247963393240'),
-            # ('out_trade_no', 'hc3O9PB6DfelqJjm'), ('attach', None), ('time_end', '20220424154328')])
-            if result['result_code'] == "SUCCESS" and result['return_code'] == "SUCCESS" and result['trade_type'] == 'MICROPAY':
-                time_end = result['time_end']
-                time_str = "%s年%s月%s日 %s时%s分%s秒" % (time_end[0:4], time_end[4:6], time_end[6:8], time_end[8:10],
-                                                    time_end[10:12], time_end[12:14])
-                Nucleic.objects.create(
-                    orderNo=order,
-                    transactionID=result['transaction_id'],
-                    timeEnd=time_str,
-                    openid=result['openid'],
-                    status='2',
-                )
-            return JsonResponse(result, safe=False)
+            model = {'order': order, 'status': 2}
+            if result['return_code'] == "SUCCESS":
+                if result['result_code'] == "SUCCESS" and result['trade_type'] == "MICROPAY":
+                    model['time_str'] = formatTime(result['time_end'])
+                    model['openid'] = result['openid']
+                    model['transaction_id'] = result['transaction_id']
+                    CreateNucleic(model)
+                    return JsonResponse(result, safe=False)
+                if result['err_code'] == 'USERPAYING':
+                    # USERPAYING	用户支付中，需要输入密码 支付结果未知 等待5秒后调用【查询订单API】
+                    time.sleep(5)
+                    qResult = pay.order.query(out_trade_no=order_no)
+                    if qResult['result_code'] == "SUCCESS" and qResult['return_code'] == "SUCCESS" and qResult['trade_state'] == "SUCCESS":
+                        model['time_str'] = formatTime(result['time_end'])
+                        model['openid'] = qResult['openid']
+                        model['transaction_id'] = qResult['transaction_id']
+                        CreateNucleic(model)
+                        return JsonResponse(qResult, safe=False)
+                else:
+                    # 调用撤销
+                    pay.order.reverse(out_trade_no=order_no)
+                    return JsonResponse({"errMsg": "支付失败，" + result['err_code_des'] + ",请重新支付"}, safe=False)
+            else:
+                # 失败返回
+                pass
         except Exception as e:
             return JsonResponse({"errMsg": str(e)}, safe=False)
     else:
         return JsonResponse({"errMsg": "md5验证失败"}, safe=False)
+
+
+def formatTime(tm):
+    return "%s年%s月%s日 %s时%s分%s秒" % (tm[0:4], tm[4:6], tm[6:8], tm[8:10], tm[10:12], tm[12:14])
+
+
+def CreateNucleic(mo):
+    nucleic = Nucleic.objects.create(
+        orderNo=mo['order'],
+        transactionID=mo['transaction_id'],
+        timeEnd=mo['time_str'],
+        openid=mo['openid'],
+        status=mo['status'],
+    )
+    print(nucleic)

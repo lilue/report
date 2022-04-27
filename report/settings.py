@@ -145,7 +145,7 @@ API_NONCE_STR = '12345685217'
 
 # APP_ID = 'wxd5191076ca1f7db7'
 # APP_SECRET = '5a20659127d67fe81a9ea9a84dd3da8a'
-APP_ID = env.str('APPID')
+APP_ID = env.str('S_APPID')
 APP_SECRET = env.str('APPSECRET')
 TOKEN = env.str('TOKEN')
 
@@ -171,11 +171,15 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 # 离线模式
 SIMPLEUI_STATIC_OFFLINE = True
 
+SPBILLIP = env.str('SPBILLIP')
+
 WECHAT_PAY = {
     'TYPE': 'JSAPI',
     'APPID': env.str('APPID'),
+    'SUB_APPID': env.str('S_APPID'),
     'APPSECRET': env.str('APPSECRET'),
     'MCHID': env.str('MCHID'),
+    "SUB_MCHID": env.str('S_MCHID'),
     'APIKEY': env.str('APIKEY'),
     'NOTIFY': env.str('NOTIFY'),
     'SANDBOX': env.bool('SANDBOX', False),
