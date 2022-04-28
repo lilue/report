@@ -179,7 +179,7 @@ def acid_order(request):
     user_info = request.session.get('user')['openid']
     order_no = ''.join(random.sample(string.ascii_letters + string.digits, 16))
     description = name + idCard + "核酸检测套餐"
-    order_amount = 3481
+    order_amount = 3481     # 参数单位为分，不能带小数点
     pay = get_entity()
     result = pay.order.create(trade_type=settings.WECHAT_PAY['TYPE'], body=description, total_fee=order_amount,
                               notify_url=settings.WECHAT_PAY['NOTIFY'] + '/website/acid_notify',
@@ -244,7 +244,6 @@ def unified_order(request):
             order_no = ''.join(random.sample(string.ascii_letters + string.digits, 16))
             description = "门诊缴费"
             order_amount = int(recipe.recipe_sum)   # 参数单位为分，不能带小数点
-            # order_amount = 1
             pay = get_entity()
             result = pay.order.create(trade_type=settings.WECHAT_PAY['TYPE'], body=description, total_fee=order_amount,
                                       notify_url=settings.WECHAT_PAY['NOTIFY'] + '/website/notify_url',
@@ -295,9 +294,7 @@ def acid_notify(request):
         if queryResult['trade_state'] == "SUCCESS":
             querySet = Nucleic.objects.filter(orderNo=out_trade_no, status=1)
             if querySet.exists():
-                time_end = response['time_end']
-                time_str = "%s年%s月%s日 %s时%s分%s秒" % (time_end[0:4], time_end[4:6], time_end[6:8], time_end[8:10],
-                                                    time_end[10:12], time_end[12:14])
+                time_str = formatTime(response['time_end'])
                 pay_order = querySet[0]
                 pay_order.status = 2
                 pay_order.transactionID = response['transaction_id']
@@ -320,14 +317,11 @@ def notify(request):
     if result['result_code'] == "SUCCESS" and result['return_code'] == "SUCCESS":
         out_trade_no = result['out_trade_no']
         queryResult = Pay.order.query(out_trade_no=out_trade_no)
-        if queryResult['result_code'] == "SUCCESS" and queryResult['return_code'] == "SUCCESS" and queryResult[
-            'trade_state'] == "SUCCESS":  # 主动查询支付状态
+        if queryResult['result_code'] == "SUCCESS" and queryResult['return_code'] == "SUCCESS" and queryResult['trade_state'] == "SUCCESS":  # 主动查询支付状态
             # 查询数据库，修改数据库，通知his支付完成
             querySet = Payment.objects.filter(orderNo=out_trade_no, status=1)
             if querySet.exists():
-                time_end = result['time_end']
-                time_str = "%s年%s月%s日 %s时%s分%s秒" % (time_end[0:4], time_end[4:6], time_end[6:8], time_end[8:10],
-                                                    time_end[10:12], time_end[12:14])
+                time_str = formatTime(result['time_end'])
                 pay_order = querySet[0]
                 pay_order.recipe.status = 2
                 pay_order.status = 2
@@ -395,8 +389,7 @@ def obtain(request):
     if str_md5 == md5str:
         pay = get_entity()
         description = "坡头区人民医院门诊缴费"
-        order_amount = int(float(total) * 100)
-        # order_amount = 1
+        order_amount = int(float(total) * 100)      # 参数单位为分，不能带小数点
         result = pay.order.create(trade_type="NATIVE", body=description, total_fee=order_amount,
                                   notify_url=settings.WECHAT_PAY['NOTIFY'] + '/website/acid_notify',
                                   out_trade_no=order)
@@ -439,7 +432,7 @@ def microPay(request):
         pay = get_entity()
         description = "坡头区人民医院门诊缴费"
         order_no = order
-        order_amount = int(float(total) * 100)
+        order_amount = int(float(total) * 100)      # 参数单位为分，不能带小数点
         # order_amount = 1
         try:
             result = pay.micropay.create(body=description, total_fee=order_amount, client_ip=settings.SPBILLIP,

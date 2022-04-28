@@ -11,9 +11,15 @@ def process_date(date):
         timeArray = time.strptime(date, "%Y/%m/%d %H:%M:%S")
     timeStamp = int(time.mktime(timeArray))
     time_local = time.localtime(timeStamp)
-    dt = time.strftime("%Y-%m-%d %H:%M:%S", time_local)
-    dtArray = dt.split(' ', 1)
-    folder = dtArray[0].replace('-', '')
+    try:
+        dt = time.strftime("%Y-%m-%d %H:%M:%S", time_local)
+        dtArray = dt.split(' ', 1)
+        folder = dtArray[0].replace('-', '')
+    except Exception as ex:
+        print(str(ex))
+        dt = time.strftime("%Y/%m/%d %H:%M:%S", time_local)
+        dtArray = dt.split(' ', 1)
+        folder = dtArray[0].replace('/', '')
     # list_folder = list(folder)
     # if len(folder) == 7:
     #     list_folder.insert(4, '0')
@@ -27,4 +33,3 @@ def process_date(date):
 
 if __name__ == '__main__':
     print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-
