@@ -433,11 +433,10 @@ def microPay(request):
         description = "坡头区人民医院门诊缴费"
         order_no = order
         order_amount = int(float(total) * 100)      # 参数单位为分，不能带小数点
-        # order_amount = 1
+        model = {'order': order_no, 'status': 2}
         try:
             result = pay.micropay.create(body=description, total_fee=order_amount, client_ip=settings.SPBILLIP,
                                          out_trade_no=order_no, auth_code=auth_code)
-            model = {'order': order, 'status': 2}
             if result['return_code'] == "SUCCESS":
                 if result['result_code'] == "SUCCESS" and result['trade_type'] == "MICROPAY":
                     model['time_str'] = formatTime(result['time_end'])
@@ -445,25 +444,31 @@ def microPay(request):
                     model['transaction_id'] = result['transaction_id']
                     CreateNucleic(model)
                     return JsonResponse(result, safe=False)
-                if result['err_code'] == 'USERPAYING':
-                    # USERPAYING	用户支付中，需要输入密码 支付结果未知 等待5秒后调用【查询订单API】
-                    time.sleep(5)
+                else:
+                    # 调用撤销
+                    reverse(order_no)
+                    return JsonResponse({"errMsg": "支付失败，" + result['err_code_des'] + ",请重新支付"}, safe=False)
+            else:
+                # 失败返回
+                reverse(order_no)
+                return JsonResponse({"errMsg": "支付失败，" + result['err_code_des'] + ",请重新支付"}, safe=False)
+        except Exception as e:
+            if "需要用户输入支付密码" in str(e):
+                hibernate = [5, 10, 10, 10, 10]
+                for item in hibernate:
+                    time.sleep(item)
                     qResult = pay.order.query(out_trade_no=order_no)
                     if qResult['result_code'] == "SUCCESS" and qResult['return_code'] == "SUCCESS" and qResult['trade_state'] == "SUCCESS":
-                        model['time_str'] = formatTime(result['time_end'])
+                        model['time_str'] = formatTime(qResult['time_end'])
                         model['openid'] = qResult['openid']
                         model['transaction_id'] = qResult['transaction_id']
                         CreateNucleic(model)
                         return JsonResponse(qResult, safe=False)
-                else:
-                    # 调用撤销
-                    pay.order.reverse(out_trade_no=order_no)
-                    return JsonResponse({"errMsg": "支付失败，" + result['err_code_des'] + ",请重新支付"}, safe=False)
+                reverse(order_no)
+                return JsonResponse({"errMsg": "支付失败，请重新支付。失败原因：" + str(e)}, safe=False)
             else:
-                # 失败返回
-                pass
-        except Exception as e:
-            return JsonResponse({"errMsg": str(e)}, safe=False)
+                reverse(order_no)
+                return JsonResponse({"errMsg": "支付失败，请重新支付。失败原因：" + str(e)}, safe=False)
     else:
         return JsonResponse({"errMsg": "md5验证失败"}, safe=False)
 
@@ -481,3 +486,12 @@ def CreateNucleic(mo):
         status=mo['status'],
     )
     print(nucleic)
+
+
+def reverse(order_no):
+    pay = get_entity()
+    try:
+        aa = pay.order.reverse(out_trade_no=order_no)
+        print(aa)
+    except Exception as e:
+        print(str(e))
