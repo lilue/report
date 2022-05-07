@@ -45,10 +45,10 @@ INSTALLED_APPS = [
     'wechat',
     'reports',
     'health',
-    # 'interface',
+    'interface',
     'wage',
     'authorization',
-    # 'invoice',
+    'invoice',
     'hospital',
 ]
 
