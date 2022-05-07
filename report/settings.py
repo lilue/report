@@ -44,12 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'wechat',
     'reports',
-    'health',
-    'interface',
+    # 'health',
+    # 'interface',
     'wage',
-    'authorization',
-    'invoice',
-    'hospital',
+    # 'authorization',
+    # 'invoice',
+    # 'c',
 ]
 
 MIDDLEWARE = [
