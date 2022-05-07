@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'wechat',
     'reports',
-    # 'health',
+    'health',
     # 'interface',
     'wage',
     'authorization',
