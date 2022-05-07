@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'wage',
     'authorization',
     # 'invoice',
-    # 'hospital',
+    'hospital',
 ]
 
 MIDDLEWARE = [
