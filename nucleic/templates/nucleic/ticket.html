@@ -1,0 +1,49 @@
+{% extends 'basis.html' %}
+{% load static %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static "nucleic/css/ticket.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% if check %}
+            <img class="img_radius" src="{{ logoUrl }}" id="paymentBg">
+            <span class="hospital_span">{{ hospital }}</span>
+            {% if status == '2' %}
+                <div class="display_list">
+                  <div class="left">订单状态</div>
+                  <div class="right">支付成功</div>
+                </div>
+                <div class="display_list">
+                  <div class="left">订单号</div>
+                  <div class="right">{{ orderNo }}</div>
+                </div>
+                <div class="display_list">
+                  <div class="left">缴费项目</div>
+                  <div class="right">{{ itemName }}</div>
+                </div>
+                <div class="display_list">
+                  <div class="left">支付时间</div>
+                  <div class="right">{{ timeEnd }}</div>
+                </div>
+            {% else %}
+                <input class="refresh-button" type="button" onclick="javascript:location.reload();" value="重新获取支付结果">
+            {% endif %}
+            <div class="link-top"></div>
+            <div class="display_list">
+              <div class="left">支付金额</div>
+              <div class="right">{{ amount }}</div>
+            </div>
+        {% else %}
+            <input class="refresh-button" type="button" onclick="javascript:location.reload();" value="重新获取支付结果">
+        {% endif %}
+    </div>
+{% endblock %}
+{% block bodyJs %}
+<script type="text/javascript">
+    window.onload=function () {
+        let mchData = {action: 'onIframeReady', displayStyle: 'SHOW_CUSTOM_PAGE'};
+        let postData = JSON.stringify(mchData);
+        window.parent.postMessage(postData, 'https://payapp.weixin.qq.com');
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'basis.html' %}
+{% load static %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static "nucleic/css/finsh.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% if status == '1' %}
+            <h2 style="color: #ff0016">未支付</h2>
+        {% elif status == '2' %}
+            <h2>支付成功</h2>
+        {% elif status == '3' %}
+            <h2>已退款</h2>
+        {% else %}
+            <h2>订单超时关闭</h2>
+        {% endif %}
+        <h4>{{ local }}</h4>
+        <h3>姓名:{{ username }}</h3>
+        <h3>人数:{{ number }}</h3>
+        {% if status == '2' %}
+            <h4>支付时间:{{ endTime }}</h4>
+        {% endif %}
+    </div>
+{% endblock %}

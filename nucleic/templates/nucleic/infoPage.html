@@ -1,0 +1,126 @@
+{% extends 'basis.html' %}
+{% load static %}
+{% block title %}{{ hospital }}{% endblock %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static "nucleic/css/index.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="alert alert-danger hide" id="alert">这是一个失败提示！</div>
+    <h3 style="text-align: center;">{{ location }}</h3>
+    <div>
+        <div class="input-group input-group-lg custom-div"> {# input-group-lg  style="display:none;"#}
+          <span class="input-group-addon" id="basic-addon2">就诊人</span>
+          <input type="text" class="form-control custom-input" id="patient" placeholder="请输入就诊人姓名" aria-describedby="basic-addon2" />
+        </div>
+        <div class="input-group input-group-lg custom-div"> {# input-group-lg  style="display:none;"#}
+          <span class="input-group-addon" id="basic-addon2">证件号码</span>
+          <input type="number" class="form-control custom-input" id="idcard" placeholder="请输入证件号码" aria-describedby="basic-addon2" />
+        </div>
+        <div class="input-group input-group-lg custom-div"> {# input-group-lg  style="display:none;"#}
+          <span class="input-group-addon" id="basic-addon2">联系电话</span>
+          <input type="tel" class="form-control custom-input" id="phone" placeholder="请输入联系电话" aria-describedby="basic-addon2" />
+        </div>
+        <div class="input-group input-group-lg  custom-div" style="display:none;">
+          <span class="input-group-addon">就诊人数</span>
+          <input type="number" class="form-control" oninput="value=value.replace(/[^\d]/g,'')" id="people" value="1" onchange="peopleNum()" />
+          <span class="input-group-addon">人</span>
+        </div>
+        <div class="custom-bg custom-div">
+          <span style="font-size: 20px">就诊项目</span>
+          <div class="info_card_text">
+              <div class="p_left">{{ item }}</div>
+              <div class="p_right">{{ price }}元</div>
+          </div>
+        </div>
+        <div class="navbar-fixed-bottom footViewStyle">
+           <div class="custom-left">
+               <div class="custom-div1"><span class="custom-font">总金额</span></div>
+               <div class="custom-div2">合计：<span class="custom-font" id="sumTotal">{{ price }}元</span></div>
+           </div>
+           <div class="custom-right custom-div">
+               <button type="button" class="btn btn-primary btn-lg" id="wxpay">去支付</button>
+           </div>
+        </div>
+    </div>
+{% endblock %}
+{% block bodyJs %}
+    <script type="text/javascript" src="{% static 'nucleic/js/validation.js' %}"></script>
+<script type="text/javascript">
+let oneClick = true;
+$('#wxpay').on('click', function(e) {
+    e.preventDefault();
+    if (oneClick) {
+        oneClick = false;
+        $('#wxpay').addClass('disabled');
+        const pNum = document.getElementById('people').value;
+        const patient = document.getElementById('patient').value;
+        const idcard = document.getElementById('idcard').value;
+        const phone = document.getElementById('phone').value;
+        if (pNum < 1) {
+            document.getElementById("alert").innerHTML = "人数不能小于1";
+            $(".alert-danger").addClass("show");
+            {#console.log('人数不能小于1');#}
+            setTimeout(function() { resetBtn() }, 2000);
+            return
+        }
+        if (patient === "") {
+            document.getElementById("alert").innerHTML = "就诊人姓名不能等于空";
+            $(".alert-danger").addClass("show");
+            setTimeout(function() { resetBtn() }, 2000);
+            return
+        }
+        const idStatus = identityIDCard(idcard);
+        if (!idStatus.isPass) {
+            document.getElementById("alert").innerHTML = idStatus.errorMessage;
+            $(".alert-danger").addClass("show");
+            setTimeout(function() { resetBtn() }, 2000);
+            return
+        }
+        const myreg = /^1[3-9]\d{9}$/;
+        if (!myreg.test(phone)){
+            document.getElementById("alert").innerHTML = "请输入正确格式联系电话";
+            $(".alert-danger").addClass("show");
+            setTimeout(function() { resetBtn() }, 2000);
+            return
+        }
+        let iNum = parseInt(pNum)
+        let obj = {
+            "people": iNum,
+            "name": patient,
+            "idcard": idcard,
+            "phone": phone,
+            "total": iNum * {{ price }} * 100,
+            "price": {{ price }},
+            "qr_id": "{{ qr_id }}"
+        }
+        console.log(obj)
+        {#$.ajax({#}
+        {#    type: 'POST',#}
+        {#    url: "{% url 'go-pay' %}",#}
+        {#    data: obj,#}
+        {#    beforeSend: function (xhr, settings) {#}
+        {#        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");#}
+        {#    },#}
+        {#    success: function (res) {#}
+        {#        let url = "/payment/progress/" + res.order;#}
+        {#        window.location.replace(url);#}
+        {#    }})#}
+
+        resetBtn()
+    }
+});
+function resetBtn() {
+    $('#wxpay').removeClass('disabled');
+    $("#alert").removeClass("show");
+    oneClick = true;
+    console.log('重置了');
+};
+function peopleNum() {
+    const pp = document.getElementById('people').value;
+    const unit = {{ price }};
+    const sum = pp * (unit * 100);
+    const total = sum / 100
+    document.getElementById("sumTotal").innerHTML = total.toFixed(2) + "元";
+}
+</script>
+{% endblock %}

@@ -11,6 +11,7 @@ from .models import Medical, Recipe, Payment, Nucleic
 from health.models import UserProfile
 from wechatpy import WeChatPay, WeChatClient
 from datetime import datetime, timedelta
+from nucleic.views import get_entity
 
 
 # Create your views here.
@@ -79,7 +80,7 @@ def addMedical(request):
     param = {'name': post_body['name'].strip(), 'sfzh': post_body['idCard'].strip(),
              'cardid': post_body['cardId'].strip()}
     splice_str = param['sfzh'] + param['cardid']
-    response = post_ask('/api/pay/GetUserInfo', param, splice_str)
+    response = post_ask('/api/nucleic/GetUserInfo', param, splice_str)
     if response['Tag'] == 1 or response['Tag'] == '1':
         result = response['Result']
         user_info = request.session.get('user')
@@ -119,7 +120,7 @@ def cost(request, pk):
         medical = Medical.objects.get(user__openid=user_info['openid'], id=pk)
     except Medical.DoesNotExist:
         return render(request, 'hospital/notdata.html')
-    response = post_ask('/api/pay/GetFymxList', {'patientid': medical.patientId}, medical.patientId)
+    response = post_ask('/api/nucleic/GetFymxList', {'patientid': medical.patientId}, medical.patientId)
     if response['Tag'] == 1 or response['Tag'] == '1':
         result = response['Result']
         cf_list = ','.join(result['cflist'])
@@ -250,7 +251,7 @@ def unified_order(request):
                                       out_trade_no=order_no, user_id=user_info)
             timestamp = int(time.time())
             if result['result_code'] == "SUCCESS" and result['return_code'] == "SUCCESS":
-                # paySign = pay.jsapi.get_jsapi_signature(prepay_id=result['prepay_id'], timestamp=timestamp,
+                # paySign = nucleic.jsapi.get_jsapi_signature(prepay_id=result['prepay_id'], timestamp=timestamp,
                 #                                         nonce_str=result['nonce_str'])
                 params = pay.jsapi.get_jsapi_params(prepay_id=result['prepay_id'], timestamp=timestamp,
                                                     nonce_str=result['nonce_str'], jssdk=True)
@@ -329,7 +330,7 @@ def notify(request):
                 pay_order.timeEnd = time_str
                 param = {'patientid': pay_order.recipe.patientId, 'cflist': pay_order.recipe.c_list}
                 splice_str = param['patientid'] + param['cflist']
-                response = post_ask('/api/pay/HisPayApi', param, splice_str)
+                response = post_ask('/api/nucleic/HisPayApi', param, splice_str)
                 if response['Tag'] == 1 or response['Tag'] == '1':
                     pay_order.notify = '1'
                 pay_order.save()
@@ -357,7 +358,7 @@ def notify_task(request):
     for item in querySet:
         param = {'patientid': item.recipe.patientId, 'cflist': item.recipe.c_list}
         splice_str = param['patientid'] + param['cflist']
-        response = post_ask('/api/pay/HisPayApi', param, splice_str)
+        response = post_ask('/api/nucleic/HisPayApi', param, splice_str)
         if response['Tag'] == 1 or response['Tag'] == '1':
             item.notify = '1'
             item.save()
@@ -368,12 +369,12 @@ def acid(request):
     return render(request, 'hospital/nucleicAcid.html')
 
 
-def get_entity():
-    pay = WeChatPay(appid=settings.WECHAT_PAY['APPID'], sub_appid=settings.WECHAT_PAY['SUB_APPID'],
-                    mch_id=settings.WECHAT_PAY['MCHID'], sub_mch_id=settings.WECHAT_PAY['SUB_MCHID'],
-                    mch_cert=settings.WECHAT_PAY['MCHCERT'], mch_key=settings.WECHAT_PAY['MCHKEY'],
-                    api_key=settings.WECHAT_PAY['APIKEY'], sandbox=settings.WECHAT_PAY['SANDBOX'])
-    return pay
+# def get_entity():
+#     pay = WeChatPay(appid=settings.WECHAT_PAY['APPID'], sub_appid=settings.WECHAT_PAY['SUB_APPID'],
+#                     mch_id=settings.WECHAT_PAY['MCHID'], sub_mch_id=settings.WECHAT_PAY['SUB_MCHID'],
+#                     mch_cert=settings.WECHAT_PAY['MCHCERT'], mch_key=settings.WECHAT_PAY['MCHKEY'],
+#                     api_key=settings.WECHAT_PAY['APIKEY'], sandbox=settings.WECHAT_PAY['SANDBOX'])
+#     return pay
 
 
 @require_http_methods("GET")

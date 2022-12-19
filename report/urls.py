@@ -27,6 +27,7 @@ urlpatterns = [
     path('health/', include('health.urls')),
     path('api/', include('interface.urls')),
     path('auth/', include('authorization.urls')),
-    path('website/', include('hospital.urls'))
+    path('website/', include('hospital.urls')),
+    path('payment/', include('nucleic.urls')),
     # path('menu/', include('makepdf.urls'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

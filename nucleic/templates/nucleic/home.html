@@ -1,0 +1,36 @@
+{% extends 'basis.html' %}
+{% load static %}
+{% block title %}{{ title1 }}{% endblock %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static "nucleic/css/home.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="top">
+{#        <span>{{ title1 }}</span><br>#}
+        <span>{{ title2 }}</span>
+    </div>
+    <div class="container">
+    {% if queryset %}
+        {% for athlete in queryset %}
+            <div class="card">
+                <p>检测地点：{{ athlete.location }}</p>
+                <p>项目名称：{{ athlete.itemName }}</p>
+                <p>检测费用：{{ athlete.price }}元</p>
+{#                <p>点击对应卡片进行缴费</p>#}
+                <a class="btn btn-success" href="{% url 'home-page' athlete.id %}">选择此项</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>没有收费项目</p>
+    {% endif %}
+    </div>
+{% endblock %}
+{#{% block bodyJs %}#}
+{#    <script type="text/javascript">#}
+{#        function selected(pid) {#}
+{#            const ddd = {% url 'home-page' pid %};#}
+{#            console.log(ddd);#}
+            {#window.location.href = {% url 'home-page' ddd %};#}
+{#        }#}
+{#    </script>#}
+{#{% endblock %}#}

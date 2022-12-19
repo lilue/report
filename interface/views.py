@@ -49,12 +49,13 @@ class Obtain(View):
                 times = int(time.time())
                 nonce = ''.join(random.sample(string.ascii_letters + string.digits, 32))
                 sign = wxClient.jsapi.get_jsapi_signature(nonce, ticket, times, url)
-                data = {'appId': settings.APP_ID, 'timestamp': times,
+                data = {'appId': settings.WECHAT_PAY['SUB_APPID'], 'timestamp': times,
                         'nonceStr': nonce, 'signature': sign}
                 response = {'data': data, 'retcode': 0}
-                return JsonResponse(response)
+                return JsonResponse(response, safe=False)
             except Exception as e:
                 print(str(e))
+                return JsonResponse(str(e))
 
 
 def getWxClient():

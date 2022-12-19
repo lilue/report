@@ -1,0 +1,88 @@
+{% extends 'basis.html' %}
+{% load static %}
+{% block headercss %}
+    <link rel="stylesheet" href="{% static "nucleic/css/finsh.css" %}">
+{% endblock %}
+{% block title %}等待支付中{% endblock %}
+{% block content %}
+    <div class="alert alert-danger hide" id="alert">这是一个失败提示！</div>
+    <div class="jumbotron">
+      <div class="container">
+          <h1>{{ location }}</h1>
+          <p>核酸人数: {{ number }}人</p>
+          <p>支付金额: {{ amount }}元</p>
+          <p><button type="button" class="btn btn-primary btn-lg" id="wxpay">确认支付</button></p>
+      </div>
+    </div>
+{#    display:none;#}
+    <div style="text-align: center; margin-bottom: 15px;" id="reloadBtn">
+        <input type="button" class="btn btn-warning" onclick="javascript:location.reload();" value="不能支付请尝试点击刷新">
+    </div>
+    <div style="text-align: center;font-size: 16px;" id="loaded">
+        <span>请核对付款金额，无误后点击确认支付按钮进行支付</span>
+    </div>
+{#    <div class="container">#}
+{#        <div class="alert alert-danger hide" id="alert">这是一个失败提示！</div>#}
+{#        #}
+{#        <button type="button" class="btn btn-primary btn-lg" id="wxpay">确认支付</button>#}
+{#    </div>#}
+{% endblock %}
+{% block bodyJs %}
+{#    <script type="text/javascript" src="{% static 'nucleic/js/jquery-2.1.3.min.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'nucleic/js/jweixin-1.6.0.js' %}"></script>
+    <script type="text/javascript" src="{% static 'nucleic/js/zepto.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'getConfig' %}",
+                data: {'url': window.location.href},
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function (res) {
+                    if (res.retcode === 0) {
+                        wx.config({
+                            debug: false,
+                            appId: res.data.appId,
+                            timestamp: res.data.timestamp,
+                            nonceStr: res.data.nonceStr,
+                            signature: res.data.signature,
+                            jsApiList: ['config', 'chooseWXPay']
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        let oneClick = true;
+        wx.ready(function() {
+            $('#wxpay').on('click', function(e) {
+                e.preventDefault();
+                if(oneClick) {
+                    wx.chooseWXPay({
+                        appId: "{{ appid }}",
+                        timestamp: "{{ timestamp }}",
+                        nonceStr: "{{ nonce_str }}",
+                        package: "{{ prepay_id }}",
+                        signType: "MD5",
+                        paySign: "{{ paySign }}",
+                        success: function (result) {
+                            {#console.log(result)#}
+                            if (result.errMsg === 'chooseWXPay:ok') {
+                                window.location.replace("{% url 'payment-complete' id %}");
+                                {#setTimeout(function() { resetBtn() }, 2000);#}
+                            }
+                        }
+                    })
+                }
+            })
+        });
+        function resetBtn() {
+            $("#alert").removeClass("show");
+            oneClick = true;
+            console.log('重置了');
+        };
+    </script>
+{% endblock %}

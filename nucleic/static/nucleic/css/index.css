@@ -1,0 +1,63 @@
+.custom-div {
+    padding: 10px;
+}
+.custom-div1 {
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.custom-div2 {
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.custom-bg {
+    background-color: #FFFFFF;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.custom-input {
+    text-align: right;
+}
+
+.info_card_text {
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.p_right {
+    text-align: right;
+    margin: 0 0 0 auto;
+}
+
+.footViewStyle {
+    width: 100%;
+    height: 60px;
+    /*position: fixed;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    bottom: 0;
+    background-color: #FFFFFF;
+}
+
+.custom-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-right {}
+
+.custom-font {
+    color: #ff0016;
+}
+
+.alert{
+    position: fixed;
+    width: 50%;
+    margin-left: 20%;
+    z-index: 2000;
+}
