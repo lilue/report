@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 urlpatterns = [
+    path('WXPAY_verify_1505071011', views.pay_verify),
     path('home/<str:pk>', oauth(views.index), name="home-page"),
     path('progress/<str:pk>', views.waitingPay, name="waitPay"),
     path('finsh/<str:pk>', views.complete, name="payment-complete"),

@@ -23,6 +23,10 @@ from nucleic.models import QRconfig, Payment
 from .utils import formatTime
 
 
+def pay_verify(request):
+    return HttpResponse('b832016ad5dbd8dcc102566b95e5de4c')
+
+
 def getWeChatOAuth(redirect_url):
     sub_status = settings.SUB_STATUS
     if sub_status:
