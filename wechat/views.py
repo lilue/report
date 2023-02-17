@@ -255,7 +255,7 @@ def createMenu(request):
                         {
                             "type": "view_limited",
                             "name": "医院简介",
-                            "media_id": "VGSuBmSVPkhR8yhfeYakYwpevUxs16MCwqpImOOuhY9Hb6Rg5kTb5bLuCvFfIA_j"
+                            "key": "profile"
                         },
                         {
                             "type": "view_limited",
