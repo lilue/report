@@ -253,7 +253,7 @@ def createMenu(request):
                     "name": "医院概况",
                     "sub_button": [
                         {
-                            "type": "view_limited",
+                            "type": "click",
                             "name": "医院简介",
                             "key": "profile"
                         },
