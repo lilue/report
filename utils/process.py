@@ -3,31 +3,23 @@ import datetime
 import re
 
 
-def process_date(date):
-    try:
-        timeArray = time.strptime(date, "%Y-%m-%d %H:%M:%S")
-    except Exception as e:
-        print(str(e))
-        timeArray = time.strptime(date, "%Y/%m/%d %H:%M:%S")
-    timeStamp = int(time.mktime(timeArray))
-    time_local = time.localtime(timeStamp)
-    try:
-        dt = time.strftime("%Y-%m-%d %H:%M:%S", time_local)
-        dtArray = dt.split(' ', 1)
-        folder = dtArray[0].replace('-', '')
-    except Exception as ex:
-        print(str(ex))
-        dt = time.strftime("%Y/%m/%d %H:%M:%S", time_local)
-        dtArray = dt.split(' ', 1)
-        folder = dtArray[0].replace('/', '')
-    # list_folder = list(folder)
-    # if len(folder) == 7:
-    #     list_folder.insert(4, '0')
-    #     folder = ''.join(list_folder)
-    # elif len(folder) == 6:
-    #     list_folder.insert(4, '0')
-    #     list_folder.insert(6, '0')
-    #     folder = ''.join(list_folder)
+def process_date(temp):
+    date = re.sub("星期一|星期二|星期三|星期四|星期五|星期六|星期日|星期天", "", temp)
+    date_formats = ["%Y-%m-%d %H:%M:%S", "%Y/%m/%d %H:%M:%S", "%Y-%m-%d %A %H:%M:%S"]
+    for date_format in date_formats:
+        try:
+            time_struct = time.strptime(date, date_format)
+            break
+        except ValueError:
+            continue
+    else:
+        raise ValueError(f"Unrecognized date format: {date}")
+    print(time_struct)
+    time_stamp = int(time.mktime(time_struct))
+    print(time_stamp)
+    dt = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time_stamp))
+    print(dt)
+    folder = dt.split(' ', 1)[0].replace('-', '').replace('/', '')
     return folder
 
 
