@@ -76,7 +76,7 @@ class UserView(View, CommonResponseMixin):
                 response = self.wrap_json_response(code=ReturnCode.SUCCESS)
         except Exception as e:
             # response = {'message': '用户信息错误，请重新登录后再保存'}
-            response = self.wrap_json_response(data='用户信息错误，请重新登录后再保存', code=ReturnCode.FAILED)
+            response = self.wrap_json_response(data='用户信息错误，请重新登录后再保存,' + str(e), code=ReturnCode.FAILED)
             return JsonResponse(data=response, safe=False)
 
         # print(dd)
