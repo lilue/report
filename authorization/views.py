@@ -59,7 +59,6 @@ class UserView(View, CommonResponseMixin):
         post_data = request.body.decode('utf-8')
         post_data = json.loads(post_data)
         data_source = post_data.get('data')
-        print(data_source)
         try:
             user = User.objects.get(open_id=data_source['openid'])
             # print(user.nickname)
