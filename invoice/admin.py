@@ -116,14 +116,13 @@ class InvoiceAdmin(admin.ModelAdmin):
     check_purchaser.short_description = '受票方名称'
     check_purchaser.allow_tags = True
 
-    list_display = ['number', 'code', 'seller', 'seller_number', 'amount', 'check_purchaser', 'date', 'confirm_txt',
-                    'submitter_txt', 'create_date']
-    list_display_links = ['number']
+    list_display = ['number', 'code', 'amount', 'date', 'confirm_txt', 'submitter_txt', 'create_date', 'update_data']
+    list_display_links = ['number', 'code']
     readonly_fields = ['number', 'code', 'seller', 'seller_number', 'amount', 'purchaser',
-                       'purchaser_number', 'date', 'user', 'create_date']
-    fields = ('number', 'code', 'seller', 'seller_number', 'amount', 'purchaser', 'purchaser_number', 'date',
-              'user', 'create_date', 'confirm')
-    list_filter = (TitleKeywordFilter,)
+                       'purchaser_number', 'date', 'user', 'create_date', 'update_data']
+    fields = ('number', 'code', 'date', 'user', 'create_date', 'update_data', 'confirm')
+    # list_filter = ('code',)
+    search_fields = ('number', 'code',)
 
 
 @admin.register(InvoiceLog)

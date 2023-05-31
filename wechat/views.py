@@ -249,6 +249,11 @@ def createMenu(request):
                     "sub_button": [
                         {
                             "type": "view",
+                            "name": "就诊预约",
+                            "url": "https://docs.qq.com/form/page/DRFByaURKSURKSERT"
+                        },
+                        {
+                            "type": "view",
                             "name": "停车缴费",
                             "url": "http://wx.ymiot.net/dwz?p=c1gd9dsk"
                         },

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User as AUser
 
 
 class Invoice(models.Model):
-    number = models.CharField(max_length=32, verbose_name="发票号码", unique=True)
+    number = models.CharField(max_length=32, verbose_name="发票号码", default='')
     code = models.CharField(max_length=32, verbose_name="发票代码", default='')
     seller = models.CharField(max_length=256, verbose_name="销售方名称", default='')
     seller_number = models.CharField(max_length=32, default='', verbose_name="销售方税号")
@@ -17,13 +17,14 @@ class Invoice(models.Model):
     confirm = models.BooleanField(default=False, verbose_name="是否确认")
     user = models.ForeignKey(User, on_delete=models.PROTECT, default='', verbose_name='提交人')
     create_date = models.DateField(default=timezone.now, verbose_name="创建时间")
+    update_data = models.DateTimeField(auto_now=True, verbose_name="最后修改时间")
 
     class Meta:
         verbose_name = '发票列表'
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.number
+        return self.code
 
     def to_dict(self):
         if self.user.username:

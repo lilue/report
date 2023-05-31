@@ -4,9 +4,9 @@ from .views import oauth
 
 
 urlpatterns = [
-    path('', oauth(views.Management.as_view()), name='index'),
+    path('', views.Management.as_view(), name='index'),
     path('user/info', views.get_wx_user_info),
-    path('card', oauth(views.health.as_view()), name='card'),
+    path('card', views.health.as_view(), name='card'),
     path('personal/<int:no>/', views.bind_success, name='suc'),
     path('untie/', views.untie_health, name='untie'),
     path('health_list/', views.health_card_list, name='cardList'),

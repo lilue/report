@@ -241,9 +241,10 @@ def untie_health(request):
 
 @require_http_methods(["GET"])
 def health_card_list(request):
-    user_info = request.session.get('user')
-    user = UserProfile.objects.get(openid=user_info['openid'])
-    card_list = user.usercard_set.filter(is_untie=0)
+    # user_info = request.session.get('user')
+    # user = UserProfile.objects.get(openid=user_info['openid'])
+    # card_list = user.usercard_set.filter(is_untie=0)
+    card_list = UserCard.objects.all()
     cards = []
     for item in card_list:
         cards.append(item.to_dict())
