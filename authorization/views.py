@@ -68,10 +68,8 @@ class UserView(View, CommonResponseMixin):
                 # response = {'message': '发票代码与发票号码重复，请检查'}
             else:
                 Invoice.objects.create(number=data_source['number'], code=data_source['code'],
-                                       seller=data_source['seller'], seller_number=data_source['seller_number'],
-                                       amount=data_source['amount'], purchaser=data_source['purchaser'],
-                                       purchaser_number=data_source['purchaser_number'], date=data_source['date'],
-                                       confirm=False, user=user)
+                                       amount=data_source['amount'], date=data_source['date'],
+                                       confirm=False, user=user.username)
                 # response = {'message': '保存成功'}
                 response = self.wrap_json_response(code=ReturnCode.SUCCESS)
         except Exception as e:

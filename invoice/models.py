@@ -8,14 +8,12 @@ from django.contrib.auth.models import User as AUser
 class Invoice(models.Model):
     number = models.CharField(max_length=32, verbose_name="发票号码", default='')
     code = models.CharField(max_length=32, verbose_name="发票代码", default='')
-    seller = models.CharField(max_length=256, verbose_name="销售方名称", default='')
-    seller_number = models.CharField(max_length=32, default='', verbose_name="销售方税号")
     amount = models.CharField(max_length=32, verbose_name="发票金额", default='')
-    purchaser = models.CharField(max_length=256, verbose_name="受票方名称", default='')
-    purchaser_number = models.CharField(max_length=32, default='', verbose_name="受票方税号")
     date = models.CharField(max_length=20, verbose_name="开票日期", default='')
     confirm = models.BooleanField(default=False, verbose_name="是否确认")
-    user = models.ForeignKey(User, on_delete=models.PROTECT, default='', verbose_name='提交人')
+    confirm_date = models.CharField(max_length=20, verbose_name="修改状态日期", blank=True, null=True, default='')
+    confirm_user = models.CharField(max_length=20, verbose_name="修改状态用户", blank=True, null=True, default='')
+    user = models.CharField(max_length=20, verbose_name="录入用户", blank=True, null=True, default='')
     create_date = models.DateField(default=timezone.now, verbose_name="创建时间")
     update_data = models.DateTimeField(auto_now=True, verbose_name="最后修改时间")
 
@@ -27,21 +25,13 @@ class Invoice(models.Model):
         return self.code
 
     def to_dict(self):
-        if self.user.username:
-            name = self.user.username
-        else:
-            name = self.user.nickname
         return {
             'id': self.pk,
             'number': self.number,
             'code': self.code,
-            'seller': self.seller,
-            'seller_number': self.seller_number,
             'amount': self.amount,
-            'purchaser': self.purchaser,
-            'purchaser_number': self.purchaser_number,
             'date': self.date,
-            'user': name,
+            'user': self.user,
             'confirm': self.confirm,
             'create_date': self.create_date
         }
