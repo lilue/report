@@ -104,10 +104,13 @@ class InvoiceAdmin(admin.ModelAdmin):
 
     # 提交人姓名
     def submitter_txt(self, obj):
-        if obj.user.username:
-            name = obj.user.username
-        else:
-            name = obj.user.nickname
+        try:
+            if obj.user.username:
+                name = obj.user.username
+            else:
+                name = obj.user.nickname
+        except Exception:
+            name = obj.user
         return mark_safe('<text>{}</text>'.format(name))
 
     submitter_txt.short_description = '提交人'
