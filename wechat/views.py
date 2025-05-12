@@ -170,7 +170,7 @@ def menu(request):
 
 @csrf_exempt
 def getMenu(request):
-    client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")  # 坡头
+    client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
     # client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")
     menu_info = client.menu.get()
     # print(menu_info)
@@ -180,7 +180,7 @@ def getMenu(request):
 
 def createMenu(request):
     if request.method == 'GET':
-        # client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
+        client = WeChatClient("wx34323ffaf43c7824", "4c50c86bc211f62145076d93c8d089f8")  # 坡头
         # client = WeChatClient("wx896da0e215f91253", "21df20f1f63944f9f0eeb65e5a5e6450")
         menuList = {
             "button": [
@@ -247,11 +247,11 @@ def createMenu(request):
                 {
                     "name": "便民服务",
                     "sub_button": [
-                        {
-                            "type": "view",
-                            "name": "就诊预约",
-                            "url": "https://docs.qq.com/form/page/DRFByaURKSURKSERT"
-                        },
+                        # {
+                        #     "type": "view",
+                        #     "name": "就诊预约",
+                        #     "url": "https://docs.qq.com/form/page/DRFByaURKSURKSERT"
+                        # },
                         {
                             "type": "view",
                             "name": "停车缴费",
@@ -280,7 +280,7 @@ def createMenu(request):
         }
         # print(menuList)
         # print(type(menuList))
-        # client.menu.create(menuList)
+        client.menu.create(menuList)
         return HttpResponse("OK")
 
     elif request.method == 'POST':
