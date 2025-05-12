@@ -20,7 +20,7 @@ from report import settings
 from hospital import views
 
 urlpatterns = [
-    path('MP_verify_mQJFPw6llNu89Htp.txt', views.wx_verify),
+    path('18CoO2tvwe.txt', views.wx_verify),
     # path('', admin.site.urls),
     path('admin/', admin.site.urls),
     path('wx/', include('wechat.urls')),

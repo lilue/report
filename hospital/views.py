@@ -18,7 +18,7 @@ from nucleic.views import get_entity
 
 
 def wx_verify(request):
-    return HttpResponse('mQJFPw6llNu89Htp')
+    return HttpResponse('e24c73352c0532df3733594c5550bb55')
 
 
 @require_http_methods(["GET"])
