@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 from django.utils import timezone
-# Create your models here.
+from django.contrib import admin
 
 
 class QRconfig(models.Model):

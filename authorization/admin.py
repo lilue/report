@@ -31,6 +31,6 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.site_title = "发票管理"
-admin.site.site_header = "坡头区人民医院"
+admin.site.site_header = "广东省湛江农垦第二医院"
 # admin.site.site_title = "乐航电子票据识别系统"
 # admin.site.site_header = "乐航电子票据识别系统后台管理"

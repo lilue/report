@@ -14,8 +14,8 @@ class TitleKeywordFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         return(
             ('first', '查询所有'),
-            ('one', '湛江市坡头区人民医院'),
-            ('two', '坡头区坡头镇中心卫生院'),
+            ('one', '广东省湛江农垦第二医院'),
+            ('two', '湛江农垦第二医院'),
         )
 
     def queryset(self, request, queryset):
@@ -25,9 +25,9 @@ class TitleKeywordFilter(admin.SimpleListFilter):
         # print(self.value())
         # print(queryset.filter(purchaser='广东中拓信息技术有限公司'))
         if self.value() == 'one':
-            return queryset.filter(purchaser='湛江市坡头区人民医院')
+            return queryset.filter(purchaser='广东省湛江农垦第二医院')
         elif self.value() == 'two':
-            return queryset.filter(purchaser='坡头区坡头镇中心卫生院')
+            return queryset.filter(purchaser='湛江农垦第二医院')
         elif self.value() == 'first':
             return queryset
         else:
@@ -92,9 +92,9 @@ class InvoiceAdmin(admin.ModelAdmin):
 
     def check_purchaser(self, obj):
         judgment = False
-        if obj.purchaser == '湛江市坡头区人民医院' and obj.purchaser_number == '12440804456250892W':
+        if obj.purchaser == '广东省湛江农垦第二医院' and obj.purchaser_number == '12440804456250892W':
             judgment = True
-        elif obj.purchaser == '坡头区坡头镇中心卫生院' and obj.purchaser_number == '124408047993279516':
+        elif obj.purchaser == '湛江农垦第二医院' and obj.purchaser_number == '124408047993279516':
             judgment = True
 
         if judgment:

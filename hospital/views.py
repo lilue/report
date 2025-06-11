@@ -389,7 +389,7 @@ def obtain(request):
         return JsonResponse({"errMsg": "md5验证失败"}, safe=False)
     if str_md5 == md5str:
         pay = get_entity()
-        description = "坡头区人民医院门诊缴费"
+        description = "广东省湛江农垦第二医院门诊缴费"
         order_amount = int(float(total) * 100)      # 参数单位为分，不能带小数点
         result = pay.order.create(trade_type="NATIVE", body=description, total_fee=order_amount,
                                   notify_url=settings.WECHAT_PAY['NOTIFY'] + '/website/acid_notify',
@@ -431,7 +431,7 @@ def microPay(request):
         return JsonResponse({"errMsg": "md5验证失败"}, safe=False)
     if str_md5 == md5str:
         pay = get_entity()
-        description = "坡头区人民医院门诊缴费"
+        description = "广东省湛江农垦第二医院门诊缴费"
         order_no = order
         order_amount = int(float(total) * 100)      # 参数单位为分，不能带小数点
         model = {'order': order_no, 'status': 2}

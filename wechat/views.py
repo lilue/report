@@ -41,7 +41,7 @@ def handle_wx(request):
         news = ''
         if msg.type == 'event':
             if msg.event == 'subscribe':
-                news = '非常感谢您关注湛江市坡头区人民医院，' \
+                news = '非常感谢您关注广东省湛江农垦第二医院，' \
                           '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
                           '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
             elif msg.event == 'click':
@@ -67,7 +67,7 @@ def handle_wx(request):
                     media_id = '8fXeWJG1lxALWwMtq-yEF5g7v4y__QcDGkCaoBYSPVTRvCIXVgbnNIEHRCuzuO5_'
                     tempMsg = '图片回复'
                 else:
-                    tempMsg = '非常感谢您关注湛江市坡头区人民医院，' \
+                    tempMsg = '非常感谢您关注广东省湛江农垦第二医院，' \
                           '如预约四维彩超，由于咨询预约人数较多，请到妇产科具体咨询；如预约疫苗接种，' \
                           '请在微信公众号页面右下角便民服务中的预约服务按要求填写小孩资料预约，新生儿疫苗接种预约同上，谢谢！'
                 news = tempMsg
@@ -119,7 +119,7 @@ def getInfo(params):
             template = "【新型冠状病毒(COVID-19)核酸检测结果】\n" \
                        "姓名：%s\n" \
                        "采样机构：%s\n" \
-                       "检测机构：湛江市坡头区人民医院\n" \
+                       "检测机构：广东省湛江农垦第二医院\n" \
                        "检测日期：%s\n" \
                        "检测结果：%s\n" \
                        "此报告仅对所检验标本负责，如有疑议请在三天内与检验科联系！\n" \
