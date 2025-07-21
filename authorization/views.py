@@ -38,12 +38,12 @@ class UserView(View, CommonResponseMixin):
         openid = request.GET["openid"]
         try:
             user = User.objects.get(open_id=openid)
-            query_set = user.invoice_set.all().order_by("-id")
+            query_set = user.invoices.all().order_by("-id")
             invoice_list = []
             if query_set.exists():
                 for i in query_set:
                     invoice_list.append(i.to_dict())
-            # print(invoice_list)
+            print(invoice_list)
             # response = {'message': '保存成功'}
             response = utils.response.wrap_json_response(data=invoice_list)
             return JsonResponse(data=response, safe=False)
@@ -69,7 +69,7 @@ class UserView(View, CommonResponseMixin):
             else:
                 Invoice.objects.create(number=data_source['number'], code=data_source['code'],
                                        amount=data_source['amount'], date=data_source['date'],
-                                       confirm=False, user=user.username)
+                                       confirm=False, user=user)
                 # response = {'message': '保存成功'}
                 response = self.wrap_json_response(code=ReturnCode.SUCCESS)
         except Exception as e:
@@ -109,6 +109,7 @@ def __authorize_by_code(request):
     code = post_data.get('code').strip()
     avatar = post_data.get('avatar').strip()
     nickname = post_data.get('nickname').strip()
+    username = post_data.get('username', '').strip()
     if not code:
         response['message'] = '数据不完整.'
         response['code'] = ReturnCode.BROKEN_AUTHORIZED_DATA
@@ -121,6 +122,27 @@ def __authorize_by_code(request):
         return JsonResponse(data=response, safe=False)
     request.session['open_id'] = openid
     request.session['is_authorized'] = True
+
+    user, created = User.objects.get_or_create(
+        open_id=openid,
+        defaults={
+            'nickname': nickname,
+            'avatar': avatar,
+            # [修改] 新增：保存username
+            'username': username
+        }
+    )
+
+    # 5. 如果用户已存在，更新用户名（如果提供了新的username）
+    # [修改] 新增：更新已有用户的username
+    if not created and username:
+        user.username = username
+        user.save()
+
+    # 6. 更新头像（如果头像有变化）
+    if user.avatar != avatar:
+        user.avatar = avatar
+        user.save()
 
     if not User.objects.filter(open_id=openid):
         new_user = User(open_id=openid, nickname=nickname, avatar=avatar)

@@ -13,7 +13,13 @@ class Invoice(models.Model):
     confirm = models.BooleanField(default=False, verbose_name="是否确认")
     confirm_date = models.CharField(max_length=20, verbose_name="修改状态日期", blank=True, null=True, default='')
     confirm_user = models.CharField(max_length=20, verbose_name="修改状态用户", blank=True, null=True, default='')
-    user = models.CharField(max_length=20, verbose_name="录入用户", blank=True, null=True, default='')
+    # user = models.CharField(max_length=20, verbose_name="录入用户", blank=True, null=True, default='')
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="invoices",
+        verbose_name="录入用户"
+    )
     create_date = models.DateField(default=timezone.now, verbose_name="创建时间")
     update_data = models.DateTimeField(auto_now=True, verbose_name="最后修改时间")
 
@@ -31,7 +37,7 @@ class Invoice(models.Model):
             'code': self.code,
             'amount': self.amount,
             'date': self.date,
-            'user': self.user,
+            'user': self.user.id,
             'confirm': self.confirm,
             'create_date': self.create_date
         }
