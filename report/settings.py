@@ -20,11 +20,39 @@ env.read_env('.env')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str('SECRET_KEY', '3*v+j3(#kp8t&d9e5*fgi8qipzlwtgfo#qw40hs!2+_fvls_)4')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # 保留现有日志器
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',  # 捕获所有级别（包括DEBUG）
+            'class': 'logging.FileHandler',
+            'filename': 'django.log',  # 与manage.py同目录
+            'formatter': 'verbose',  # 详细格式
+        },
+        'console': {  # 同时输出到终端（可选）
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'root': {
+        'handlers': ['file', 'console'],  # 文件+终端双输出
+        'level': 'DEBUG',  # 根日志器记录所有级别
+    },
+}
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', False)

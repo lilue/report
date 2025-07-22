@@ -1,0 +1,3 @@
+INFO 2025-07-22 17:23:36,875 autoreload Watching for file changes with StatReloader
+DEBUG 2025-07-22 17:23:54,194 connectionpool Starting new HTTPS connection (1): api.weixin.qq.com:443
+DEBUG 2025-07-22 17:23:55,574 connectionpool https://api.weixin.qq.com:443 "GET /sns/jscode2session?appid=wxe4f810d2540b36af&secret=410155ca5163c6c1524bcdae30c75c5b&js_code=0b13kQ1w3YHTh53BGa2w36KlfR23kQ1Q&grant_type=authorization_code HTTP/1.1" 200 82
